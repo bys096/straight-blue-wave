@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/test/member/login" method="POST">
+  <h2>로그인</h2>
+  <div class="textForm">
+    <input name="user_id" type="text" class="id" placeholder="아이디">
+    </input>
+  </div>
+  <div class="textForm">
+    <input name="user_pw" type="password" class="pw" placeholder="비밀번호">
+  </div>
+  <input type="hidden" name="actionType" value="login">
+  <input type="submit" class="btn" value="로그인"/>
+</form>
+<button type="button" onClick="location.href='/test/joinForm'">회원가입</button>
+</body>
+</html>

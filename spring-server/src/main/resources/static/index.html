@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<a href="/user/modify" class="flex-c-m trans-04 p-lr-25">
+    <div></div>
+</a>
+<span th:text="${session.loginId}">텍스트</span>
+
+<a href="/test/logout" class="flex-c-m trans-04 p-lr-25">
+    로그아웃
+</a>
+
+<a th:href="@{/test/member(user_id = ${session.loginId})}" class="flex-c-m trans-04 p-lr-25">
+    회원정보 수정
+</a>
+<hr>
+<button type="button" onClick="location.href='/test/joinForm'">팀생성</button>
+</body>
+</html>
