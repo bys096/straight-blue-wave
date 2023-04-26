@@ -1,62 +1,44 @@
-import {React, useEffect, useState, useRef} from "react";
-import {Alert, Button, Container, Form} from "react-bootstrap";
-import {Link, useNavigate} from "react-router-dom";
+import React, {useState} from "react";
+import {Route, Routes, Link} from "react-router-dom";
+import {Nav, Button} from "react-bootstrap";
+import Sidebar1 from "./Sidebar1";
+import Sidebar2 from "./Sidebar2";
+import Sidebar3 from "./Sidebar3";
 import "./Sidebar.css";
 
-const Sidebar = ({width = 280, children}) => {
-	const [isOpen, setOpen] = useState(false);
-	const [xPosition, setX] = useState(width);
-	const side = useRef();
+const Sidebar = () => {
+	const [isOpen, setIsOpen] = useState(false);
+	const [teamButton, setTeamButton] = useState(false);
+	const [projectButton, setProjectButton] = useState(false);
+	const [friendButton, setFriendButton] = useState(false);
 
-	const toggleMenu = () => {
-		if (xPosition > 0) {
-			setX(0);
-			setOpen(true);
-		} else {
-			setX(width);
-			setOpen(false);
-		}
+	const toggleSidebar = () => {
+		setIsOpen(!isOpen);
 	};
-
-	const handleClose = async (e) => {
-		let sideArea = side.current;
-		let sideChildren = side.current.contains(e.target);
-		if (isOpen && (!sideArea || !sideChildren)) {
-			await setX(width);
-			await setOpen(false);
-		}
-	};
-
-	useEffect(() => {
-		window.addEventListener("click", handleClose);
-		return () => {
-			window.removeEventListener("click", handleClose);
-		};
-	});
 
 	return (
-		<Container>
-			<div className="container">
-				<div
-					ref={side}
-					className="sideBar"
-					style={{
-						width: `${width}px`,
-						height: "100%",
-						transform: `translatex(${-xPosition}px)`,
-					}}>
-					<button onClick={() => toggleMenu()} className="button">
-						{isOpen ? (
-							<span>X</span>
-						) : (
-							<img src="images/avatar.png" alr="contact open button" className="openBtn" />
-						)}
-					</button>
-
-					<div className="content">{children}</div>
-				</div>
+		<>
+			<div className={`sidebar ${!isOpen ? "collapsed" : ""}`}>
+				<Button className="toggle-btn" onClick={toggleSidebar}>
+					{!isOpen ? ">" : "<"}
+				</Button>
+				{isOpen && (
+					<span>
+						<Nav className="flex-column">
+							<Link className="nav-link" to="/">
+								팀
+							</Link>
+							<Link className="nav-link" to="/">
+								프로젝트
+							</Link>
+							<Link className="nav-link" to="/">
+								친구
+							</Link>
+						</Nav>
+					</span>
+				)}
 			</div>
-		</Container>
+		</>
 	);
 };
 
