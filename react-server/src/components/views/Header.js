@@ -29,10 +29,10 @@ function Header() {
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<Nav style={{ marginLeft: "auto" }}>
 						<Nav.Link>
-							<Link to="">커뮤니티</Link>
+							<Link to="/community">커뮤니티</Link>
 						</Nav.Link>
 						<Nav.Link>
-							<Link to="">쇼핑몰</Link>
+							<Link to="/shopping">쇼핑몰</Link>
 						</Nav.Link>
 						<Nav.Link>
 							<Link to="/">로그아웃</Link>

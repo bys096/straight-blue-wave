@@ -8,6 +8,8 @@ import Sidebar from "./components/views/Sidebar";
 import DefaultPage from "./pages/DefaultPage";
 import SignUp from "./pages/SignUp";
 import LoggedIn from "./pages/LoggedIn";
+import CommunityPage from "./pages/CommunityPage";
+import ShoppingPage from "./pages/ShoppingPage";
 
 function App() {
 	return (
@@ -16,6 +18,8 @@ function App() {
 				<Route path="/" exact={true} Component={DefaultPage} />
 				<Route path="/SignUp" exact={true} Component={SignUp} />
 				<Route path="/LoggedIn" exact={true} Component={LoggedIn} />
+				<Route path="/community" exact={true} Component={CommunityPage} />
+				<Route path="/shopping" exact={true} Component={ShoppingPage}></Route>
 			</Routes>
 		</div>
 	);

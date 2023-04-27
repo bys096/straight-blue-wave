@@ -5,7 +5,7 @@ import Footer from "../components/views/Footer";
 
 import "./LoggedIn.css";
 import VideoCall from "../components/views/VideoCall";
-function LoggedIn(props) {
+function LoggedIn() {
 	return (
 		<div className="main">
 			<Header />
