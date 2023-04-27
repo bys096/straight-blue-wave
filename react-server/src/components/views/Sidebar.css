@@ -1,20 +1,17 @@
 
   .sidebar {
-    flex : 1;
+    flex: 1;
     background-color: #E3ECF1;
     top: 0;
     bottom: 0;
     left: 0;
     height: 100vh;
-    width: 25vh;
-    transition: 0.4s ease;
+    width: 30vh;
+    transition: 0.2s ease;
   }
 
   .sidebar.collapsed {
     width: 50px;
   }
   
-  .toggle-btn {
-
-  }
   
