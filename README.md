@@ -7,7 +7,7 @@
 1. git clone
 2. 각 서버 npm i (node 서버 동작 오류 시 babel 추가
 ```
-npm i @babel/node -g)
+npm i @babel/node -g
 ```
 3. 노드 서버 기동
 ```
