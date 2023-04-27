@@ -4,22 +4,29 @@ import express from "express";
 import cors from "cors"; // 추가
 
 
-const app = express();
 
-app.set("view engine", "pug");
-app.set("views", __dirname + "/views");
-app.use("/public", express.static(__dirname + "/public"));
-app.get("/", (_, res) => res.render("home"));
-app.get("/*", (_, res) => res.redirect("/"));
+const path = require('path');
+const app = express();
+app.use(express.static(path.join(__dirname, "build")));
+
+// app.set("view engine", "pug");
+// app.set("views", __dirname + "/views");
+// app.get("/", (_, res) => res.render("home"));
+// app.get("/*", (_, res) => res.redirect("/"));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + '/build/index.html'));
+})
+
 
 const httpServer = http.createServer(app);
-// const wsServer = SocketIO(httpServer);
-const wsServer = SocketIO(httpServer, {
-  cors: {
-    origin: ["http://localhost:3000", "http://172.26.20.111:3000"], // 클라이언트 도메인을 허용합니다.
-    methods: ["GET", "POST"],
-  },
-});
+const wsServer = SocketIO(httpServer);
+// const wsServer = SocketIO(httpServer, {
+//   cors: {
+//     origin: ["http://localhost:3000", "http://172.26.20.111:3000"], // 클라이언트 도메인을 허용합니다.
+//     methods: ["GET", "POST"],
+//   },
+// });
 
 wsServer.on("connection", (socket) => {
   console.log('Clienct Connected');
@@ -42,5 +49,5 @@ wsServer.on("connection", (socket) => {
   });
 });
 
-const handleListen = () => console.log(`Listening on http://localhost:3000`);
+const handleListen = () => console.log(`Listening on http://localhost:4000`);
 httpServer.listen(4000, handleListen);
