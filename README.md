@@ -15,7 +15,7 @@ npm i @babel/node -g
 ```
 4. localtunnel 기동(node port번호 4000을 따라감)
 ```
-npx localtunnel —port 4000
+npx localtunnel --port 4000
 ```
 5. 발급 받은 URL로 build 폴더의 socket.io에 관한 script 태그 수정
 6. URL로 접속
