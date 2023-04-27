@@ -14,7 +14,7 @@ function Header(props) {
 						</Col>
 						<Col xs="auto">
 							<Routes>
-								<Route path="/" exact={true} Component={Login} />
+	
 							</Routes>
 						</Col>
 					</Row>

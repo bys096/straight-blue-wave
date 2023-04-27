@@ -16,7 +16,7 @@ const httpServer = http.createServer(app);
 // const wsServer = SocketIO(httpServer);
 const wsServer = SocketIO(httpServer, {
   cors: {
-    origin: "http://localhost:3000", // 클라이언트 도메인을 허용합니다.
+    origin: ["http://localhost:3000", "http://172.26.20.111:3000"], // 클라이언트 도메인을 허용합니다.
     methods: ["GET", "POST"],
   },
 });

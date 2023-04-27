@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 
 function MainPage(props) {
 
-	const socket = io('http://localhost:4000');
+	const socket = io('http://localhost4000');
     const myFaceRef = useRef(null);
     const muteRef = useRef(null);
     const cameraRef = useRef(null);

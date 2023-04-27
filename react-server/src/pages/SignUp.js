@@ -17,8 +17,6 @@ const SignUp = () =>{
     const [user_class, setUserClass] = useState('');
 
     const history = useNavigate();
-     
-
 
     // 세션 스토리지에 회원가입 정보 저장
     

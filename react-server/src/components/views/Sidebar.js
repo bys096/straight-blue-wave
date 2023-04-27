@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import {Route, Routes, Link} from "react-router-dom";
 import {Nav, Button, ButtonGroup} from "react-bootstrap";
 import Sidebar1 from "./Sidebar1";
 import Sidebar2 from "./Sidebar2";
@@ -64,7 +63,9 @@ const Sidebar = () => {
 								</Button>
 							</ButtonGroup>
 						</Nav>
-						{renderActiveComponent()}
+						<div className="sidebarContent">
+							{renderActiveComponent()}
+						</div>
 					</div>
 				)}
 			</div>
