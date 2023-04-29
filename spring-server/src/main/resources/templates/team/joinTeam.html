@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <h1>팀생성</h1>
+  <hr>
+  <form action="/team/joinTeam" method="post">
+      <label>팀명:</label><input name="team_name" id="team_name" type="text" class="team_name" placeholder="팀명을 입력해주세요"> <br>
+      <input type="hidden" name="actionType" value="join">
+      <input type="submit" class="btn" value="팀생성"/>
+  </form>
+</body>
+</html>
