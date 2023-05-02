@@ -26,7 +26,7 @@ public class MemberController {
 
     private final TeamService teamService;
 
-    // 회원가입 페이지로 navi
+    // 회원가입 페이지로 navi 테스트세트스트ㅡ햣
     @GetMapping("/joinForm")
     public String joinForm() {
         return "joinForm";
