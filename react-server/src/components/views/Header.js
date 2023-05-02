@@ -14,28 +14,38 @@ function Header() {
 		>
 			<Container style={{ display: "flex", justifyContent: "space-between" }}>
 				<Navbar.Brand>
-					<img
-						src={logo}
-						width="60"
-						height="40"
-						className="d-inline-block align-top"
-						alt="React Bootstrap logo"
-					/>
+					<Link to="/LoggedIn">
+						<img
+							src={logo}
+							width="60"
+							height="40"
+							className="d-inline-block align-top"
+							alt="React Bootstrap logo"
+						/>
+					</Link>
 				</Navbar.Brand>
 				<Navbar.Brand style={{ color: "blue", margin: "0 10px 0 -10px" }}>
-					Blue<span style={{ color: "black" }}>Wave</span>
+					<Link to="/LoggedIn" style={{ textDecoration: "none" }}>
+						Blue<span style={{ color: "black" }}>Wave</span>
+					</Link>
 				</Navbar.Brand>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<Nav style={{ marginLeft: "auto" }}>
 						<Nav.Link>
-							<Link to="/community">커뮤니티</Link>
+							<Link to="/community" style={{ textDecoration: "none" }}>
+								커뮤니티
+							</Link>
 						</Nav.Link>
 						<Nav.Link>
-							<Link to="/shopping">쇼핑몰</Link>
+							<Link to="/shopping" style={{ textDecoration: "none" }}>
+								쇼핑몰
+							</Link>
 						</Nav.Link>
 						<Nav.Link>
-							<Link to="/">로그아웃</Link>
+							<Link to="/" style={{ textDecoration: "none" }}>
+								로그아웃
+							</Link>
 						</Nav.Link>
 					</Nav>
 				</Navbar.Collapse>
