@@ -1,7 +1,9 @@
 # Straight-BlueWave
+
 # straight-blue-wave
 
 
+blue wave ver 0.0.1
 
 ## 설치 및 실행방법
 1. git clone
@@ -19,3 +21,4 @@ npx localtunnel --port 4000
 ```
 5. 발급 받은 URL로 build 폴더의 socket.io에 관한 script 태그 수정
 6. URL로 접속
+
