@@ -2,31 +2,24 @@ import "./App.css";
 import Footer from "./components/views/Footer";
 import Header from "./components/views/Header";
 import {Route, Routes} from "react-router-dom";
-import Signup from "./components/views/SignUp";
-import MainPage from "./components/views/MainPage";
-import Update from "./components/views/UpdatePage";
+import Signup from "./pages/SignUp";
+import MainPage from "./pages/MainPage";
+import Update from "./pages/UpdatePage";
 import Sidebar from "./components/views/Sidebar";
+import DefaultPage from "./pages/DefaultPage"
+import SignUp from "./pages/SignUp";
+import LoggedIn from "./pages/LoggedIn";
 
 function App() {
 
 	return (
 		<div className="App">
-			
-			<header className="App-header">
-					<Header />
-			</header>
-			<div>
-				<Sidebar />	
-			</div>
-			
-			<div className="Main">
-				<Routes>
-					<Route path="/" exact={true} Component={MainPage} />
-					<Route path="/signup" exact={true} Component={Signup} />
-					<Route path="/Update" exact={true} Component={Update} />
-				</Routes>
-			</div>
-			<Footer />
+			<Routes>
+				<Route path="/" exact={true} Component={DefaultPage} />
+				<Route path="/SignUp" exact={true} Component={SignUp} />
+				<Route path="/LoggedIn" exact={true} Component={LoggedIn} />
+			</Routes>
+
 		</div>
 	)
 }
