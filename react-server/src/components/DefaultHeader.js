@@ -46,7 +46,7 @@ function DefaultHeader() {
 					</Nav>
 					<Nav>
 						<Nav.Link style={{ margin: "0 20px" }}>
-							<Link to="/LoggedIn" style={{ textDecoration: "none" }}>
+							<Link to="/login" style={{ textDecoration: "none" }}>
 								로그인
 							</Link>
 						</Nav.Link>
