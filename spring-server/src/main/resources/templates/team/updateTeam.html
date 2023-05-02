@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>팀명 변경</h1>
+<hr>
+<form action="/team/update" method="post">
+  <label>팀명:</label><input name="team_name" id="team_name" type="text" class="team_name" th:value="${dto.getTeam_name()}"> <br>
+  <input type="hidden" name="tno" th:value="${dto.getTno()}">
+  <input type="submit" class="btn" value="팀명 변경"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<span th:text="${session.loginId}">텍스트</span>
+
+<a href="/test/logout" class="flex-c-m trans-04 p-lr-25">
+    로그아웃
+</a>
+
+<a th:href="@{/test/member(user_id = ${session.loginId})}" class="flex-c-m trans-04 p-lr-25">
+    회원정보 수정
+</a>
+<hr>
+<button type="button" onClick="location.href='/team/teamForm'">팀생성</button>
+<br>
+<table>
+    <thead>
+        <th>팀명</th>
+        <th>팀명 바꾸기</th>
+        <th>팀 삭제</th>
+    </thead>
+    <tbody>
+        <tr th:each="dto : ${result.dtoList}">
+            <td>[[${dto.team_name}]]</td>
+            <th>
+                <a th:href="@{/team/update(tno = ${dto.tno})}">수정</a>
+            </th>
+            <th>
+                <a th:href="@{/team/delete(tno = ${dto.tno})}">삭제</a>
+            </th>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>

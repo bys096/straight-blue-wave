@@ -23,20 +23,6 @@ public interface SpringDataJpaMemberRepository extends JpaRepository<Member, Lon
 
     Optional<Member> findByUserIdAndUserPw(String userId, String userPw);
 
-    default MemberDTO entityToDto(Member entity) {
-        MemberDTO dto = MemberDTO.builder()
-                .id(entity.getId())
-                .user_id(entity.getUserId())
-                .user_pw(entity.getUserPw())
-                .user_name(entity.getUserName())
-                .user_class(entity.getUserClass())
-                .user_gender(entity.getUserGender())
-                .user_email(entity.getUserEmail())
-                .user_birth(entity.getUserBirth())
-                .build();
-        return dto;
-    }
-
     Optional<Member> findByUserId(String userId);
 
 }
