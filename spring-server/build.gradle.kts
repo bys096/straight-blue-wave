@@ -21,6 +21,8 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+	implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2")
 
 }
 
