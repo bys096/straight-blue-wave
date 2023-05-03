@@ -7,7 +7,7 @@ import cors from "cors"; // 추가
 
 const path = require('path');
 const app = express();
-app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, "/client/build")));
 
 // app.set("view engine", "pug");
 // app.set("views", __dirname + "/views");
