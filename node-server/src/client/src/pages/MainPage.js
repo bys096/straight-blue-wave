@@ -14,6 +14,11 @@ function MainPage(props) {
     const welcomeFormRef = useRef(null);
     const peerFaceRef = useRef(null);
     const myStreamRef = useRef(null);
+
+    const chatListRef = useRef(null);
+    const chatBoxRef = useRef(null);
+
+
     const [hidden, setHidden] = useState(true);
     const [welHidden, setWelHidden] = useState(false);
 
@@ -272,6 +277,28 @@ function paintPeerFace(peerStream, id) {
 //   streamArr.forEach((stream) => (stream.className = `people${peopleInRoom}`));
 // }
 
+
+
+// chatting
+
+function sendChat() {
+  const chatBox = chatBoxRef.current;
+  const chatList = chatListRef.current;
+  const msg = chatBox.value;
+  socket.emit("sendChat", roomName, msg, () => {
+    const li = document.createElement("li");
+    li.innerText = msg;
+    chatList.appendChild(li);
+  });
+}
+
+socket.on("newMessage", (msg) => {
+  console.log(`newMessage: ${msg}`);
+});
+
+
+
+
   return (
     <Container>
       <h1>영상통화</h1>
@@ -296,7 +323,15 @@ function paintPeerFace(peerStream, id) {
                     <video id="peerFace" ref={peerFaceRef} autoPlay playsInline width="400" height="400"></video>
                 </div>
             </div>
-            <button onClick={handleWelcomeSubmit}>teset</button>
+            
+            <div className="chat" >
+              <h2>Chatting</h2>
+              <ul ref={chatListRef}></ul>
+              <form>
+                <input ref={chatBoxRef} type="text" required placeholder="채팅을 입력하세요"/>
+                <button onClick={sendChat}>Send</button>
+              </form>
+            </div>
         </div>
       </div>
     </Container>

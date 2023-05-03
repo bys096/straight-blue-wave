@@ -131,6 +131,12 @@ wsServer.on("connection", (socket) => {
       roomObjArr = newRoomObjArr;
     }
   });
+  
+
+  socket.on("sendChat", (roomName, msg, done) => {
+    socket.to(roomName).emit("newMessage", msg);
+    done();
+  });
 });
 
 const handleListen = () => console.log(`Listening on http://localhost:4000`);
