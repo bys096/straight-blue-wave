@@ -11,7 +11,7 @@ const SignUp = () =>{
     const [term,setTerm] = useState(false);
     const [passwordError,setPasswordError] = useState(false);
     const [termError,setTermError] = useState(false);
-    const [user_gender, setGender] = useState('');
+    const [user_gender, setGender] = useState('male');
     const [user_birth, setBirth] = useState('');
     const [user_email, setEmail] = useState('');
     const [user_class, setUserClass] = useState('');
@@ -82,6 +82,24 @@ const SignUp = () =>{
     const onChangeUserClass = (e) => {
       setUserClass(e.target.value)
   }
+
+    const addMember = () => {
+      return axios
+      .post("http://localhost:8002/api/register", {
+        user_id: user_id,
+        user_pw: user_pw,
+        user_name: user_name,
+        user_gender: user_gender,
+        user_email: user_email,
+        user_birth: user_birth
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    };
 
   
     // axios 임시
@@ -220,7 +238,7 @@ const SignUp = () =>{
                 <Alert variant="danger">약관에 동의하셔야 합니다.</Alert>
               )}
             </Form.Group>
-            <Button type="primary" htmltype="submit">
+            <Button onClick={() => addMember()} type="primary" htmltype="submit">
               가입하기
             </Button>
           </Form>
