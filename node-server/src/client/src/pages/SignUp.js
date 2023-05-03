@@ -85,7 +85,7 @@ const SignUp = () =>{
 
     const addMember = () => {
       return axios
-      .post("http://localhost:8002/api/register", {
+      .post("http://172.26.1.126:8002/api/register", {
         user_id: user_id,
         user_pw: user_pw,
         user_name: user_name,

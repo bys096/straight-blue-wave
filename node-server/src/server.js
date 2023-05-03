@@ -8,8 +8,8 @@ import cors from "cors"; // 추가
 const path = require('path');
 const app = express();
 
-// app.use(cors({
-//   origin: 'http://172.26.1.126:8002'
+ //app.use(cors({
+// origin: 'http://192.168.0.79:8002'
 // }));
 
 app.use(express.static(path.join(__dirname, "/client/build")));
