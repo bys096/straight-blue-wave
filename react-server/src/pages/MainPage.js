@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 
 function MainPage(props) {
 
-	const socket = io();
+  const socket = io();
     const myFaceRef = useRef(null);
     const muteRef = useRef(null);
     const cameraRef = useRef(null);
@@ -13,6 +13,7 @@ function MainPage(props) {
     const welcomeRef = useRef(null);
     const welcomeFormRef = useRef(null);
     const peerFaceRef = useRef(null);
+    const myStreamRef = useRef(null);
     const [hidden, setHidden] = useState(true);
     const [welHidden, setWelHidden] = useState(false);
 
@@ -22,7 +23,9 @@ function MainPage(props) {
     let roomName;
     let myPeerConnection;
     let myDataChannel;
-   
+    let peopleInRoom = 1;
+
+    let pcObj = {};
 async function getCameras() {
   try {
     const devices = await navigator.mediaDevices.enumerateDevices();
@@ -109,13 +112,19 @@ async function initCall() {
   setWelHidden(true);
   setHidden(false);
   await getMedia();
-  makeConnection();
+  // myPeerConnection = makeConnection(); // 수정된 부분
 }
 
 async function handleWelcomeSubmit(event) {
   event.preventDefault();
   const input = welcomeFormRef.current.querySelector("input");
-  await initCall();
+  // await initCall();
+  // await getMedia();
+  // 추후에 닉네임 추가
+
+  if(socket.disconnected) {
+    socket.connect();
+  }
   socket.emit("join_room", input.value);
   roomName = input.value;
   input.value = "";
@@ -123,45 +132,79 @@ async function handleWelcomeSubmit(event) {
 
 
 
-socket.on("welcome", async () => {
-  myDataChannel = myPeerConnection.createDataChannel("chat");
-  myDataChannel.addEventListener("message", (event) => console.log(event.data));
-  console.log("made data channel");
-  const offer = await myPeerConnection.createOffer();
-  myPeerConnection.setLocalDescription(offer);
-  console.log("sent the offer");
-  socket.emit("offer", offer, roomName);
+socket.on("reject_join", () => {
+  // Paint modal
+  // paintModal("Sorry, The room is already full.");
+
+  // Erase names
+  // const nicknameContainer = document.querySelector("#userNickname");
+  // nicknameContainer.innerText = "";
+  roomName = "";
+  // nickname = "";
 });
 
-socket.on("offer", async (offer) => {
-  myPeerConnection.addEventListener("datachannel", (event) => {
-    myDataChannel = event.channel;
-    myDataChannel.addEventListener("message", (event) =>
-      console.log(event.data)
-    );
-  });
-  console.log("received the offer");
-  myPeerConnection.setRemoteDescription(offer);
-  const answer = await myPeerConnection.createAnswer();
-  myPeerConnection.setLocalDescription(answer);
-  socket.emit("answer", answer, roomName);
-  console.log("sent the answer");
+socket.on("accept_join", async (userObjArr) => {
+  await initCall();
+
+  const length = userObjArr.length;
+  if (length === 1) {
+    return;
+  }
+
+  // writeChat("Notice!", NOTICE_CN);
+  for (let i = 0; i < length; ++i) {
+    try {
+      const newPC = createConnection(
+        userObjArr[i].socketId,
+        // userObjArr[i].nickname
+      );
+      const offer = await newPC.createOffer();
+      await newPC.setLocalDescription(offer);
+      socket.emit("offer", offer, userObjArr[i].socketId);
+      // writeChat(`__${userObjArr[i].nickname}__`, NOTICE_CN);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  // writeChat("is in the room.", NOTICE_CN);
 });
 
-socket.on("answer", (answer) => {
-  console.log("received the answer");
-  myPeerConnection.setRemoteDescription(answer);
+socket.on("offer", async (offer, remoteSocketId) => {
+  try {
+    const newPC = createConnection(remoteSocketId);
+    await newPC.setRemoteDescription(offer);
+    const answer = await newPC.createAnswer();
+    await newPC.setLocalDescription(answer);
+    socket.emit("answer", answer, remoteSocketId);
+    // writeChat(`notice! __${remoteNickname}__ joined the room`, NOTICE_CN);
+  } catch (err) {
+    console.error(err);
+  }
 });
 
-socket.on("ice", (ice) => {
-  console.log("received candidate");
-  myPeerConnection.addIceCandidate(ice);
+socket.on("answer", async (answer, remoteSocketId) => {
+  await pcObj[remoteSocketId].setRemoteDescription(answer);
 });
 
-// RTC Code
+socket.on("ice", async (ice, remoteSocketId) => {
+  await pcObj[remoteSocketId].addIceCandidate(ice);
+});
 
-function makeConnection() {
-  myPeerConnection = new RTCPeerConnection({
+socket.on("chat", (message) => {
+  // writeChat(message);
+});
+
+socket.on("leave_room", (leavedSocketId) => {
+  // removeVideo(leavedSocketId);
+  // writeChat(`notice! ${nickname} leaved the room.`, NOTICE_CN);
+  // --peopleInRoom;
+  // sortStreams();
+});
+
+// RTC code
+
+function createConnection(remoteSocketId) {
+  const myPeerConnection = new RTCPeerConnection({
     iceServers: [
       {
         urls: [
@@ -174,35 +217,65 @@ function makeConnection() {
       },
     ],
   });
-  myPeerConnection.addEventListener("icecandidate", handleIce);
-myPeerConnection.addEventListener("track", handleTrack); // 이 부분이 추가됩니다.
-  myStream.getTracks().forEach((track) => myPeerConnection.addTrack(track, myStream));
+  myPeerConnection.addEventListener("icecandidate", (event) => {
+    handleIce(event, remoteSocketId);
+  });
+  myPeerConnection.addEventListener("track", (event) => {
+    handleAddStream(event, remoteSocketId);
+  });
+  // myPeerConnection.addEventListener(
+  //   "iceconnectionstatechange",
+  //   handleConnectionStateChange
+  // );
+  myStream //
+    .getTracks()
+    .forEach((track) => myPeerConnection.addTrack(track, myStream));
 
+  pcObj[remoteSocketId] = myPeerConnection;
+
+  ++peopleInRoom;
+  // sortStreams();
+  return myPeerConnection;
 }
 
-function handleIce(data) {
-  console.log("sent candidate");
-  socket.emit("ice", data.candidate, roomName);
-}
-// function handleAddStream(data) {
-//   if (peerFaceRef.current) {
-//     peerFaceRef.current.srcObject = data.stream;
-//   } else {
-//     console.log('peerFaceRef.current is not defined');
-//   }
-// }
-function handleTrack(event) {
-  if (peerFaceRef.current) {
-    peerFaceRef.current.srcObject = event.streams[0];
-  } else {
-    console.log('peerFaceRef.current is not defined');
+function handleIce(event, remoteSocketId) {
+  if (event.candidate) {
+    socket.emit("ice", event.candidate, remoteSocketId);
   }
 }
 
-	return (
-		<Container>
-			<h1>영상통화</h1>
-			<div className="video">
+function handleAddStream(event, remoteSocketId) {
+  const peerStream = event.streams[0];
+  paintPeerFace(peerStream, remoteSocketId);
+}
+
+function paintPeerFace(peerStream, id) {
+  const streams = myStreamRef.current;
+  let div = document.getElementById(id);
+  if (!div) {
+    div = document.createElement("div");
+    div.id = id;
+    streams.appendChild(div);
+  }
+  const video = div.querySelector("video") || document.createElement("video");
+  video.autoplay = true;
+  video.playsInline = true;
+  video.width = "400";
+  video.height = "400";
+  video.srcObject = peerStream;
+  div.appendChild(video);
+}
+
+// function sortStreams() {
+//   const streams = document.querySelector("#streams");
+//   const streamArr = streams.querySelectorAll("div");
+//   streamArr.forEach((stream) => (stream.className = `people${peopleInRoom}`));
+// }
+
+  return (
+    <Container>
+      <h1>영상통화</h1>
+      <div className="video">
         <div>
             <div id="welcome" ref={welcomeRef} 
                 style={{display: welHidden ? "none" : "block"}}
@@ -215,7 +288,7 @@ function handleTrack(event) {
             <div id="call" ref={callRef}
                 style={{ display: hidden ? "none" : "block" }}
             >
-                <div id="myStream">
+                <div id="myStream" ref={myStreamRef}>
                     <video id="myFace"ref={myFaceRef} autoPlay playsInline width="400" height="400"></video>
                     <button id="mute" ref={muteRef} onClick={handleMuteClick}>Mute</button>
                     <button id="camera" ref={cameraRef} onClick={handleCameraClick}>Turn Camera Off</button>
@@ -225,9 +298,10 @@ function handleTrack(event) {
             </div>
             <button onClick={handleWelcomeSubmit}>teset</button>
         </div>
-			</div>
-		</Container>
-	);
+      </div>
+    </Container>
+  );
 }
 
 export default MainPage;
+

@@ -28,24 +28,108 @@ const wsServer = SocketIO(httpServer);
 //   },
 // });
 
+let roomObjArr = [
+  // {
+  //   roomName,
+  //   currentNum,
+  //   users: [
+  //     {
+  //       socketId,
+  //       nickname,
+  //     },
+  //   ],
+  // },
+];
+const MAXIMUM = 5;
+
 wsServer.on("connection", (socket) => {
-  console.log('Clienct Connected');
+  let myRoomName = null;
+  // let myNickname = null;
+
   socket.on("join_room", (roomName) => {
-        console.log(wsServer.sockets.adapter);
+    myRoomName = roomName;
+    // myNickname = nickname;
 
-        socket.join(roomName);
-        console.log(`User joined room: ${roomName}`); // 여기에 콘솔 로그를 추가합니다.
+    let isRoomExist = false;
+    let targetRoomObj = null;
 
-    socket.to(roomName).emit("welcome");
+    // forEach를 사용하지 않는 이유: callback함수를 사용하기 때문에 return이 효용없음.
+    for (let i = 0; i < roomObjArr.length; ++i) {
+      if (roomObjArr[i].roomName === roomName) {
+        // Reject join the room
+        if (roomObjArr[i].currentNum >= MAXIMUM) {
+          socket.emit("reject_join");
+          return;
+        }
+
+        isRoomExist = true;
+        targetRoomObj = roomObjArr[i];
+        break;
+      }
+    }
+
+    // Create room
+    if (!isRoomExist) {
+      targetRoomObj = {
+        roomName,
+        currentNum: 0,
+        users: [],
+      };
+      roomObjArr.push(targetRoomObj);
+    }
+
+    //Join the room
+    targetRoomObj.users.push({
+      socketId: socket.id,
+      
+    });
+    ++targetRoomObj.currentNum;
+
+    socket.join(roomName);
+    socket.emit("accept_join", targetRoomObj.users);
   });
-  socket.on("offer", (offer, roomName) => {
-    socket.to(roomName).emit("offer", offer);
+
+  socket.on("offer", (offer, remoteSocketId) => {
+    socket.to(remoteSocketId).emit("offer", offer, socket.id);
   });
-  socket.on("answer", (answer, roomName) => {
-    socket.to(roomName).emit("answer", answer);
+
+  socket.on("answer", (answer, remoteSocketId) => {
+    socket.to(remoteSocketId).emit("answer", answer, socket.id);
   });
-  socket.on("ice", (ice, roomName) => {
-    socket.to(roomName).emit("ice", ice);
+
+  socket.on("ice", (ice, remoteSocketId) => {
+    socket.to(remoteSocketId).emit("ice", ice, socket.id);
+  });
+
+  socket.on("chat", (message, roomName) => {
+    socket.to(roomName).emit("chat", message);
+  });
+
+  socket.on("disconnecting", () => {
+    socket.to(myRoomName).emit("leave_room", socket.id);
+
+    let isRoomEmpty = false;
+    for (let i = 0; i < roomObjArr.length; ++i) {
+      if (roomObjArr[i].roomName === myRoomName) {
+        const newUsers = roomObjArr[i].users.filter(
+          (user) => user.socketId != socket.id
+        );
+        roomObjArr[i].users = newUsers;
+        --roomObjArr[i].currentNum;
+
+        if (roomObjArr[i].currentNum == 0) {
+          isRoomEmpty = true;
+        }
+      }
+    }
+
+    // Delete room
+    if (isRoomEmpty) {
+      const newRoomObjArr = roomObjArr.filter(
+        (roomObj) => roomObj.currentNum != 0
+      );
+      roomObjArr = newRoomObjArr;
+    }
   });
 });
 
