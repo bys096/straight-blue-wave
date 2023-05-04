@@ -51,9 +51,12 @@ wsServer.on("connection", (socket) => {
   let myRoomName = null;
   // let myNickname = null;
 
-  socket.on("join_room", (roomName) => {
+  socket.on("join_room", (roomName, userId) => {
     myRoomName = roomName;
-    // myNickname = nickname;
+    const joinUser = {
+      userId: userId,
+      msg: `${userId}님이 방에 참가하셨습니다.`
+    }
 
     let isRoomExist = false;
     let targetRoomObj = null;
@@ -90,9 +93,10 @@ wsServer.on("connection", (socket) => {
     });
     ++targetRoomObj.currentNum;
 
+
     socket.join(roomName);
     socket.emit("accept_join", targetRoomObj.users);
-    socket.to(roomName).emit("welcome", "~님이 방에 참가하셨습니다.");
+    socket.to(roomName).emit("welcome", joinUser);
   });
 
   socket.on("offer", (offer, remoteSocketId) => {
@@ -107,12 +111,9 @@ wsServer.on("connection", (socket) => {
     socket.to(remoteSocketId).emit("ice", ice, socket.id);
   });
 
-  // socket.on("chat", (message, roomName) => {
-  //   socket.to(roomName).emit("chat", message);
-  // });
-
-  socket.on("disconnecting", () => {
-    socket.to(myRoomName).emit("leave_room", socket.id);
+  socket.on("disc", (user) => {
+    console.log("leaving room: " + user.roomName);
+    socket.to(user.roomName).emit("leave_room", user.userId);
 
     let isRoomEmpty = false;
     for (let i = 0; i < roomObjArr.length; ++i) {
@@ -140,10 +141,12 @@ wsServer.on("connection", (socket) => {
 
   
   
-  socket.on("sendChat", (roomName, msg, sid) => {
-    console.log(`roomName: ${roomName}, msg: ${msg}, sid: ${socket.id}`);
+  socket.on("sendChat", (chat) => {
+    // console.log(`roomName: ${roomName}, msg: ${msg}, sid: ${socket.id}`);
     // console.log(`myroomName: ${myRoomName}, msg: ${msg}`);
-    socket.to(roomName).emit("newMessage", msg, sid);
+    
+
+    socket.to(chat.roomName).emit("newMessage", chat);
     
   });
 

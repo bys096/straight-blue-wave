@@ -1,10 +1,9 @@
 import {Container} from "react-bootstrap";
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, useEffect} from "react";
 import io from "socket.io-client";
 import "./MainPage.css";
 
 function MainPage(props) {
-
   const socket = io();
   const myFaceRef = useRef(null);
   const muteRef = useRef(null);
@@ -15,27 +14,26 @@ function MainPage(props) {
   const welcomeFormRef = useRef(null);
   const peerFaceRef = useRef(null);
   const myStreamRef = useRef(null);
-
   const chatListRef = useRef(null);
   const chatBoxRef = useRef(null);
-
-
   const [hidden, setHidden] = useState(true);
   const [welHidden, setWelHidden] = useState(false);
-
+  const [roomName, setRoomName] = useState("");
+  const [userId, setUserId] = useState("");
+  const senderRef = useRef(null);
   let myStream;
   let muted = false;
   let cameraOff = false;
-  // let roomName;
-  const [roomName, setRoomName] = useState("");
-  // const [sender, setSender] = useState("");
-  const senderRef = useRef(null);
-
   let myPeerConnection;
   let myDataChannel;
   let peopleInRoom = 1;
-
   let pcObj = {};
+
+  useEffect(() => {
+    setUserId(sessionStorage.getItem("user_id"));
+  }, []);
+
+
   async function getCameras() {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -105,7 +103,6 @@ function MainPage(props) {
   }
 
   async function handleCameraChange() {
-    // select 한 camera id를 기준으로 다시 getMedia를 통해 미디어 스트림을 가져옴
     await getMedia(camerasRef.current.value);
     if (myPeerConnection) {
       const videoTrack = myStream.getVideoTracks()[0];
@@ -116,30 +113,23 @@ function MainPage(props) {
     }
   }
 
-
-
-
   async function initCall() {
     setWelHidden(true);
     setHidden(false);
     await getMedia();
-    // myPeerConnection = makeConnection(); // 수정된 부분
   }
 
   async function handleWelcomeSubmit(event) {
     event.preventDefault();
-    const input = welcomeFormRef.current.querySelector("input");
-    // await initCall();
-    // await getMedia();
-    // 추후에 닉네임 추가
+    const roomForm = welcomeFormRef.current.querySelector("input");
 
     if(socket.disconnected) {
       socket.connect();
     }
-    socket.emit("join_room", input.value);
-    setRoomName(input.value);
+    socket.emit("join_room", roomForm.value, userId);
+    setRoomName(roomForm.value);
     // console.log(`입장, 방이름: ${roomName}`);
-    input.value = "";
+    roomForm.value = "";
     // console.log(`입장, 방이름?: ${roomName}`);
   }
 
@@ -170,7 +160,6 @@ function MainPage(props) {
       try {
         const newPC = createConnection(
           userObjArr[i].socketId,
-          // userObjArr[i].nickname
         );
         const offer = await newPC.createOffer();
         await newPC.setLocalDescription(offer);
@@ -204,19 +193,15 @@ function MainPage(props) {
     await pcObj[remoteSocketId].addIceCandidate(ice);
   });
 
-  socket.on("chat", (message) => {
-    // writeChat(message);
-  });
-
   socket.on("leave_room", (leavedSocketId) => {
     // removeVideo(leavedSocketId);
     // writeChat(`notice! ${nickname} leaved the room.`, NOTICE_CN);
-    // --peopleInRoom;
+    --peopleInRoom;
     // sortStreams();
   });
 
-  // RTC code
 
+  // RTC code
   function createConnection(remoteSocketId) {
     const myPeerConnection = new RTCPeerConnection({
       iceServers: [
@@ -301,28 +286,32 @@ function MainPage(props) {
     event.preventDefault();
     const chatBox = chatBoxRef.current;
     const msg = chatBox.value;
-    socket.emit("sendChat", roomName, msg, socket.id)
-    addMessage(`You: ${msg}, sid: ${socket.id}`);
+
+    const chat = {
+      roomName: roomName,
+      msg: msg,
+      sid: socket.id,
+      userId: userId
+    }
+
+    socket.emit("sendChat", chat);
     chatBox.value = "";
     senderRef.current = socket.id;
   }
 
-  socket.on("newMessage", (msg, senderSocketId) => {
-    console.log("sender id: " + senderSocketId);
-    console.log("receive id: " + senderRef.current);
-    if(senderSocketId !== senderRef.current) {
-      console.log("같은 sid");
-      addMessage(`${msg}, sid: ${senderSocketId}`);
-    }
+  socket.on("newMessage", chat => {
+    addMessage(`${chat.userId}: ${chat.msg}`);
+  });
+
+  socket.on("welcome", (user) => {
+    addMessage(user.msg);
+  });
+
+
+
+
+  // leave
   
-  });
-
-  socket.on("welcome", (msg) => {
-    addMessage(msg);
-  });
-
-
-
 
   return (
     <Container>
