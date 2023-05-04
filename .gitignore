@@ -2,3 +2,5 @@
 node-server/src/client/bulid/
 node-server/src/client/bulid/*
 build/
+.idea/*
+!.idea/.gitignore
