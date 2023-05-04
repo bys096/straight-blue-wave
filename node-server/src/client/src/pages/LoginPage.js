@@ -10,6 +10,7 @@ function LoginPage() {
 		event.preventDefault();
 		const response = await axios
 		.post("http://172.26.1.126:8002/api/login", {
+
 			user_id: user_id,
 			user_pw: user_pw
 		})
@@ -27,6 +28,29 @@ function LoginPage() {
 			console.error(error);
 		})
 	};
+
+	/*const Login = () => {
+		axios
+		.post("http://localhost:8002/api/login", {
+			user_id: user_id,
+			user_pw: user_pw
+		})
+		.then((res) => {
+			console.log("res.data.user_id : ", res.data.user_id);
+			console.log("res.data.user_pw : ", res.data.user_pw);
+			if(res.data.user_id === undefined) {
+				alert("입력하신 아이디가 일치하지 않습니다.")
+			} else if (res.data.user_id === user_id && res.data.user_pw != user_pw) {
+				alert("입력하신 비밀번호가 일치하지 않습니다.")
+			} else if (res.data.user_id === user_id && res.data.user_pw === user_pw) {
+				sessionStorage.setItem("user_id", user_id);
+				alert("로그인 성공")
+			}
+		})
+		.catch((error) => {
+			console.error(error);
+		})
+	};*/
 
 	return (
 		<>

@@ -6,4 +6,19 @@
 
 .article {
     display: flex;
+    flex: 1;
+}
+
+.sidebar {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 1rem;
 }
