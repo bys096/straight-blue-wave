@@ -1,2 +1,4 @@
-/node-server/node_modules/*/
-/node-server/src/client/node_modules/*/
+**/node_modules/
+node-server/src/client/bulid/
+node-server/src/client/bulid/*
+build/
