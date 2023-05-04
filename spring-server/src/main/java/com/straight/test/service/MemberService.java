@@ -20,6 +20,26 @@ public class MemberService implements MemberServiceImp{
 
     private final SpringDataJpaMemberRepository memberRepository;
 
+    public Member join(MemberDTO m) {
+        Member member = Member.builder()
+                .userId(m.getUser_id())
+                .userPw(m.getUser_pw())
+                .userBirth(m.getUser_birth())
+                .userGender(m.getUser_gender())
+                .userName(m.getUser_name())
+                .userEmail(m.getUser_email())
+                .build();
+        memberRepository.save(member);
+        return member;
+
+    }
+
+    public MemberDTO login(MemberDTO m) {
+        Optional<Member> result = memberRepository.findByUserIdAndUserPw(m.getUser_id(), m.getUser_pw());
+
+        return result.isPresent() ? entityToDto(result.get()) : null;
+    }
+
     public Member joinMember(MemberDTO m) {
         Member member = Member.builder()
                 .userId(m.getUser_id())
@@ -27,7 +47,6 @@ public class MemberService implements MemberServiceImp{
                 .userBirth(m.getUser_birth())
                 .userGender(m.getUser_gender())
                 .userName(m.getUser_name())
-                .userClass(m.getUser_class())
                 .userEmail(m.getUser_email())
                 .build();
         memberRepository.save(member);
@@ -62,8 +81,8 @@ public class MemberService implements MemberServiceImp{
 
         if(result.isPresent()) {
             Member entity = result.get();
-            entity.changeName(member.getUser_name());
-            entity.changePw(member.getUser_pw());
+            //entity.changeName(member.getUser_name());
+            //entity.changePw(member.getUser_pw());
             memberRepository.save(entity);
         }
 
