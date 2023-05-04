@@ -19,8 +19,6 @@ public class MemberDTO {
 
     private String user_name;
 
-    private String user_class;
-
     private String user_gender;
 
     private String user_email;

@@ -16,49 +16,24 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@Controller
-@RequestMapping("/test")
+@RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @Log4j2
 public class MemberController {
 
     private final MemberService memberService;
 
-    private final TeamService teamService;
+    @PostMapping("/register")
+    public Member join(@RequestBody MemberDTO member) {
 
-    // 회원가입 페이지로 navi
-    @GetMapping("/joinForm")
-    public String joinForm() {
-        return "joinForm";
+        return memberService.join(member);
     }
 
-    // 로그인 페이지로 navi
-    @GetMapping("/loginForm")
-    public String loginForm() {return "loginForm";}
-
-
-    // 회원 가입
-    @PostMapping("/member")     //회원가입
-    public String joinMember(MemberDTO member) {
-        Member result = memberService.joinMember(member);
-        return "redirect:/test/loginForm";
-    }
-
-    @PostMapping("/member/login")   //로그인
-    public String login(String user_id, String user_pw, HttpServletRequest request) {
-
-        boolean login = memberService.loginMember(user_id, user_pw);
-        HttpSession session = (HttpSession) request.getSession();
-        if(login) {
-            session.setAttribute("loginState", "login");
-            session.setAttribute("loginId", user_id);
-            session.setAttribute("loginPw", user_pw);
-            return "redirect:/team/list";
-        }
-        else {
-            session.setAttribute("loinState", "logout");
-            return "loginForm";
-        }
+    @PostMapping("/login")
+    public MemberDTO login(@RequestBody MemberDTO member) {
+        MemberDTO dto = memberService.login(member);
+        return dto;
     }
 
     @GetMapping("/logout")      //로그아웃

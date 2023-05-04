@@ -7,6 +7,11 @@ import cors from "cors"; // 추가
 
 const path = require('path');
 const app = express();
+
+ //app.use(cors({
+// origin: 'http://192.168.0.79:8002'
+// }));
+
 app.use(express.static(path.join(__dirname, "/client/build")));
 
 // app.set("view engine", "pug");
@@ -87,6 +92,7 @@ wsServer.on("connection", (socket) => {
 
     socket.join(roomName);
     socket.emit("accept_join", targetRoomObj.users);
+    socket.to(roomName).emit("welcome", "~님이 방에 참가하셨습니다.");
   });
 
   socket.on("offer", (offer, remoteSocketId) => {
@@ -101,9 +107,9 @@ wsServer.on("connection", (socket) => {
     socket.to(remoteSocketId).emit("ice", ice, socket.id);
   });
 
-  socket.on("chat", (message, roomName) => {
-    socket.to(roomName).emit("chat", message);
-  });
+  // socket.on("chat", (message, roomName) => {
+  //   socket.to(roomName).emit("chat", message);
+  // });
 
   socket.on("disconnecting", () => {
     socket.to(myRoomName).emit("leave_room", socket.id);
@@ -131,6 +137,16 @@ wsServer.on("connection", (socket) => {
       roomObjArr = newRoomObjArr;
     }
   });
+
+  
+  
+  socket.on("sendChat", (roomName, msg, sid) => {
+    console.log(`roomName: ${roomName}, msg: ${msg}, sid: ${socket.id}`);
+    // console.log(`myroomName: ${myRoomName}, msg: ${msg}`);
+    socket.to(roomName).emit("newMessage", msg, sid);
+    
+  });
+
 });
 
 const handleListen = () => console.log(`Listening on http://localhost:4000`);
