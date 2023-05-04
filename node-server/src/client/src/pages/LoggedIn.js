@@ -11,7 +11,9 @@ function LoggedIn() {
 			<Header />
 			<div className="article">
 				<Sidebar />
-				<VideoCall />
+				<div className="section">
+					<VideoCall />
+				</div>
 			</div>
 			<Footer />
 		</div>

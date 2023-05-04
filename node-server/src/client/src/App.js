@@ -11,6 +11,7 @@ import LoggedIn from "./pages/LoggedIn";
 import CommunityPage from "./pages/CommunityPage";
 import ShoppingPage from "./pages/ShoppingPage";
 import LoginPage from "./pages/LoginPage";
+import CalendarForm from "./pages/CalendarForm";
 
 function App() {
 	return (
@@ -22,6 +23,7 @@ function App() {
 				<Route path="/LoggedIn" exact={true} Component={LoggedIn} />
 				<Route path="/community" exact={true} Component={CommunityPage} />
 				<Route path="/shopping" exact={true} Component={ShoppingPage}></Route>
+				<Route path="/calendar" exact={true} Component={CalendarForm}></Route>
 			</Routes>
 		</div>
 	);
