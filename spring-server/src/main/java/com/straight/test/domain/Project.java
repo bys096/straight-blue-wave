@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
@@ -32,6 +33,7 @@ public class Project {
     private Date creationDate;
 
     @Column(name = "member_number")
+    @ColumnDefault("1")
     private int memberNumber;
 
     @Column(name = "prj_thumbnail")

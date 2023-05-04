@@ -1,11 +1,13 @@
 package com.straight.test.service;
 
 import com.straight.test.domain.Project;
-import com.straight.test.domain.dto.ProejctDTO;
+import com.straight.test.domain.dto.PageRequestDTO;
+import com.straight.test.domain.dto.PageResultDTO;
+import com.straight.test.domain.dto.ProjectDTO;
 
 public interface ProjectServiceImp {
 
-    default Project dtoToEntity(ProejctDTO dto){
+    default Project dtoToEntity(ProjectDTO dto){
         Project entity = Project.builder()
                 .prjId(dto.getPrj_id())
                 .prjName(dto.getPrj_name())
@@ -16,8 +18,8 @@ public interface ProjectServiceImp {
         return entity;
     }
 
-    default ProejctDTO entityToDto(Project entity){
-        ProejctDTO dto = ProejctDTO.builder()
+    default ProjectDTO entityToDto(Project entity){
+        ProjectDTO dto = ProjectDTO.builder()
                 .prj_id(entity.getPrjId())
                 .prj_name(entity.getPrjName())
                 .creation_date(entity.getCreationDate())
@@ -27,9 +29,11 @@ public interface ProjectServiceImp {
         return dto;
     }
 
-    ProejctDTO read(Long prj_id);
+    ProjectDTO read(Long prj_id);
 
-    void modify(ProejctDTO dto);
+    Project modify(ProjectDTO dto);
 
     void remove(Long prj_id);
+
+    PageResultDTO<ProjectDTO, Project> getPrjList(String user_id, PageRequestDTO resultDTO);
 }

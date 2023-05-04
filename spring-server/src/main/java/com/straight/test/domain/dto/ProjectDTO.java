@@ -11,7 +11,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ProejctDTO {
+public class ProjectDTO {
 
     private Long prj_id;
 
