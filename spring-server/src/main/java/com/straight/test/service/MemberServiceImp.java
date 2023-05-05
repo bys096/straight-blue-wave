@@ -36,5 +36,5 @@ public interface MemberServiceImp {
 
     void modify(MemberDTO member);
 
-    void remove(Long id);
+    void remove(String user_id);
 }

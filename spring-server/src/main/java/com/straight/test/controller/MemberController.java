@@ -24,41 +24,33 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/register")
+    @PostMapping("/register")       //회원가입
     public Member join(@RequestBody MemberDTO member) {
 
         return memberService.join(member);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login")          //로그인
     public MemberDTO login(@RequestBody MemberDTO member) {
         MemberDTO dto = memberService.login(member);
         return dto;
     }
 
-    @GetMapping("/logout")      //로그아웃
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/test/loginForm";
-    }
 
     @GetMapping("/member")      //회원 정보 불러오기
-    public String updateMember(String user_id, Model model) {
+    public MemberDTO updateMember(@RequestParam("user_id") String user_id) {
 
         MemberDTO dto = memberService.read(user_id);
-        model.addAttribute("dto", dto);
-        return "member";
+        return dto;
     }
 
-    @PostMapping("/update")     //회원 정보 수정
-    public String updateMember(MemberDTO member) {
+    @PutMapping("/update")     //회원 정보 수정
+    public void updateMember(@RequestBody MemberDTO member) {
         memberService.modify(member);
-        return "redirect:/team/list";
     }
 
-    @GetMapping("/delete")      //회원탙퇴
-    public String deleteMember(@RequestParam("id") Long id) {
-        memberService.remove(id);
-        return "loginForm";
+    @DeleteMapping("/delete")      //회원탙퇴
+    public void deleteMember(@RequestParam("user_id") String user_id) {
+        memberService.remove(user_id);
     }
 }

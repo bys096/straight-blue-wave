@@ -25,4 +25,6 @@ public interface SpringDataJpaMemberRepository extends JpaRepository<Member, Lon
 
     Optional<Member> findByUserId(String userId);
 
+    void deleteByUserId(String userId);
+
 }
