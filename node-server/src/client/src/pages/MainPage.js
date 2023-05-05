@@ -163,7 +163,7 @@ function MainPage(props) {
         );
         const offer = await newPC.createOffer();
         await newPC.setLocalDescription(offer);
-        socket.emit("offer", offer, userObjArr[i].socketId);
+        socket.emit("offer", offer, userObjArr[i].socketId, userId);
         // writeChat(`__${userObjArr[i].nickname}__`, NOTICE_CN);
       } catch (err) {
         console.error(err);
@@ -172,9 +172,9 @@ function MainPage(props) {
     // writeChat("is in the room.", NOTICE_CN);
   });
 
-  socket.on("offer", async (offer, remoteSocketId) => {
+  socket.on("offer", async (offer, remoteSocketId, remoteUserId) => {
     try {
-      const newPC = createConnection(remoteSocketId);
+      const newPC = createConnection(remoteSocketId, remoteUserId);
       await newPC.setRemoteDescription(offer);
       const answer = await newPC.createAnswer();
       await newPC.setLocalDescription(answer);
@@ -202,7 +202,7 @@ function MainPage(props) {
 
 
   // RTC code
-  function createConnection(remoteSocketId) {
+  function createConnection(remoteSocketId, remoteUserId) {
     const myPeerConnection = new RTCPeerConnection({
       iceServers: [
         {
@@ -220,7 +220,7 @@ function MainPage(props) {
       handleIce(event, remoteSocketId);
     });
     myPeerConnection.addEventListener("track", (event) => {
-      handleAddStream(event, remoteSocketId);
+      handleAddStream(event, remoteSocketId, remoteUserId);
     });
     // myPeerConnection.addEventListener(
     //   "iceconnectionstatechange",
@@ -243,17 +243,17 @@ function MainPage(props) {
     }
   }
 
-  function handleAddStream(event, remoteSocketId) {
+  function handleAddStream(event, remoteSocketId, remoteUserId) {
     const peerStream = event.streams[0];
-    paintPeerFace(peerStream, remoteSocketId);
+    paintPeerFace(peerStream, remoteSocketId, remoteUserId);
   }
 
-  function paintPeerFace(peerStream, id) {
+  function paintPeerFace(peerStream, id, remoteUserId) {
     const streams = myStreamRef.current;
-    let div = document.getElementById(id);
+    let div = document.getElementById(remoteUserId);
     if (!div) {
       div = document.createElement("div");
-      div.id = id;
+      div.id = remoteUserId;
       streams.appendChild(div);
     }
     const video = div.querySelector("video") || document.createElement("video");
@@ -309,8 +309,30 @@ function MainPage(props) {
 
 
 
+  socket.on("left", (user) => {
+    console.log(user.msg);
+    console.log(`left socket id: ${user.sid}`);
+    console.log(`left my user id: ${user.mid}`);
+    addMessage(`${user.mid} 님이 퇴실하셨습니다`);
 
-  // leave
+    const streamArr = myStreamRef.current.querySelectorAll('div');
+
+    streamArr.forEach((e) => {
+      console.log(`현재 등록된 div id: ${e.id}`)
+      if(e.id === user.mid) {
+        myStreamRef.current.removeChild(e);
+      }
+    });    
+  });
+
+  
+  function leaveRoom() {
+    socket.disconnect();
+  }
+
+
+
+  
   
 
   return (
@@ -319,16 +341,14 @@ function MainPage(props) {
       <div className="video">
         <div>
             <div id="welcome" ref={welcomeRef} 
-                style={{display: welHidden ? "none" : "block"}}
-            >
+                style={{display: welHidden ? "none" : "block"}}>
                 <form ref={welcomeFormRef}>
                     <input placeholder="room name" required type="text"/>
                     <button onClick={handleWelcomeSubmit}>Enter room</button>
                 </form>
             </div>
             <div id="call" ref={callRef}
-                style={{ display: hidden ? "none" : "block" }}
-            >
+                style={{ display: hidden ? "none" : "block" }}>
                 <div id="myStream" ref={myStreamRef}>
                     <video id="myFace"ref={myFaceRef} autoPlay playsInline width="400" height="400"></video>
                     <button id="mute" ref={muteRef} onClick={handleMuteClick}>Mute</button>
@@ -336,6 +356,8 @@ function MainPage(props) {
                     <select id="cameras" ref={camerasRef} onChange={handleCameraChange}></select>
                     <video id="peerFace" ref={peerFaceRef} autoPlay playsInline width="400" height="400"></video>
                 </div>
+
+                <button onClick={leaveRoom}>Leave</button>
             </div>
             
             <div className="chat" >
