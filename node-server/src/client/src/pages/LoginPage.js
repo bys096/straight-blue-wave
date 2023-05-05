@@ -9,7 +9,7 @@ function LoginPage() {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const response = await axios
-		.post("http://172.26.1.126:8002/api/login", {
+		.post("http://localhost:8002/api/login", {
 
 			user_id: user_id,
 			user_pw: user_pw
