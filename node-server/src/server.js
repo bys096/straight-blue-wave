@@ -117,6 +117,7 @@ wsServer.on("connection", (socket) => {
 
 
   socket.on("disconnecting", () => {
+    console.log("disconnecting socket id from server: " + socket.id);
     console.log("disconect id? " + myUserId);
     const user = {
       sid: socket.id,

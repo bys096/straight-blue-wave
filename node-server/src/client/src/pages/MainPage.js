@@ -327,6 +327,9 @@ function MainPage(props) {
 
   
   function leaveRoom() {
+    console.log(`try to leave sokcet id: ${socket.id}`);
+    window.location.href = 'http://localhost:4000';
+
     socket.disconnect();
   }
 
