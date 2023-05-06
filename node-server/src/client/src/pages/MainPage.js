@@ -2,6 +2,11 @@ import {Container} from "react-bootstrap";
 import React, {useRef, useState, useEffect} from "react";
 import io from "socket.io-client";
 import "./MainPage.css";
+import "../assets/css/ChatUI.css";
+import $ from 'jquery';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function MainPage(props) {
   const socket = io();
@@ -14,13 +19,14 @@ function MainPage(props) {
   const welcomeFormRef = useRef(null);
   const peerFaceRef = useRef(null);
   const myStreamRef = useRef(null);
-  const chatListRef = useRef(null);
-  const chatBoxRef = useRef(null);
   const [hidden, setHidden] = useState(true);
   const [welHidden, setWelHidden] = useState(false);
+  const [chatHidden, setChatHidden] = useState(true);
   const [roomName, setRoomName] = useState("");
   const [userId, setUserId] = useState("");
   const senderRef = useRef(null);
+  const chatLogsRef = useRef(null);
+  const chatInputRef = useRef(null);
   let myStream;
   let muted = false;
   let cameraOff = false;
@@ -31,6 +37,18 @@ function MainPage(props) {
 
   useEffect(() => {
     setUserId(sessionStorage.getItem("user_id"));
+    setChatHidden(true);
+  
+  $("#chat-circle").click(function() {    
+    $("#chat-circle").toggle('scale');
+    $(".chat-box").toggle('scale');
+  })
+  
+  $(".chat-box-toggle").click(function() {
+    $("#chat-circle").toggle('scale');
+    $(".chat-box").toggle('scale');
+  })
+  
   }, []);
 
 
@@ -116,6 +134,7 @@ function MainPage(props) {
   async function initCall() {
     setWelHidden(true);
     setHidden(false);
+    setChatHidden(false);
     await getMedia();
   }
 
@@ -160,6 +179,7 @@ function MainPage(props) {
       try {
         const newPC = createConnection(
           userObjArr[i].socketId,
+          userObjArr[i].userId
         );
         const offer = await newPC.createOffer();
         await newPC.setLocalDescription(offer);
@@ -272,21 +292,37 @@ function MainPage(props) {
   // }
 
 
-
   // chatting
-  function addMessage(msg) {
-    const chatList = chatListRef.current;
-    const li = document.createElement("li");
-    li.innerText = msg;
-    chatList.appendChild(li);
+  function addMessage(msg, type) {
+    const chatLogs = chatLogsRef.current;
+    const div = document.createElement("div");
+    const span = document.createElement("span");
+    const img = document.createElement("img");
+    const text = document.createElement("div");
+    text.innerText = msg;
+    div.className = type;
+    span.className="mssg-avatar";
+    text.className="cm-msg-text";
+
+    console.log("text divtag " + text.value);
+
+    div.appendChild(text);
+    chatLogs.appendChild(div);
+    div.appendChild(span);
+    span.appendChild(img);
+
+    // chatList.appendChild(li);
   }
   
+
+
   
   function sendChat(event) {
     event.preventDefault();
-    const chatBox = chatBoxRef.current;
-    const msg = chatBox.value;
+    const chatBox = chatInputRef.current;
+    const msg = chatInputRef.current.value;
 
+    // console.log(msg);
     const chat = {
       roomName: roomName,
       msg: msg,
@@ -300,7 +336,15 @@ function MainPage(props) {
   }
 
   socket.on("newMessage", chat => {
-    addMessage(`${chat.userId}: ${chat.msg}`);
+    // console.log("recieve msg: " + chat.msg);
+
+    if(userId === chat.userId) {
+      addMessage(`${chat.userId}: ${chat.msg}`, 'chat-msg self');
+    }
+    else
+      addMessage(`${chat.userId}: ${chat.msg}`, 'chat-msg user');
+
+
   });
 
   socket.on("welcome", (user) => {
@@ -327,9 +371,9 @@ function MainPage(props) {
 
   
   function leaveRoom() {
-    console.log(`try to leave sokcet id: ${socket.id}`);
+    // console.log(`try to leave sokcet id: ${socket.id}`);
     window.location.href = 'http://localhost:4000';
-
+    setChatHidden(true);
     socket.disconnect();
   }
 
@@ -363,16 +407,41 @@ function MainPage(props) {
                 <button onClick={leaveRoom}>Leave</button>
             </div>
             
-            <div className="chat" >
-              <h2>Chatting</h2>
-              <ul ref={chatListRef}></ul>
-              <form>
-                <input ref={chatBoxRef} type="text" required placeholder="채팅을 입력하세요"/>
-                <button onClick={sendChat}>Send</button>
-              </form>
-            </div>
+            
         </div>
       </div>
+
+
+
+
+
+
+<div style={{display: chatHidden ? "none" : "block"}}>
+  <div id="chat-circle" className="btn btn-raised">
+    <div id="chat-overlay"></div>
+      <i className="material-icons">speaker_phone</i>
+	</div>
+  
+  <div className="chat-box">
+    <div class="chat-box-header">
+      ChatBot
+      <span className="chat-box-toggle"><i className="material-icons">close</i></span>
+    </div>
+    <div className="chat-box-body">
+      <div className="chat-box-overlay">   
+      </div>
+      <div className="chat-logs" ref={chatLogsRef}>
+       
+      </div>
+    </div>
+    <div className="chat-input">      
+      <form>
+        <input ref={chatInputRef} type="text" id="chat-input" placeholder="Send a message..."/>
+        <button type="submit" class="chat-submit" id="chat-submit" onClick={sendChat}><i class="material-icons">send</i></button>
+      </form>      
+    </div>
+  </div>
+  </div>
     </Container>
   );
 
