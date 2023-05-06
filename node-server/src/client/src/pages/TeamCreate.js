@@ -9,6 +9,20 @@ const TeamCreate = () => {
 
 	const history = useNavigate();
 
+	const addTeam = () => {
+		return axios
+			.post("http://172.30.1.14:8002/api/team/joinTeam", {
+				tm_name: team_name,
+				tm_intro: team_description,
+			})
+			.then((res) => {
+				console.log(res);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
+
 	// 세션 스토리지에 회원가입 정보 저장
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -29,6 +43,8 @@ const TeamCreate = () => {
 		if (sessionStorage.getItem(`team${teamIndex}`) != null) {
 			history("/LoggedIn");
 		}
+
+		addTeam();
 	};
 
 	const onChangeTeamName = (e) => {
@@ -36,20 +52,6 @@ const TeamCreate = () => {
 	};
 	const onChangeTeamDesc = (e) => {
 		setTeamDecription(e.target.value);
-	};
-
-	const addTeam = () => {
-		return axios
-			.post("localhost:8085/api/team/joinTeam", {
-				team_name: team_name,
-				team_description: team_description,
-			})
-			.then((res) => {
-				console.log(res);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
 	};
 
 	return (
@@ -77,12 +79,12 @@ const TeamCreate = () => {
 					/>
 				</Form.Group>
 
-				<Button onClick={() => addTeam()} type="primary" htmltype="submit">
+				<Button type="submit" htmltype="submit">
 					가입하기
 				</Button>
 			</Form>
 			<div style={{ marginTop: 10 }}>
-				<Link to="/">
+				<Link to="/LoggedIn">
 					<Button>홈으로 돌아가기</Button>
 				</Link>
 			</div>

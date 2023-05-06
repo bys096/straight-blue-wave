@@ -19,23 +19,27 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
-@RequestMapping("/project")
+@RequestMapping("/api/project")
 @RequiredArgsConstructor
 @Log4j2
 public class ProjectController {
     private final ProjectService projectService;
-
+    
+    // 프로젝트 추가
     @PostMapping("/create")
     public Project createProject(@RequestBody ProjectDTO dto){
         Project project = projectService.createProject(dto);
         return project;
     }
-
+    
+    
+    // 프로젝트 수정
     @PutMapping("/modify/{prj_id}")
     public Long modifyProject(@PathVariable Long prj_id, @RequestBody ProjectDTO dto){
         return projectService.modify(prj_id, dto);
     }
 
+    // 프로젝트 삭제
     @DeleteMapping("/delete/{prj_id}")
     public ResponseEntity<Void> deleteBoard(@PathVariable("prj_id") Long prj_id) {
         projectService.remove(prj_id);
@@ -43,6 +47,7 @@ public class ProjectController {
     }
 
 
+    // 프로젝트 리스트
     @GetMapping("/list")
     public ResponseEntity<List<Project>> getAllUsers() {
         List<Project> users = projectService.findAll();

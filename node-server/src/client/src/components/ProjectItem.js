@@ -5,7 +5,7 @@ import { Route, Routes } from "react-router-dom/dist";
 import styled from "styled-components";
 import ProjectList from "../pages/ProjectList";
 
-const TeamItem = ({ team = [] }) => {
+const TeamItem = ({ project = [] }) => {
 	const StyledCard = styled(Card)`
 		display: flex;
 		flex-direction: column;
@@ -21,13 +21,12 @@ const TeamItem = ({ team = [] }) => {
 	return (
 		<>
 			<Routes>
-				<Route path={`/team/${team.tmId}`} Component={ProjectList} />
+				<Route path={`/project/${project.prjId}`} Component={ProjectList} />
 			</Routes>
-			<Link to={`/team/${team.tmId}`} className="text-decoration-none">
+			<Link to={`/project/${project.prjId}`} className="text-decoration-none">
 				<StyledCard>
 					<Card.Body>
-						<Card.Title>{team.tmName}</Card.Title>
-						<Card.Text>{team.tmIntro}</Card.Text>
+						<Card.Title>{project.prjName}</Card.Title>
 					</Card.Body>
 				</StyledCard>
 			</Link>

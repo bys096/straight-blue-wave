@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
-@RequestMapping("/team")
+@RequestMapping("/api/team")
 @RequiredArgsConstructor
 @Log4j2
 public class TeamController {
@@ -26,8 +26,9 @@ public class TeamController {
     private final TeamService teamService;
 
     @PostMapping("/joinTeam")       //팀 생성
-    public void join(@RequestBody TeamDTO dto) {
-        teamService.joinTeam(dto);
+    public Team join(@RequestBody TeamDTO dto) {
+        return teamService.joinTeam(dto);
+
     }
 
     @GetMapping("/readTeam/{tm_id}")      //변경할 팀 조회

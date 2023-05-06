@@ -1,16 +1,16 @@
 // TeamList.js
 import React, { useState, useEffect } from "react";
-import TeamItem from "./TeamItem";
+import ProjectItem from "../components/ProjectItem";
 import { Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import TeamCreateCard from "./TeamCreateCard";
+import ProjectCreateCard from "../components/ProjectCreateCard";
 
 const ProjectList = () => {
 	const [projects, setProjects] = useState([]);
-
+	
 	const fetchProjects = async () => {
 		try {
-			const response = await axios.get("서버 URL을 여기에 입력하세요");
+			const response = await axios.get("http://172.30.1.14:8002/api/project/list");
 			setProjects(response.data);
 		} catch (error) {
 			console.error("Error fetching project:", error);
@@ -18,6 +18,7 @@ const ProjectList = () => {
 	};
 
 	useEffect(() => {
+		/*
 		const storedProjects = [];
 		for (let i = 0; i < sessionStorage.length; i++) {
 			const key = sessionStorage.key(i);
@@ -26,30 +27,21 @@ const ProjectList = () => {
 			}
 		}
 		setProjects(storedProjects);
+		*/
 		fetchProjects();
 	}, []);
 
-	const handleDelete = (projectToDelete) => {
-		const index = sessionStorage.key(`project${projectToDelete.id}`);
-		sessionStorage.removeItem(index);
-		setProjects(projects.filter((project) => project.id !== projectToDelete.id));
-	};
-
-	const handleEdit = (projectToEdit) => {
-		// Handle team editing logic here
-		console.log("Edit:", projectToEdit);
-	};
 
 	return (
 		<Container>
 			<h1>프로젝트 목록</h1>
 			<Row>
-				<Col sm={3} md={3} lg={2}>
-					<TeamCreateCard />
+				<Col md={4} lg={3}>
+					<ProjectCreateCard />
 				</Col>
 				{projects.map((project, index) => (
-					<Col key={index} sm={3} md={3} lg={2}>
-						<TeamItem id={project} onDelete={handleDelete} onEdit={handleEdit} />
+					<Col key={index} md={4} lg={3}>
+						<ProjectItem project={project} />
 					</Col>
 				))}
 			</Row>
