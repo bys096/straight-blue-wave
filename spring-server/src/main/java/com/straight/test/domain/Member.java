@@ -1,5 +1,6 @@
 package com.straight.test.domain;
 
+import com.straight.test.domain.dto.MemberDTO;
 import lombok.*;
 import javax.persistence.*;
 import java.sql.Date;
