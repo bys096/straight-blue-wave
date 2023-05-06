@@ -60,4 +60,5 @@ public class PostService implements PostServiceImp{
         postRepository.findAll().forEach(u -> posts.add(u));
         return posts;
     }
+
 }

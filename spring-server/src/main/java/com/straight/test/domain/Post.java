@@ -39,7 +39,7 @@ public class Post {
     @Column(name = "post_name")
     private String post_name;
 
-    @Column(name = "post_createAt")
+    @Column(name = "post_createAt", updatable = false)
     private LocalDateTime post_createAt;
 
     @Column(name = "post_modify")
