@@ -41,7 +41,7 @@ public class ProjectController {
 
     //프로젝트 삭제 - 완료
     @PostMapping("/delete/{prj_id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("prj_id") Long prj_id) {
+    public ResponseEntity<Void> deleteProject(@PathVariable("prj_id") Long prj_id) {
         projectService.remove(prj_id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
