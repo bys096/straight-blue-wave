@@ -54,8 +54,8 @@ public class MemberService implements MemberServiceImp{
     }*/
 
     @Override
-    public MemberDTO read(String user_id) {
-        Optional<Member> result = memberRepository.findByUserId(user_id);
+    public MemberDTO read(Long id) {
+        Optional<Member> result = memberRepository.findById(id);
 
         return result.isPresent() ? entityToDto(result.get()) : null;
     }
@@ -77,8 +77,8 @@ public class MemberService implements MemberServiceImp{
     }*/
 
     @Override
-    public void modify(MemberDTO member) {
-        Optional<Member> result = memberRepository.findByUserId(member.getUser_id());
+    public void modify(MemberDTO member, Long id) {
+        Optional<Member> result = memberRepository.findById(id);
 
         if(result.isPresent()) {
             Member entity = result.get();
@@ -90,8 +90,8 @@ public class MemberService implements MemberServiceImp{
     }
 
     @Override
-    public void remove(String user_id) {
+    public void remove(Long id) {
 
-        memberRepository.deleteByUserId(user_id);
+        memberRepository.deleteById(id);
     }
 }
