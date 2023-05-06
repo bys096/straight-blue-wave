@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
-@RequestMapping("/team")
+@RequestMapping("/api/team")
 @RequiredArgsConstructor
 @Log4j2
 public class TeamController {

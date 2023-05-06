@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
-@RequestMapping("/project")
+@RequestMapping("/api/project")
 @RequiredArgsConstructor
 @Log4j2
 public class ProjectController {
