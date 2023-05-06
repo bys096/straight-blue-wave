@@ -15,7 +15,7 @@ const SettingPage = () => {
     if (window.confirm("정말로 삭제하시겠습니까?")) {
       axios
         .delete(
-          `http://172.30.1.7:8002/api/delete/${parseInt(
+          `http://172.30.1.7:8002/api/member/delete/${parseInt(
             sessionStorage.getItem("user_num")
           )}`
         )

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -10,7 +11,8 @@ function LoginPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await axios
-      .post("http://172.30.1.14:8002/api/login", {
+
+      .post("http://172.30.1.7:8002/api/member/login", {
         user_id: user_id,
         user_pw: user_pw,
       })
@@ -22,7 +24,6 @@ function LoginPage() {
         } else if (res.data.user_id === user_id) {
           sessionStorage.setItem("user_num", res.data.id);
           sessionStorage.setItem("user_id", user_id);
-          alert("로그인 성공");
           navigate("/LoggedIn");
         }
       })
@@ -32,23 +33,37 @@ function LoginPage() {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Userid"
-          value={user_id}
-          onChange={(e) => setUserid(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={user_pw}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-      </form>
-    </>
+    <Container className="d-flex justify-content-center align-items-center vh-100">
+      <Row>
+        <Col>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Userid</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter userid"
+                value={user_id}
+                onChange={(e) => setUserid(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                value={user_pw}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+
+            <Button variant="primary" type="submit" style={{ margin: "10px" }}>
+              Login
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

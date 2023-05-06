@@ -4,9 +4,11 @@ import com.straight.test.domain.Board;
 import com.straight.test.domain.Post;
 import com.straight.test.domain.dto.PostDTO;
 import com.straight.test.domain.dto.ProjectDTO;
+import com.straight.test.repository.SpringDataJpaPostRepository;
 import com.straight.test.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/api/post")
 @RequiredArgsConstructor
 @Log4j2
 public class PostController {
     private final PostService postService;
+
+    private final  SpringDataJpaPostRepository postRepository;
 
     @PostMapping("/create")
     public Post createPost(@RequestBody PostDTO dto){
@@ -43,4 +47,12 @@ public class PostController {
     public List<Post> getBoard() {
         return postService.findAll();
     }
+
+
+
+    @GetMapping("/Calender")
+    public List<Object[]> getPostColumns() {
+        return postRepository.findPostColumns();
+    }
+
 }
