@@ -21,6 +21,7 @@ function MainPage(props) {
   const myStreamRef = useRef(null);
   const [hidden, setHidden] = useState(true);
   const [welHidden, setWelHidden] = useState(false);
+  const [chatHidden, setChatHidden] = useState(true);
   const [roomName, setRoomName] = useState("");
   const [userId, setUserId] = useState("");
   const senderRef = useRef(null);
@@ -36,6 +37,7 @@ function MainPage(props) {
 
   useEffect(() => {
     setUserId(sessionStorage.getItem("user_id"));
+    setChatHidden(true);
   
   $("#chat-circle").click(function() {    
     $("#chat-circle").toggle('scale');
@@ -132,6 +134,7 @@ function MainPage(props) {
   async function initCall() {
     setWelHidden(true);
     setHidden(false);
+    setChatHidden(false);
     await getMedia();
   }
 
@@ -370,7 +373,7 @@ function MainPage(props) {
   function leaveRoom() {
     // console.log(`try to leave sokcet id: ${socket.id}`);
     window.location.href = 'http://localhost:4000';
-
+    setChatHidden(true);
     socket.disconnect();
   }
 
@@ -413,10 +416,10 @@ function MainPage(props) {
 
 
 
-       
-<div id="chat-circle" className="btn btn-raised">
-        <div id="chat-overlay"></div>
-		    <i className="material-icons">speaker_phone</i>
+<div style={{display: chatHidden ? "none" : "block"}}>
+  <div id="chat-circle" className="btn btn-raised">
+    <div id="chat-overlay"></div>
+      <i className="material-icons">speaker_phone</i>
 	</div>
   
   <div className="chat-box">
@@ -438,7 +441,7 @@ function MainPage(props) {
       </form>      
     </div>
   </div>
-  
+  </div>
     </Container>
   );
 
