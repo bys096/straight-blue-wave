@@ -12,6 +12,4 @@ import java.util.Optional;
 @Transactional
 public interface SpringDataJpaBoardRepository extends JpaRepository<Board, Long>{
 
-    Page<Project> findBoardIdBy(Long brd_id, Pageable pageable);
-
 }

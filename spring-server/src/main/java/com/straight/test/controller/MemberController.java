@@ -66,5 +66,3 @@ public class MemberController {
         log.info("id : " + id);
         memberService.remove(id);
     }
-
-}
