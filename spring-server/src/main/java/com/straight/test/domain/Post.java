@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -39,10 +40,10 @@ public class Post {
     private String post_name;
 
     @Column(name = "post_createAt")
-    private Date post_createAt;
+    private LocalDateTime post_createAt;
 
     @Column(name = "post_modify")
-    private Date post_modify;
+    private LocalDateTime post_modify;
 
     @Column(name = "meeting_date")
     private Date meeting_date;
@@ -62,8 +63,6 @@ public class Post {
         this.brd_id = dto.getBrd_id();
         this.post_content = dto.getPost_content();
         this.post_name = dto.getPost_name();
-        this.post_createAt = dto.getPost_createAt();
-        this.post_modify = dto.getPost_modify();
         this.meeting_date = dto.getMeeting_date();
         this.attendees_id = dto.getAttendees_id();
     }
@@ -74,8 +73,6 @@ public class Post {
         this.brd_id = dto.getBrd_id();
         this.post_content = dto.getPost_content();
         this.post_name = dto.getPost_name();
-        this.post_createAt = dto.getPost_createAt();
-        this.post_modify = dto.getPost_modify();
         this.meeting_date = dto.getMeeting_date();
         this.attendees_id = dto.getAttendees_id();
     }

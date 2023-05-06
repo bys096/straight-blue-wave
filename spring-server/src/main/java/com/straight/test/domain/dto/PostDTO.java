@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Builder
@@ -24,9 +25,9 @@ public class PostDTO {
 
     private String post_name;
 
-    private Date post_createAt;
+    private LocalDateTime post_createAt;
 
-    private Date post_modify;
+    private LocalDateTime post_modify;
 
     private Date meeting_date;
 

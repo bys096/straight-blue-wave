@@ -3,7 +3,6 @@ package com.straight.test.controller;
 import com.straight.test.domain.Board;
 import com.straight.test.domain.Post;
 import com.straight.test.domain.dto.PostDTO;
-import com.straight.test.domain.dto.TeamDTO;
 import com.straight.test.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

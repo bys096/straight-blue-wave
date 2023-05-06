@@ -23,8 +23,6 @@ public class PostService implements PostServiceImp{
                 .brd_id(dto.getBrd_id())
                 .post_content(dto.getPost_content())
                 .post_name(dto.getPost_name())
-                .post_createAt(dto.getPost_createAt())
-                .post_modify(dto.getPost_modify())
                 .meeting_date(dto.getMeeting_date())
                 .attendees_id(dto.getAttendees_id())
                 .file_status(dto.isFile_status())

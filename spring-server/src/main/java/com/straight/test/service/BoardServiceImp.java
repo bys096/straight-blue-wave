@@ -24,7 +24,7 @@ public interface BoardServiceImp {
 
     BoardDTO read(Long brd_id);
 
-    Board modify(BoardDTO Board);
+    Board modify(Long brd_id, BoardDTO dto);
 
     void remove(Long brd_id);
 

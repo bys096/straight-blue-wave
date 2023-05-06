@@ -21,6 +21,7 @@ public class ProjectService implements ProjectServiceImp{
         Project project = Project.builder()
                 .prjName(dto.getPrj_name())
                 .prjThumbnail(dto.getPrj_thumbnail())
+                .memberNumber(1)
                 .build();
         projectRepository.save(project);
         return project;

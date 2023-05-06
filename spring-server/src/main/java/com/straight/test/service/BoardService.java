@@ -35,7 +35,7 @@ public class BoardService implements BoardServiceImp{
     }
 
     @Override
-    public Board modify(BoardDTO dto) {
+    public Board modify(Long brd_id, BoardDTO dto) {
         Optional<Board> result = boardRepository.findById(dto.getBrd_id());
 
         Board board = null;

@@ -1,7 +1,9 @@
 package com.straight.test.controller;
 
+import com.straight.test.domain.Post;
 import com.straight.test.domain.Project;
 import com.straight.test.domain.dto.PageRequestDTO;
+import com.straight.test.domain.dto.PostDTO;
 import com.straight.test.domain.dto.ProjectDTO;
 import com.straight.test.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +24,10 @@ import java.util.List;
 public class ProjectController {
     private final ProjectService projectService;
 
-    //프로젝트 생성 - 완
-    @PostMapping("/create/{user_id}")
-    public Project createProject(@PathVariable Long user_id, ProjectDTO project, HttpServletRequest request){
-        HttpSession session = (HttpSession) request.getSession();
-//        String id = (String) session.getAttribute("loginId");
-        log.info("user_id : " + user_id);
-        Project prj =  projectService.createProject(project);
-        return prj;
+    @PostMapping("/create")
+    public Project createProject(@RequestBody ProjectDTO dto){
+        Project project = projectService.createProject(dto);
+        return project;
     }
 
     //프로젝트명, 썸네일 수정 - 된건가?
@@ -40,8 +38,8 @@ public class ProjectController {
     }
 
     //프로젝트 삭제 - 완료
-    @PostMapping("/delete/{prj_id}")
-    public ResponseEntity<Void> deleteProject(@PathVariable("prj_id") Long prj_id) {
+    @DeleteMapping("/delete/{prj_id}")
+    public ResponseEntity<Void> deleteBoard(@PathVariable("prj_id") Long prj_id) {
         projectService.remove(prj_id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
@@ -49,7 +47,7 @@ public class ProjectController {
 
 
     //프로젝트 목록 - DB재구축 후 확인
-    @GetMapping("/list/{tno}")
+    @GetMapping("/list")
     public ResponseEntity<List<Project>> getAllUsers() {
         List<Project> users = projectService.findAll();
         return new ResponseEntity<List<Project>>(users, HttpStatus.OK);
