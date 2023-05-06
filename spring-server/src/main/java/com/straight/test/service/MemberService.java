@@ -60,7 +60,6 @@ public class MemberService implements MemberServiceImp{
         return result.isPresent() ? entityToDto(result.get()) : null;
     }
 /*
-
     public Long deleteMember(String name) {
 //        Long result = memberRepository.deleteByName(name);
         return null;
