@@ -14,6 +14,9 @@ import LoginPage from "./pages/LoginPage";
 import CalendarForm from "./pages/CalendarForm";
 import SettingPage from "./pages/SettingPage";
 import UpdatePage from "./pages/UpdatePage";
+import TeamCreate from "./pages/TeamCreate";
+import TeamDetail from "./pages/TeamDetail";
+import ProjectCreate from "./pages/ProjectCreate";
 
 function App() {
   return (
@@ -28,6 +31,10 @@ function App() {
         <Route path="/calendar" exact={true} Component={CalendarForm}></Route>
         <Route path="/setting" exact={true} Component={SettingPage}></Route>
         <Route path="/update" exact={true} Component={UpdatePage}></Route>
+        <Route path="/TeamCreate" exact={true} Component={TeamCreate}></Route>
+        <Route path="/team/:tmId" Component={TeamDetail} />
+        <Route path="/ProjectCreate" exact={true} Component={ProjectCreate}></Route>
+
       </Routes>
     </div>
   );

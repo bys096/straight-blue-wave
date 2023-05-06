@@ -5,6 +5,7 @@ import Footer from "../components/views/Footer";
 
 import "./LoggedIn.css";
 import VideoCall from "../pages/MainPage";
+import TeamList from "./TeamList";
 function LoggedIn() {
 	return (
 		<div className="main">
@@ -12,7 +13,7 @@ function LoggedIn() {
 			<div className="article">
 				<Sidebar />
 				<div className="section">
-					<VideoCall />
+					<TeamList />
 				</div>
 			</div>
 			<Footer />

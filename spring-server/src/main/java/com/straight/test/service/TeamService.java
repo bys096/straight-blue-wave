@@ -21,13 +21,14 @@ import java.util.function.Function;
 public class TeamService implements TeamServiceImp{
     private final SpringDataJpaTeamRepository teamRepository;
 
-    public void joinTeam(TeamDTO dto) {       //팀생성
+    public Team joinTeam(TeamDTO dto) {       //팀생성
         Team team = Team.builder()
                 .tmName(dto.getTm_name())
                 .tmIntro(dto.getTm_intro())
                 .tmNumber(1)
                 .build();
         teamRepository.save(team);
+        return team;
     }
 
     /*@Override
