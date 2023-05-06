@@ -1,10 +1,14 @@
 import {Container} from "react-bootstrap";
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, useEffect} from "react";
 import io from "socket.io-client";
 import "./MainPage.css";
+import "../assets/css/ChatUI.css";
+import $ from 'jquery';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function MainPage(props) {
-
   const socket = io();
   const myFaceRef = useRef(null);
   const muteRef = useRef(null);
@@ -15,27 +19,39 @@ function MainPage(props) {
   const welcomeFormRef = useRef(null);
   const peerFaceRef = useRef(null);
   const myStreamRef = useRef(null);
-
-  const chatListRef = useRef(null);
-  const chatBoxRef = useRef(null);
-
-
   const [hidden, setHidden] = useState(true);
   const [welHidden, setWelHidden] = useState(false);
-
+  const [chatHidden, setChatHidden] = useState(true);
+  const [roomName, setRoomName] = useState("");
+  const [userId, setUserId] = useState("");
+  const senderRef = useRef(null);
+  const chatLogsRef = useRef(null);
+  const chatInputRef = useRef(null);
   let myStream;
   let muted = false;
   let cameraOff = false;
-  // let roomName;
-  const [roomName, setRoomName] = useState("");
-  // const [sender, setSender] = useState("");
-  const senderRef = useRef(null);
-
   let myPeerConnection;
   let myDataChannel;
   let peopleInRoom = 1;
-
   let pcObj = {};
+
+  useEffect(() => {
+    setUserId(sessionStorage.getItem("user_id"));
+    setChatHidden(true);
+  
+  $("#chat-circle").click(function() {    
+    $("#chat-circle").toggle('scale');
+    $(".chat-box").toggle('scale');
+  })
+  
+  $(".chat-box-toggle").click(function() {
+    $("#chat-circle").toggle('scale');
+    $(".chat-box").toggle('scale');
+  })
+  
+  }, []);
+
+
   async function getCameras() {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -105,7 +121,6 @@ function MainPage(props) {
   }
 
   async function handleCameraChange() {
-    // select 한 camera id를 기준으로 다시 getMedia를 통해 미디어 스트림을 가져옴
     await getMedia(camerasRef.current.value);
     if (myPeerConnection) {
       const videoTrack = myStream.getVideoTracks()[0];
@@ -116,30 +131,24 @@ function MainPage(props) {
     }
   }
 
-
-
-
   async function initCall() {
     setWelHidden(true);
     setHidden(false);
+    setChatHidden(false);
     await getMedia();
-    // myPeerConnection = makeConnection(); // 수정된 부분
   }
 
   async function handleWelcomeSubmit(event) {
     event.preventDefault();
-    const input = welcomeFormRef.current.querySelector("input");
-    // await initCall();
-    // await getMedia();
-    // 추후에 닉네임 추가
+    const roomForm = welcomeFormRef.current.querySelector("input");
 
     if(socket.disconnected) {
       socket.connect();
     }
-    socket.emit("join_room", input.value);
-    setRoomName(input.value);
+    socket.emit("join_room", roomForm.value, userId);
+    setRoomName(roomForm.value);
     // console.log(`입장, 방이름: ${roomName}`);
-    input.value = "";
+    roomForm.value = "";
     // console.log(`입장, 방이름?: ${roomName}`);
   }
 
@@ -170,11 +179,11 @@ function MainPage(props) {
       try {
         const newPC = createConnection(
           userObjArr[i].socketId,
-          // userObjArr[i].nickname
+          userObjArr[i].userId
         );
         const offer = await newPC.createOffer();
         await newPC.setLocalDescription(offer);
-        socket.emit("offer", offer, userObjArr[i].socketId);
+        socket.emit("offer", offer, userObjArr[i].socketId, userId);
         // writeChat(`__${userObjArr[i].nickname}__`, NOTICE_CN);
       } catch (err) {
         console.error(err);
@@ -183,9 +192,9 @@ function MainPage(props) {
     // writeChat("is in the room.", NOTICE_CN);
   });
 
-  socket.on("offer", async (offer, remoteSocketId) => {
+  socket.on("offer", async (offer, remoteSocketId, remoteUserId) => {
     try {
-      const newPC = createConnection(remoteSocketId);
+      const newPC = createConnection(remoteSocketId, remoteUserId);
       await newPC.setRemoteDescription(offer);
       const answer = await newPC.createAnswer();
       await newPC.setLocalDescription(answer);
@@ -204,20 +213,16 @@ function MainPage(props) {
     await pcObj[remoteSocketId].addIceCandidate(ice);
   });
 
-  socket.on("chat", (message) => {
-    // writeChat(message);
-  });
-
   socket.on("leave_room", (leavedSocketId) => {
     // removeVideo(leavedSocketId);
     // writeChat(`notice! ${nickname} leaved the room.`, NOTICE_CN);
-    // --peopleInRoom;
+    --peopleInRoom;
     // sortStreams();
   });
 
-  // RTC code
 
-  function createConnection(remoteSocketId) {
+  // RTC code
+  function createConnection(remoteSocketId, remoteUserId) {
     const myPeerConnection = new RTCPeerConnection({
       iceServers: [
         {
@@ -235,7 +240,7 @@ function MainPage(props) {
       handleIce(event, remoteSocketId);
     });
     myPeerConnection.addEventListener("track", (event) => {
-      handleAddStream(event, remoteSocketId);
+      handleAddStream(event, remoteSocketId, remoteUserId);
     });
     // myPeerConnection.addEventListener(
     //   "iceconnectionstatechange",
@@ -258,17 +263,17 @@ function MainPage(props) {
     }
   }
 
-  function handleAddStream(event, remoteSocketId) {
+  function handleAddStream(event, remoteSocketId, remoteUserId) {
     const peerStream = event.streams[0];
-    paintPeerFace(peerStream, remoteSocketId);
+    paintPeerFace(peerStream, remoteSocketId, remoteUserId);
   }
 
-  function paintPeerFace(peerStream, id) {
+  function paintPeerFace(peerStream, id, remoteUserId) {
     const streams = myStreamRef.current;
-    let div = document.getElementById(id);
+    let div = document.getElementById(remoteUserId);
     if (!div) {
       div = document.createElement("div");
-      div.id = id;
+      div.id = remoteUserId;
       streams.appendChild(div);
     }
     const video = div.querySelector("video") || document.createElement("video");
@@ -287,42 +292,95 @@ function MainPage(props) {
   // }
 
 
-
   // chatting
-  function addMessage(msg) {
-    const chatList = chatListRef.current;
-    const li = document.createElement("li");
-    li.innerText = msg;
-    chatList.appendChild(li);
+  function addMessage(msg, type) {
+    const chatLogs = chatLogsRef.current;
+    const div = document.createElement("div");
+    const span = document.createElement("span");
+    const img = document.createElement("img");
+    const text = document.createElement("div");
+    text.innerText = msg;
+    div.className = type;
+    span.className="mssg-avatar";
+    text.className="cm-msg-text";
+
+    console.log("text divtag " + text.value);
+
+    div.appendChild(text);
+    chatLogs.appendChild(div);
+    div.appendChild(span);
+    span.appendChild(img);
+
+    // chatList.appendChild(li);
   }
   
+
+
   
   function sendChat(event) {
     event.preventDefault();
-    const chatBox = chatBoxRef.current;
-    const msg = chatBox.value;
-    socket.emit("sendChat", roomName, msg, socket.id)
-    addMessage(`You: ${msg}, sid: ${socket.id}`);
+    const chatBox = chatInputRef.current;
+    const msg = chatInputRef.current.value;
+
+    // console.log(msg);
+    const chat = {
+      roomName: roomName,
+      msg: msg,
+      sid: socket.id,
+      userId: userId
+    }
+
+    socket.emit("sendChat", chat);
     chatBox.value = "";
     senderRef.current = socket.id;
   }
 
-  socket.on("newMessage", (msg, senderSocketId) => {
-    console.log("sender id: " + senderSocketId);
-    console.log("receive id: " + senderRef.current);
-    if(senderSocketId !== senderRef.current) {
-      console.log("같은 sid");
-      addMessage(`${msg}, sid: ${senderSocketId}`);
+  socket.on("newMessage", chat => {
+    // console.log("recieve msg: " + chat.msg);
+
+    if(userId === chat.userId) {
+      addMessage(`${chat.userId}: ${chat.msg}`, 'chat-msg self');
     }
+    else
+      addMessage(`${chat.userId}: ${chat.msg}`, 'chat-msg user');
+
+
+  });
+
+  socket.on("welcome", (user) => {
+    addMessage(user.msg);
+  });
+
+
+
+  socket.on("left", (user) => {
+    console.log(user.msg);
+    console.log(`left socket id: ${user.sid}`);
+    console.log(`left my user id: ${user.mid}`);
+    addMessage(`${user.mid} 님이 퇴실하셨습니다`);
+
+    const streamArr = myStreamRef.current.querySelectorAll('div');
+
+    streamArr.forEach((e) => {
+      console.log(`현재 등록된 div id: ${e.id}`)
+      if(e.id === user.mid) {
+        myStreamRef.current.removeChild(e);
+      }
+    });    
+  });
+
   
-  });
+  function leaveRoom() {
+    // console.log(`try to leave sokcet id: ${socket.id}`);
+    window.location.href = 'http://localhost:4000';
+    setChatHidden(true);
+    socket.disconnect();
+  }
 
-  socket.on("welcome", (msg) => {
-    addMessage(msg);
-  });
 
 
-
+  
+  
 
   return (
     <Container>
@@ -330,16 +388,14 @@ function MainPage(props) {
       <div className="video">
         <div>
             <div id="welcome" ref={welcomeRef} 
-                style={{display: welHidden ? "none" : "block"}}
-            >
+                style={{display: welHidden ? "none" : "block"}}>
                 <form ref={welcomeFormRef}>
                     <input placeholder="room name" required type="text"/>
                     <button onClick={handleWelcomeSubmit}>Enter room</button>
                 </form>
             </div>
             <div id="call" ref={callRef}
-                style={{ display: hidden ? "none" : "block" }}
-            >
+                style={{ display: hidden ? "none" : "block" }}>
                 <div id="myStream" ref={myStreamRef}>
                     <video id="myFace"ref={myFaceRef} autoPlay playsInline width="400" height="400"></video>
                     <button id="mute" ref={muteRef} onClick={handleMuteClick}>Mute</button>
@@ -347,18 +403,45 @@ function MainPage(props) {
                     <select id="cameras" ref={camerasRef} onChange={handleCameraChange}></select>
                     <video id="peerFace" ref={peerFaceRef} autoPlay playsInline width="400" height="400"></video>
                 </div>
+
+                <button onClick={leaveRoom}>Leave</button>
             </div>
             
-            <div className="chat" >
-              <h2>Chatting</h2>
-              <ul ref={chatListRef}></ul>
-              <form>
-                <input ref={chatBoxRef} type="text" required placeholder="채팅을 입력하세요"/>
-                <button onClick={sendChat}>Send</button>
-              </form>
-            </div>
+            
         </div>
       </div>
+
+
+
+
+
+
+<div style={{display: chatHidden ? "none" : "block"}}>
+  <div id="chat-circle" className="btn btn-raised">
+    <div id="chat-overlay"></div>
+      <i className="material-icons">speaker_phone</i>
+	</div>
+  
+  <div className="chat-box">
+    <div class="chat-box-header">
+      ChatBot
+      <span className="chat-box-toggle"><i className="material-icons">close</i></span>
+    </div>
+    <div className="chat-box-body">
+      <div className="chat-box-overlay">   
+      </div>
+      <div className="chat-logs" ref={chatLogsRef}>
+       
+      </div>
+    </div>
+    <div className="chat-input">      
+      <form>
+        <input ref={chatInputRef} type="text" id="chat-input" placeholder="Send a message..."/>
+        <button type="submit" class="chat-submit" id="chat-submit" onClick={sendChat}><i class="material-icons">send</i></button>
+      </form>      
+    </div>
+  </div>
+  </div>
     </Container>
   );
 

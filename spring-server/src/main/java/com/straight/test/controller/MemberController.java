@@ -39,20 +39,22 @@ public class MemberController {
     }
 
 
-    @GetMapping("/member")      //회원 정보 불러오기
-    public MemberDTO updateMember(@RequestParam("user_id") String user_id) {
-
+    @GetMapping("/member/{user_id}")      //회원 정보 불러오기
+    public MemberDTO updateMember(@PathVariable String user_id) {
+        log.info("user_id : " + user_id);
         MemberDTO dto = memberService.read(user_id);
         return dto;
     }
 
     @PutMapping("/update")     //회원 정보 수정
     public void updateMember(@RequestBody MemberDTO member) {
+
         memberService.modify(member);
     }
 
-    @DeleteMapping("/delete")      //회원탙퇴
-    public void deleteMember(@RequestParam("user_id") String user_id) {
+    @DeleteMapping("/delete/{user_id}")      //회원탙퇴
+    public void deleteMember(@PathVariable String user_id) {
+        log.info("user_id : " + user_id);
         memberService.remove(user_id);
     }
 

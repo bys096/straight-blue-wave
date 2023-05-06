@@ -49,11 +49,16 @@ const MAXIMUM = 5;
 
 wsServer.on("connection", (socket) => {
   let myRoomName = null;
+  let myUserId = null;
   // let myNickname = null;
 
-  socket.on("join_room", (roomName) => {
+  socket.on("join_room", (roomName, userId) => {
     myRoomName = roomName;
-    // myNickname = nickname;
+    myUserId = userId;
+    const joinUser = {
+      userId: userId,
+      msg: `${userId}님이 방에 참가하셨습니다.`
+    }
 
     let isRoomExist = false;
     let targetRoomObj = null;
@@ -86,17 +91,18 @@ wsServer.on("connection", (socket) => {
     //Join the room
     targetRoomObj.users.push({
       socketId: socket.id,
-      
+      userId: userId
     });
     ++targetRoomObj.currentNum;
 
+
     socket.join(roomName);
     socket.emit("accept_join", targetRoomObj.users);
-    socket.to(roomName).emit("welcome", "~님이 방에 참가하셨습니다.");
+    socket.to(roomName).emit("welcome", joinUser);
   });
 
-  socket.on("offer", (offer, remoteSocketId) => {
-    socket.to(remoteSocketId).emit("offer", offer, socket.id);
+  socket.on("offer", (offer, remoteSocketId, localUserId) => {
+    socket.to(remoteSocketId).emit("offer", offer, socket.id, localUserId);
   });
 
   socket.on("answer", (answer, remoteSocketId) => {
@@ -107,43 +113,32 @@ wsServer.on("connection", (socket) => {
     socket.to(remoteSocketId).emit("ice", ice, socket.id);
   });
 
-  // socket.on("chat", (message, roomName) => {
-  //   socket.to(roomName).emit("chat", message);
-  // });
+  
+
 
   socket.on("disconnecting", () => {
-    socket.to(myRoomName).emit("leave_room", socket.id);
-
-    let isRoomEmpty = false;
-    for (let i = 0; i < roomObjArr.length; ++i) {
-      if (roomObjArr[i].roomName === myRoomName) {
-        const newUsers = roomObjArr[i].users.filter(
-          (user) => user.socketId != socket.id
-        );
-        roomObjArr[i].users = newUsers;
-        --roomObjArr[i].currentNum;
-
-        if (roomObjArr[i].currentNum == 0) {
-          isRoomEmpty = true;
-        }
-      }
+    // console.log("disconnecting socket id from server: " + socket.id);
+    // console.log("disconect id? " + myUserId);
+    const user = {
+      sid: socket.id,
+      msg: `나감`,
+      mid: myUserId
     }
-
-    // Delete room
-    if (isRoomEmpty) {
-      const newRoomObjArr = roomObjArr.filter(
-        (roomObj) => roomObj.currentNum != 0
-      );
-      roomObjArr = newRoomObjArr;
-    }
+    socket.rooms.forEach((room) =>
+      socket.to(room).emit("left", user)
+    );
   });
 
+
+
   
   
-  socket.on("sendChat", (roomName, msg, sid) => {
-    console.log(`roomName: ${roomName}, msg: ${msg}, sid: ${socket.id}`);
+  socket.on("sendChat", (chat) => {
+    // console.log(`roomName: ${roomName}, msg: ${msg}, sid: ${socket.id}`);
     // console.log(`myroomName: ${myRoomName}, msg: ${msg}`);
-    socket.to(roomName).emit("newMessage", msg, sid);
+    
+
+    socket.to(chat.roomName).emit("newMessage", chat);
     
   });
 

@@ -12,13 +12,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class TeamDTO {
-    private Long tno;
+    private Long tm_id;
 
-    private String team_name;
+    private String tm_name;
 
-    private int team_member;
+    private String tm_intro;
 
-    private LocalDateTime team_regdate;
+    private int tm_number;
 
-    private String team_writer;
+    private String tm_thumbnail;
+
+    private LocalDateTime creation_date;
+
 }
