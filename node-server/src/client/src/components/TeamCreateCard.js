@@ -27,7 +27,6 @@ const TeamCreateCard = () => {
 			<StyledCard className="team_create">
 				<Card.Body>
 					<AiOutlinePlusCircle size={100} />
-					<Card.Title>Create New Team</Card.Title>
 				</Card.Body>
 			</StyledCard>
 		</Link>

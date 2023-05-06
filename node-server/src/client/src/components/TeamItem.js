@@ -3,7 +3,7 @@ import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const TeamItem = ({ id, onDelete, onEdit }) => {
+const TeamItem = ({ id, onDelete, onEdit}) => {
 	const handleDelete = () => {
 		onDelete(id);
 	};

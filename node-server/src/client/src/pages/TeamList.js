@@ -1,16 +1,16 @@
 // TeamList.js
 import React, { useState, useEffect } from "react";
-import TeamItem from "./TeamItem";
+import TeamItem from "../components/TeamItem";
 import { Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import TeamCreateCard from "./TeamCreateCard";
+import TeamCreateCard from "../components/TeamCreateCard";
 
 const TeamList = () => {
 	const [teams, setTeams] = useState([]);
 
 	const fetchTeams = async () => {
 		try {
-			const response = await axios.get("서버 URL을 여기에 입력하세요");
+			const response = await axios.get("localhost:8085/api/team/listTeam");
 			setTeams(response.data);
 		} catch (error) {
 			console.error("Error fetching teams:", error);

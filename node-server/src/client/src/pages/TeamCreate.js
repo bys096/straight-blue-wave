@@ -40,7 +40,7 @@ const TeamCreate = () => {
 
 	const addTeam = () => {
 		return axios
-			.post("주소입력", {
+			.post("localhost:8085/api/team/joinTeam", {
 				team_name: team_name,
 				team_description: team_description,
 			})
