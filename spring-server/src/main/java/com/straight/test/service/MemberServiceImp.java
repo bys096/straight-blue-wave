@@ -32,9 +32,8 @@ public interface MemberServiceImp {
         return dto;
     }
 
-    MemberDTO read(String user_id);
+    MemberDTO read(Long id);
 
-    void modify(MemberDTO member);
+    void modify(MemberDTO member, Long id);
 
-    void remove(String user_id);
-}
+    void remove(Long id);
