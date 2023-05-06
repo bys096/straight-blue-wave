@@ -10,5 +10,5 @@ import java.util.List;
 
 @Transactional
 public interface SpringDataJpaTeamRepository extends JpaRepository<Team, Long> {
-    Page<Team> findAllByTeamWriter(String user_id, Pageable pageable);
+    //Page<Team> findAllByTeamWriter(String user_id, Pageable pageable);
 }

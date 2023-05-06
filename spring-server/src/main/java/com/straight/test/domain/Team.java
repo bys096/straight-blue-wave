@@ -8,11 +8,13 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,22 +24,29 @@ import java.time.LocalDateTime;
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tno;
+    private Long tmId;
 
-    @Column(name = "team_name")
-    private String teamName;
+    @Column(name = "tm_name")
+    private String tmName;
 
-    @Column(name = "team_member")
-    private int teamMember;
+    @Column(name = "tm_intro")
+    private String tmIntro;
 
     @CreatedDate
-    @Column(name = "team_regdate", updatable = false)
-    private LocalDateTime teamRegDate;
+    @Column(name = "creation_date", updatable = false)
+    private LocalDateTime creationDate;
 
-    @Column(name = "team_writer")
-    private String teamWriter;
+    @Column(name = "tm_number")
+    private int tmNumber;
 
-    public void changeTeamName(String teamName) {
-        this.teamName = teamName;
+    @Column(name = "tm_thumbnail")
+    private String tmThumbnail;
+
+    public void changeTeamName(String tmName) {
+        this.tmName = tmName;
+    }
+
+    public void changeTeamIntro(String tmIntro) {
+        this.tmIntro = tmIntro;
     }
 }

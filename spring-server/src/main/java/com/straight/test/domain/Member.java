@@ -34,4 +34,12 @@ public class Member {
     @Column(name = "user_email")
     private String userEmail;
 
+    public void changeUserPw(String userPw) {
+        this.userPw = userPw;
+    }
+
+    public void changeUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
 }

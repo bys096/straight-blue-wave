@@ -40,7 +40,7 @@ public class MemberService implements MemberServiceImp{
         return result.isPresent() ? entityToDto(result.get()) : null;
     }
 
-    public Member joinMember(MemberDTO m) {
+    /*public Member joinMember(MemberDTO m) {
         Member member = Member.builder()
                 .userId(m.getUser_id())
                 .userPw(m.getUser_pw())
@@ -51,7 +51,8 @@ public class MemberService implements MemberServiceImp{
                 .build();
         memberRepository.save(member);
         return member;
-    }
+    }*/
+
     @Override
     public MemberDTO read(String user_id) {
         Optional<Member> result = memberRepository.findByUserId(user_id);
@@ -66,14 +67,14 @@ public class MemberService implements MemberServiceImp{
     }
 */
 
-    public boolean loginMember(String user_id, String user_pw) {
+    /*public boolean loginMember(String user_id, String user_pw) {
 //        Optional<Member> dbInfo = memberRepository.getLoginInfo(user_id, user_pw);
         Optional<Member> dbInfo = memberRepository.findByUserIdAndUserPw(user_id, user_pw);
 //        System.out.println("pw :" + dbInfo.get().getUser_pw());
         System.out.println(dbInfo);
         if (dbInfo.isPresent()) return true;
         else return false;
-    }
+    }*/
 
     @Override
     public void modify(MemberDTO member) {
@@ -81,16 +82,16 @@ public class MemberService implements MemberServiceImp{
 
         if(result.isPresent()) {
             Member entity = result.get();
-            //entity.changeName(member.getUser_name());
-            //entity.changePw(member.getUser_pw());
+            entity.changeUserEmail(member.getUser_email());
+            entity.changeUserPw(member.getUser_pw());
             memberRepository.save(entity);
         }
 
     }
 
     @Override
-    public void remove(Long id) {
+    public void remove(String user_id) {
 
-        memberRepository.deleteById(id);
+        memberRepository.deleteByUserId(user_id);
     }
 }
