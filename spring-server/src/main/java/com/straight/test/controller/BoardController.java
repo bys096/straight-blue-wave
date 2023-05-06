@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/api/board")
 @RequiredArgsConstructor
 @Log4j2
 public class BoardController {
