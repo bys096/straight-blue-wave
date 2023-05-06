@@ -19,7 +19,7 @@ const UpdatePage = () => {
   useEffect(() => {
     axios
       .get(
-        `http://172.30.1.7:8002/api/member/${sessionStorage.getItem(
+        `http://172.30.1.7:8002/api/member/member/${sessionStorage.getItem(
           "user_num"
         )}`
       )
@@ -43,7 +43,7 @@ const UpdatePage = () => {
     e.preventDefault();
     axios
       .put(
-        `http://172.30.1.7:8002/api/update/${sessionStorage.getItem(
+        `http://172.30.1.7:8002/api/member/update/${sessionStorage.getItem(
           "user_num"
         )}`,
         {
