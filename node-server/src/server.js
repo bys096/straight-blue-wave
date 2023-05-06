@@ -91,7 +91,7 @@ wsServer.on("connection", (socket) => {
     //Join the room
     targetRoomObj.users.push({
       socketId: socket.id,
-      
+      userId: userId
     });
     ++targetRoomObj.currentNum;
 
@@ -117,8 +117,8 @@ wsServer.on("connection", (socket) => {
 
 
   socket.on("disconnecting", () => {
-    console.log("disconnecting socket id from server: " + socket.id);
-    console.log("disconect id? " + myUserId);
+    // console.log("disconnecting socket id from server: " + socket.id);
+    // console.log("disconect id? " + myUserId);
     const user = {
       sid: socket.id,
       msg: `나감`,
