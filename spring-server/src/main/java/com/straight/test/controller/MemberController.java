@@ -49,7 +49,7 @@ public class MemberController {
         return dto;
     }
 
-    @GetMapping("/listMember")
+    @GetMapping("/listMember")      //회원 전체 불러오기
     public ResponseEntity<List<Member>> getAllMembers() {
         List<Member> members = memberService.getAllMembers();
         return new ResponseEntity<>(members, HttpStatus.OK);
