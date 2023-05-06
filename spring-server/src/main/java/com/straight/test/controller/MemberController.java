@@ -3,6 +3,7 @@ package com.straight.test.controller;
 import com.straight.test.domain.Member;
 import com.straight.test.domain.dto.MemberDTO;
 import com.straight.test.domain.dto.PageRequestDTO;
+import com.straight.test.repository.SpringDataJpaMemberRepository;
 import com.straight.test.service.MemberService;
 import com.straight.test.service.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -37,22 +39,23 @@ public class MemberController {
     }
 
 
-    @GetMapping("/member/{user_id}")      //회원 정보 불러오기
-    public MemberDTO updateMember(@PathVariable String user_id) {
-        log.info("user_id : " + user_id);
-        MemberDTO dto = memberService.read(user_id);
+    @GetMapping("/member/{id}")      //회원 정보 불러오기
+    public MemberDTO updateMember(@PathVariable Long id) {
+        log.info("id : " + id);
+        MemberDTO dto = memberService.read(id);
         return dto;
     }
 
-    @PutMapping("/update")     //회원 정보 수정
-    public void updateMember(@RequestBody MemberDTO member) {
+    @PutMapping("/update/{id}")     //회원 정보 수정
+    public void updateMember(@RequestBody MemberDTO member, @PathVariable Long id) {
 
-        memberService.modify(member);
+        memberService.modify(member, id);
     }
 
-    @DeleteMapping("/delete/{user_id}")      //회원탙퇴
-    public void deleteMember(@PathVariable String user_id) {
-        log.info("user_id : " + user_id);
-        memberService.remove(user_id);
+    @DeleteMapping("/delete/{id}")      //회원탙퇴
+    public void deleteMember(@PathVariable Long id) {
+        log.info("id : " + id);
+        memberService.remove(id);
     }
+
 }
