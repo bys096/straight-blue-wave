@@ -2,6 +2,7 @@ package com.straight.test.service;
 
 import com.straight.test.domain.Post;
 import com.straight.test.domain.dto.PostDTO;
+import com.straight.test.domain.dto.ProjectDTO;
 
 public interface PostServiceImp {
 

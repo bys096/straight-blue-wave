@@ -35,8 +35,8 @@ public class BoardService implements BoardServiceImp{
     }
 
     @Override
-    public Board modify(Long brd_id, BoardDTO dto) {
-        Optional<Board> result = boardRepository.findById(dto.getBrd_id());
+    public Long modify(Long brd_id, BoardDTO dto) {
+        Optional<Board> result = boardRepository.findById(brd_id);
 
         Board board = null;
         if(result.isPresent()) {
@@ -45,7 +45,7 @@ public class BoardService implements BoardServiceImp{
 
             boardRepository.save(board);
         }
-        return board;
+        return board.getBrdId();
     }
 
     @Override

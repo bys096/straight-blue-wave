@@ -29,16 +29,10 @@ public class BoardController {
         return board;
     }
 
-    //보류
     @PutMapping("/modify/{brd_id}")
-    public Board modifyBoard(@PathVariable Long brd_id, @RequestBody BoardDTO dto) {
+    public Long modifyBoard(@PathVariable Long brd_id, @RequestBody BoardDTO dto){
         return boardService.modify(brd_id, dto);
     }
-//    @PostMapping("/modify/{brd_id}")
-//    public Board modifyBoard(@PathVariable BoardDTO board){
-//        Board brd = boardService.modify(board);
-//        return brd;
-//    }
 
     @DeleteMapping("/delete/{brd_id}")
     public ResponseEntity<Void> deleteBoard(@PathVariable("brd_id") Long brd_id) {

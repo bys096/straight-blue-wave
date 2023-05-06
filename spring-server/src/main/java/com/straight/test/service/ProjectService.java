@@ -34,8 +34,8 @@ public class ProjectService implements ProjectServiceImp{
     }
 
     @Override
-    public Project modify(ProjectDTO dto) {
-        Optional<Project> result = projectRepository.findById(dto.getPrj_id());
+    public Long modify(Long prj_id, ProjectDTO dto) {
+        Optional<Project> result = projectRepository.findById(prj_id);
 
         Project project = null;
         if (result.isPresent()) {
@@ -45,7 +45,7 @@ public class ProjectService implements ProjectServiceImp{
 
             projectRepository.save(project);
         }
-        return project;
+        return project.getPrjId();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.straight.test.service;
 
 import com.straight.test.domain.Post;
 import com.straight.test.domain.dto.PostDTO;
+import com.straight.test.domain.dto.ProjectDTO;
 import com.straight.test.repository.SpringDataJpaPostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,24 +39,16 @@ public class PostService implements PostServiceImp{
         return result.isPresent() ? entityToDto(result.get()) : null;
     }
 
+    @Override
     public Long modify(Long post_id, PostDTO dto) {
         Post post = postRepository.findById(post_id).orElseThrow(
                 () -> new IllegalArgumentException("해당 id가 존재하지 않습니다.")
         );
         post.changePost(dto);
+        postRepository.save(post);
         return post.getPost_id();
     }
 
-//    @Override
-//    public Long modify(Long post_id , PostDTO dto) {
-//        Optional<Post> result = postRepository.findById(dto.getPost_id());
-//
-//        Post post = postRepository.findById(post_id).orElseThrow(
-//                () -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다.")
-//        );
-//        post.changePost(dto);
-//        return post.getPost_id();
-//    }
 
     @Override
     public void remove(Long post_id) {

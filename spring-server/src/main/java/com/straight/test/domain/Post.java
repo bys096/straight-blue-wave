@@ -58,7 +58,6 @@ public class Post {
     private boolean voting_status;
 
     public void changePost(PostDTO dto){
-        this.post_id = dto.getPost_id();
         this.mem_id = dto.getMem_id();
         this.brd_id = dto.getBrd_id();
         this.post_content = dto.getPost_content();

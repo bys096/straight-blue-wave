@@ -2,6 +2,7 @@ package com.straight.test.controller;
 
 import com.straight.test.domain.Post;
 import com.straight.test.domain.Project;
+import com.straight.test.domain.dto.BoardDTO;
 import com.straight.test.domain.dto.PageRequestDTO;
 import com.straight.test.domain.dto.PostDTO;
 import com.straight.test.domain.dto.ProjectDTO;
@@ -30,14 +31,11 @@ public class ProjectController {
         return project;
     }
 
-    //프로젝트명, 썸네일 수정 - 된건가?
-    @PostMapping("/modify/{prj_id}")
-    public Project modifyProject(@PathVariable ProjectDTO project){
-        Project prj = projectService.modify(project);
-        return prj;
+    @PutMapping("/modify/{prj_id}")
+    public Long modifyProject(@PathVariable Long prj_id, @RequestBody ProjectDTO dto){
+        return projectService.modify(prj_id, dto);
     }
 
-    //프로젝트 삭제 - 완료
     @DeleteMapping("/delete/{prj_id}")
     public ResponseEntity<Void> deleteBoard(@PathVariable("prj_id") Long prj_id) {
         projectService.remove(prj_id);
@@ -45,8 +43,6 @@ public class ProjectController {
     }
 
 
-
-    //프로젝트 목록 - DB재구축 후 확인
     @GetMapping("/list")
     public ResponseEntity<List<Project>> getAllUsers() {
         List<Project> users = projectService.findAll();

@@ -31,7 +31,7 @@ public interface ProjectServiceImp {
 
     ProjectDTO read(Long prj_id);
 
-    Project modify(ProjectDTO dto);
+    Long modify(Long prj_id, ProjectDTO dto);
 
     void remove(Long prj_id);
 
