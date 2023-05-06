@@ -160,6 +160,7 @@ function MainPage(props) {
       try {
         const newPC = createConnection(
           userObjArr[i].socketId,
+          userObjArr[i].userId
         );
         const offer = await newPC.createOffer();
         await newPC.setLocalDescription(offer);
