@@ -81,7 +81,7 @@ const SignUp = () => {
 
   const addMember = () => {
     return axios
-      .post("http://172.30.1.7:8002/api/register", {
+      .post("http://172.30.1.7:8002/api/member/register", {
         user_id: user_id,
         user_pw: user_pw,
         user_name: user_name,
@@ -91,58 +91,12 @@ const SignUp = () => {
       })
       .then((res) => {
         console.log(res);
+        alert("회원가입이 완료되었습니다");
       })
       .catch((error) => {
         console.error(error);
       });
   };
-
-  // axios 임시
-  /*
-    const onSubmit = async (e) => {
-      e.preventDefault();
-      //검증 로직 만들기
-      // 1. 비밀번호와 비밀번호 체크가 다를 경우를 검증한다
-      // 2. 약관 동의를 확인한다.
-       
-      if(user_pw !== passwordCheck){
-          return setPasswordError(true);
-      }
-      if(!term){
-          return setTermError(true);
-      }
-      console.log({
-        user_id,
-        user_pw,
-        passwordCheck,
-        user_name,
-        user_gender,
-        user_birth,
-        user_email,
-        term
-      });
-      try {
-          const response = await axios.post('http://localhost:8080/user/join', {
-            user_id:user_id,
-            user_pw,
-            user_name,
-            user_birth,
-            user_email,
-            user_class,
-            user_gender
-          });
-    
-          if (response.data.success) {
-            sessionStorage.setItem('user', JSON.stringify(response.data.user));
-            history('/');
-          } else {
-            history('/');
-          }
-        } catch (error) {
-          console.error('Signup error:', error);
-          alert("회원가입 오류!")
-        }
-  }; */
 
   return (
     <Container>

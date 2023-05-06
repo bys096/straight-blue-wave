@@ -47,7 +47,13 @@ function Header() {
               </Link>
             </Nav.Link>
             <Nav.Link>
-              <Link to="/" style={{ textDecoration: "none" }}>
+              <Link
+                to="/"
+                style={{ textDecoration: "none" }}
+                onClick={() => {
+                  sessionStorage.clear();
+                }}
+              >
                 로그아웃
               </Link>
             </Nav.Link>
