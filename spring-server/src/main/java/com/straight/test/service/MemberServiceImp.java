@@ -37,3 +37,4 @@ public interface MemberServiceImp {
     void modify(MemberDTO member, Long id);
 
     void remove(Long id);
+}
