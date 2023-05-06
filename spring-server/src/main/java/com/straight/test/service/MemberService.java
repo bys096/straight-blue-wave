@@ -94,4 +94,8 @@ public class MemberService implements MemberServiceImp{
 
         memberRepository.deleteById(id);
     }
+
+    public List<Member> getAllMembers() {
+        return memberRepository.findAll();
+    }
 }

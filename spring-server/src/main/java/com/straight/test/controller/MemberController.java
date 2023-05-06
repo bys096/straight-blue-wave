@@ -1,6 +1,7 @@
 package com.straight.test.controller;
 
 import com.straight.test.domain.Member;
+import com.straight.test.domain.Team;
 import com.straight.test.domain.dto.MemberDTO;
 import com.straight.test.domain.dto.PageRequestDTO;
 import com.straight.test.repository.SpringDataJpaMemberRepository;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +47,12 @@ public class MemberController {
         log.info("id : " + id);
         MemberDTO dto = memberService.read(id);
         return dto;
+    }
+
+    @GetMapping("/listMember")
+    public ResponseEntity<List<Member>> getAllMembers() {
+        List<Member> members = memberService.getAllMembers();
+        return new ResponseEntity<>(members, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")     //회원 정보 수정
