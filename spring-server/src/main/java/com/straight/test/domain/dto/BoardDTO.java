@@ -2,11 +2,10 @@ package com.straight.test.domain.dto;
 
 import lombok.*;
 
-@Setter @Getter
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class BoardDTO {
     private Long brd_id;
 
@@ -14,4 +13,5 @@ public class BoardDTO {
 
     private String brd_name;
 
+    //임시 그룹 제외
 }
