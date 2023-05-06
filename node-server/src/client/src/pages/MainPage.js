@@ -6,14 +6,6 @@ import "../assets/css/ChatUI.css";
 import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Helmet} from "react-helmet";
-
-
-
-
-
-
-
 
 
 function MainPage(props) {
@@ -27,8 +19,6 @@ function MainPage(props) {
   const welcomeFormRef = useRef(null);
   const peerFaceRef = useRef(null);
   const myStreamRef = useRef(null);
-  const chatListRef = useRef(null);
-  const chatBoxRef = useRef(null);
   const [hidden, setHidden] = useState(true);
   const [welHidden, setWelHidden] = useState(false);
   const [roomName, setRoomName] = useState("");
@@ -46,94 +36,6 @@ function MainPage(props) {
 
   useEffect(() => {
     setUserId(sessionStorage.getItem("user_id"));
-
-  //   $(function() {
-  // var INDEX = 0; 
-  // $("#chat-submit").click(function(e) {
-  //   e.preventDefault();
-  //   var msg = $("#chat-input").val(); 
-  //   if(msg.trim() == ''){
-  //     return false;
-  //   }
-  //   generate_message(msg, 'self');
-  //   var buttons = [
-  //       {
-  //         name: 'Existing User',
-  //         value: 'existing'
-  //       },
-  //       {
-  //         name: 'New User',
-  //         value: 'new'
-  //       }
-  //     ];
-  //   setTimeout(function() {      
-  //     generate_message(msg, 'user');  
-  //   }, 1000)
-    
-  // })
-  
-  // function generate_message(msg, type) {
-  //   INDEX++;
-  //   var str="";
-  //   str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg "+type+"\">";
-  //   str += "          <span class=\"msg-avatar\">";
-  //   str += "            <img src=\"https:\/\/image.crisp.im\/avatar\/operator\/196af8cc-f6ad-4ef7-afd1-c45d5231387c\/240\/?1483361727745\">";
-  //   str += "          <\/span>";
-  //   str += "          <div class=\"cm-msg-text\">";
-  //   str += msg;
-  //   str += "          <\/div>";
-  //   str += "        <\/div>";
-  //   $(".chat-logs").append(str);
-  //   $("#cm-msg-"+INDEX).hide().fadeIn(300);
-  //   if(type == 'self'){
-  //    $("#chat-input").val(''); 
-  //   }    
-  //   $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);    
-  // }  
-  
-  // function generate_button_message(msg, buttons){    
-    /* Buttons should be object array 
-      [
-        {
-          name: 'Existing User',
-          value: 'existing'
-        },
-        {
-          name: 'New User',
-          value: 'new'
-        }
-      ]
-    */
-    // INDEX++;
-    // var btn_obj = buttons.map(function(button) {
-    //    return  "              <li class=\"button\"><a href=\"javascript:;\" class=\"btn btn-primary chat-btn\" chat-value=\""+button.value+"\">"+button.name+"<\/a><\/li>";
-    // }).join('');
-    // var str="";
-    // str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg user\">";
-    // str += "          <span class=\"msg-avatar\">";
-    // str += "            <img src=\"https:\/\/image.crisp.im\/avatar\/operator\/196af8cc-f6ad-4ef7-afd1-c45d5231387c\/240\/?1483361727745\">";
-    // str += "          <\/span>";
-    // str += "          <div class=\"cm-msg-text\">";
-    // str += msg;
-    // str += "          <\/div>";
-    // str += "          <div class=\"cm-msg-button\">";
-    // str += "            <ul>";   
-    // str += btn_obj;
-    // str += "            <\/ul>";
-    // str += "          <\/div>";
-    // str += "        <\/div>";
-    // $(".chat-logs").append(str);
-    // $("#cm-msg-"+INDEX).hide().fadeIn(300);   
-    // $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);
-    // $("#chat-input").attr("disabled", true);
-  // }
-  
-  // $(document).delegate(".chat-btn", "click", function() {
-  //   var value = $(this).attr("chat-value");
-  //   var name = $(this).html();
-  //   $("#chat-input").attr("disabled", false);
-  //   generate_message(name, 'self');
-  // })
   
   $("#chat-circle").click(function() {    
     $("#chat-circle").toggle('scale');
@@ -145,8 +47,6 @@ function MainPage(props) {
     $(".chat-box").toggle('scale');
   })
   
-// })
- 
   }, []);
 
 
@@ -391,8 +291,6 @@ function MainPage(props) {
 
   // chatting
   function addMessage(msg, type) {
-    // generate_message(msg, 'user');
-
     const chatLogs = chatLogsRef.current;
     const div = document.createElement("div");
     const span = document.createElement("span");
@@ -421,8 +319,7 @@ function MainPage(props) {
     const chatBox = chatInputRef.current;
     const msg = chatInputRef.current.value;
 
-    console.log(msg);
-    alert('send Button Click! ' + msg);
+    // console.log(msg);
     const chat = {
       roomName: roomName,
       msg: msg,
@@ -436,13 +333,13 @@ function MainPage(props) {
   }
 
   socket.on("newMessage", chat => {
-    console.log("recieve msg: " + chat.msg);
+    // console.log("recieve msg: " + chat.msg);
 
-    if(userId == chat.userId) {
-      addMessage(`${chat.userId}: ${chat.msg}`, 'chat-msg user');
+    if(userId === chat.userId) {
+      addMessage(`${chat.userId}: ${chat.msg}`, 'chat-msg self');
     }
     else
-    addMessage(`${chat.userId}: ${chat.msg}`, 'chat-msg self');
+      addMessage(`${chat.userId}: ${chat.msg}`, 'chat-msg user');
 
 
   });
@@ -471,7 +368,7 @@ function MainPage(props) {
 
   
   function leaveRoom() {
-    console.log(`try to leave sokcet id: ${socket.id}`);
+    // console.log(`try to leave sokcet id: ${socket.id}`);
     window.location.href = 'http://localhost:4000';
 
     socket.disconnect();
@@ -507,14 +404,7 @@ function MainPage(props) {
                 <button onClick={leaveRoom}>Leave</button>
             </div>
             
-            <div className="chat" >
-              <h2>Chatting</h2>
-              <ul ref={chatListRef}></ul>
-              <form>
-                <input ref={chatBoxRef} type="text" required placeholder="채팅을 입력하세요"/>
-                <button onClick={sendChat}>Send</button>
-              </form>
-            </div>
+            
         </div>
       </div>
 
