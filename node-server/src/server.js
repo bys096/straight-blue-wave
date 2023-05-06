@@ -91,7 +91,7 @@ wsServer.on("connection", (socket) => {
     //Join the room
     targetRoomObj.users.push({
       socketId: socket.id,
-      
+      userId: userId
     });
     ++targetRoomObj.currentNum;
 
