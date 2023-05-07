@@ -6,19 +6,21 @@ import axios from "axios";
 import ProjectCreateCard from "../components/ProjectCreateCard";
 
 const ProjectList = () => {
-	const [projects, setProjects] = useState([]);
-	
-	const fetchProjects = async () => {
-		try {
-			const response = await axios.get("http://172.30.1.14:8002/api/project/list");
-			setProjects(response.data);
-		} catch (error) {
-			console.error("Error fetching project:", error);
-		}
-	};
+  const [projects, setProjects] = useState([]);
 
-	useEffect(() => {
-		/*
+  const fetchProjects = async () => {
+    try {
+      const response = await axios.get(
+        "http://172.30.1.7:8002/api/project/list"
+      );
+      setProjects(response.data);
+    } catch (error) {
+      console.error("Error fetching project:", error);
+    }
+  };
+
+  useEffect(() => {
+    /*
 		const storedProjects = [];
 		for (let i = 0; i < sessionStorage.length; i++) {
 			const key = sessionStorage.key(i);
@@ -28,25 +30,26 @@ const ProjectList = () => {
 		}
 		setProjects(storedProjects);
 		*/
+    fetchProjects();
+  }, []);
 		fetchProjects();
 	});
 
-
-	return (
-		<Container>
-			<h1>프로젝트 목록</h1>
-			<Row>
-				<Col md={4} lg={3}>
-					<ProjectCreateCard />
-				</Col>
-				{projects.map((project, index) => (
-					<Col key={index} md={4} lg={3}>
-						<ProjectItem project={project} />
-					</Col>
-				))}
-			</Row>
-		</Container>
-	);
+  return (
+    <Container>
+      <h1>프로젝트 목록</h1>
+      <Row>
+        <Col md={4} lg={3}>
+          <ProjectCreateCard />
+        </Col>
+        {projects.map((project, index) => (
+          <Col key={index} md={4} lg={3}>
+            <ProjectItem project={project} />
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  );
 };
 
 export default ProjectList;
