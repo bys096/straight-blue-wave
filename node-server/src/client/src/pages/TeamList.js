@@ -12,7 +12,7 @@ const TeamList = () => {
   const fetchTeams = async () => {
     try {
       const response = await axios.get(
-        "http://172.30.1.7:8002/api/team/listTeam"
+        "http://172.30.1.14:8002/api/team/listTeam"
       );
       setTeams(response.data);
       console.log(teams);
@@ -33,12 +33,16 @@ const TeamList = () => {
     fetchTeams();
   }, []);
 
+  const onTeamCreated = () => {
+	fetchTeams();
+  };
+
   return (
     <Container>
       <h1>팀 목록</h1>
       <Row>
         <Col md={4} lg={3}>
-          <TeamCreateCard />
+          <TeamCreateCard onTeamCreated={onTeamCreated} />
         </Col>
         {teams.map((team, index) => (
           <Col key={index} md={4} lg={3}>
