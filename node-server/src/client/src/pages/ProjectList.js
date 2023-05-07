@@ -11,7 +11,7 @@ const ProjectList = () => {
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        "http://172.30.1.7:8002/api/project/list"
+        "http://172.30.1.14:8002/api/project/list"
       );
       setProjects(response.data);
     } catch (error) {
@@ -36,6 +36,10 @@ const ProjectList = () => {
 		*/
     fetchProjects();
   }, []);
+
+  const onProjectCreated = () => {
+	fetchProjects();
+  };
 
   return (
     <Container>
