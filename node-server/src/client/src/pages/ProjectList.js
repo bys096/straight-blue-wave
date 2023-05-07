@@ -29,7 +29,7 @@ const ProjectList = () => {
 		setProjects(storedProjects);
 		*/
 		fetchProjects();
-	}, []);
+	});
 
 
 	return (

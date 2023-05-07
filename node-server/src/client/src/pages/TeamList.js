@@ -32,7 +32,7 @@ const TeamList = () => {
 		}
 		setTeams(storedTeams);*/
 		fetchTeams();
-	}, []);
+	});
 
 	return (
 		<Container>

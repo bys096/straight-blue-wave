@@ -8,20 +8,25 @@ import cors from "cors"; // 추가
 const path = require('path');
 const app = express();
 
+app.use(express.static(path.join(__dirname, "/client/build")));
+
  //app.use(cors({
 // origin: 'http://192.168.0.79:8002'
 // }));
 
-app.use(express.static(path.join(__dirname, "/client/build")));
+
 
 // app.set("view engine", "pug");
 // app.set("views", __dirname + "/views");
 // app.get("/", (_, res) => res.render("home"));
 // app.get("/*", (_, res) => res.redirect("/"));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + '/build/index.html'));
-})
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client/build/index.html"));
+});
+
+
 
 
 const httpServer = http.createServer(app);

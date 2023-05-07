@@ -20,9 +20,6 @@ const TeamItem = ({ team = [] }) => {
 
 	return (
 		<>
-			<Routes>
-				<Route path={`/team/${team.tmId}`} Component={ProjectList} />
-			</Routes>
 			<Link to={`/team/${team.tmId}`} className="text-decoration-none">
 				<StyledCard>
 					<Card.Body>
