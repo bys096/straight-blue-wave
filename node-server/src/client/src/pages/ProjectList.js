@@ -19,6 +19,10 @@ const ProjectList = () => {
     }
   };
 
+  const onProjectCreated = () => {
+    fetchProjects();
+  };
+
   useEffect(() => {
     /*
 		const storedProjects = [];
@@ -38,7 +42,7 @@ const ProjectList = () => {
       <h1>프로젝트 목록</h1>
       <Row>
         <Col md={4} lg={3}>
-          <ProjectCreateCard />
+          <ProjectCreateCard onProjectCreated={onProjectCreated} />
         </Col>
         {projects.map((project, index) => (
           <Col key={index} md={4} lg={3}>

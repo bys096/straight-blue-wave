@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Alert, Button, Container, Form } from "react-bootstrap";
 
-const ProjectCreate = () => {
+const ProjectCreate = (props) => {
   const [project_name, setProjectName] = useState("");
   const history = useNavigate();
 
@@ -14,6 +14,9 @@ const ProjectCreate = () => {
       })
       .then((res) => {
         console.log(res);
+        if (props.onProjectCreated) {
+          props.onProjectCreated();
+        }
       })
       .catch((error) => {
         console.error(error);
