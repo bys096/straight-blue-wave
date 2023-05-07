@@ -32,8 +32,6 @@ const ProjectList = () => {
 		*/
     fetchProjects();
   }, []);
-		fetchProjects();
-	});
 
   return (
     <Container>

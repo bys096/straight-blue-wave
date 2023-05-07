@@ -32,8 +32,6 @@ const TeamList = () => {
 		setTeams(storedTeams);*/
     fetchTeams();
   }, []);
-		fetchTeams();
-	});
 
   return (
     <Container>
