@@ -30,38 +30,33 @@ const TeamDetail = () => {
     };
     fetchTeam();
   }, [tmId]);
-	const mainForm = styled.div`
-        display: flex;
-        flex-direction: column
-        min-height: 100vh;
-    `;
+  const mainForm = styled.div`
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  `;
 
-	const TeamDesc = styled.div`
-		display: flex;
-		margin: 20px;
-	`;
+  const StyledName = styled.div`
+    display: flex;
+    align-items: flex-start;
+    margin: 50px;
+    flex-wrap: wrap;
+  `;
 
-	const StyledName = styled.div`
-		display: flex;
-		align-items: flex-start;
-		margin: 50px;
-		flex-wrap: wrap;
-	`;
-
-	useEffect(() => {
-		const fetchTeam = async () => {
-			try {
-				const response = await axios.get(
-					`http://172.30.1.14:8002/api/team/readTeam/${tmId}`
-				);
-				setTeam(response.data);
-				console.log(response.data);
-			} catch (error) {
-				console.error("Error fetching team:", error);
-			}
-		};
-		fetchTeam();
-	}, [tmId]);
+  useEffect(() => {
+    const fetchTeam = async () => {
+      try {
+        const response = await axios.get(
+          `http://172.30.1.14:8002/api/team/readTeam/${tmId}`
+        );
+        setTeam(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching team:", error);
+      }
+    };
+    fetchTeam();
+  }, [tmId]);
 
   if (!team) return <p>Loading...</p>;
 
@@ -75,25 +70,25 @@ const TeamDetail = () => {
       <ProjectList />
     </div>
   );
-	return (
-		<>
-			<mainForm>
-				<Header />
-				<TeamDesc>
-					<Sidebar />
+  return (
+    <>
+      <mainForm>
+        <Header />
+        <TeamDesc>
+          <Sidebar />
 
-					<StyledName>
-						<h2>{team.tm_name}</h2>
-						<p>{team.tm_intro}</p>
-                        <br />
-                        <hr />
-						<ProjectList />
-					</StyledName>
-				</TeamDesc>
-				<Footer />
-			</mainForm>
-		</>
-	);
+          <StyledName>
+            <h2>{team.tm_name}</h2>
+            <p>{team.tm_intro}</p>
+            <br />
+            <hr />
+            <ProjectList />
+          </StyledName>
+        </TeamDesc>
+        <Footer />
+      </mainForm>
+    </>
+  );
 };
 
 export default TeamDetail;
