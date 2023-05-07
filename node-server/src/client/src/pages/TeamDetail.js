@@ -21,7 +21,7 @@ const TeamDetail = () => {
     const fetchTeam = async () => {
       try {
         const response = await axios.get(
-          `http://172.30.1.7:8002/api/team/readTeam/${tmId}`
+          `http://172.30.1.14:8002/api/team/readTeam/${tmId}`
         );
         setTeam(response.data);
       } catch (error) {
@@ -70,25 +70,6 @@ const TeamDetail = () => {
       <ProjectList />
     </div>
   );
-  return (
-    <>
-      <mainForm>
-        <Header />
-        <TeamDesc>
-          <Sidebar />
-
-          <StyledName>
-            <h2>{team.tm_name}</h2>
-            <p>{team.tm_intro}</p>
-            <br />
-            <hr />
-            <ProjectList />
-          </StyledName>
-        </TeamDesc>
-        <Footer />
-      </mainForm>
-    </>
-  );
-};
+}
 
 export default TeamDetail;
