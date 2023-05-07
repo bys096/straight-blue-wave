@@ -17,6 +17,8 @@ import UpdatePage from "./pages/UpdatePage";
 import TeamCreate from "./pages/TeamCreate";
 import TeamDetail from "./pages/TeamDetail";
 import ProjectCreate from "./pages/ProjectCreate";
+import ProjectDetail from "./pages/ProjectDetail";
+import ChattingPage from "./pages/ChattingPage";
 
 function App() {
   return (
@@ -31,10 +33,19 @@ function App() {
         <Route path="/calendar" exact={true} Component={CalendarForm}></Route>
         <Route path="/setting" exact={true} Component={SettingPage}></Route>
         <Route path="/update" exact={true} Component={UpdatePage}></Route>
+        <Route
+          path="/chattingroom"
+          exact={true}
+          Component={ChattingPage}
+        ></Route>
         <Route path="/TeamCreate" exact={true} Component={TeamCreate}></Route>
         <Route path="/team/:tmId" Component={TeamDetail} />
-        <Route path="/ProjectCreate" exact={true} Component={ProjectCreate}></Route>
-
+        <Route path="/project/:prjId" Component={ProjectDetail}></Route>
+        <Route
+          path="/ProjectCreate"
+          exact={true}
+          Component={ProjectCreate}
+        ></Route>
       </Routes>
     </div>
   );
