@@ -19,10 +19,6 @@ const ProjectList = () => {
     }
   };
 
-  const onProjectCreated = () => {
-    fetchProjects();
-  };
-
   useEffect(() => {
     /*
 		const storedProjects = [];
@@ -38,7 +34,7 @@ const ProjectList = () => {
   }, []);
 
   const onProjectCreated = () => {
-	fetchProjects();
+    fetchProjects();
   };
 
   return (
