@@ -19,6 +19,10 @@ const ProjectList = () => {
     }
   };
 
+  const onProjectCreated = () => {
+    fetchProjects();
+  };
+
   useEffect(() => {
     /*
 		const storedProjects = [];

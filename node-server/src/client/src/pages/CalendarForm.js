@@ -18,7 +18,15 @@ const CalendarForm = () => {
       <Header />
       <div className="article">
         <Sidebar />
-        <div className="section">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+          }}
+        >
           <Calendar></Calendar>
         </div>
       </div>

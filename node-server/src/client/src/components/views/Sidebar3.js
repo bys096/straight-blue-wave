@@ -21,7 +21,11 @@ function Sidebar() {
           const members = res.data;
           const findMember = members.filter((mem) => mem.userId === userId);
           if (findMember.length > 0) {
-            setUserData({ id: findMember[0].userId });
+            if (findMember[0].userId !== sessionStorage.getItem("user_id")) {
+              setUserData({ id: findMember[0].userId });
+            } else {
+              alert("자기 자신은 검색할 수 없습니다.");
+            }
           } else {
             alert("검색 하신 아이디는 존재하지 않습니다");
           }

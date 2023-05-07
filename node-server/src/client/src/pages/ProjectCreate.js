@@ -4,6 +4,24 @@ import axios from "axios";
 import { Alert, Button, Container, Form } from "react-bootstrap";
 
 const ProjectCreate = (props) => {
+  const [project_name, setProjectName] = useState("");
+  const history = useNavigate();
+
+  const addProject = () => {
+    return axios
+      .post("http://172.30.1.7:8002/api/project/create", {
+        prj_name: project_name,
+      })
+      .then((res) => {
+        console.log(res);
+        if (props.onProjectCreated) {
+          props.onProjectCreated();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 	const [project_name, setProjectName] = useState("");
 	const history = useNavigate();
 

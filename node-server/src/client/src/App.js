@@ -20,11 +20,12 @@ import ProjectCreate from "./pages/ProjectCreate";
 import ProjectDetail from "./pages/ProjectDetail";
 import ChattingPage from "./pages/ChattingPage";
 import { Navigate } from "react-router-dom";
+import PostPage from "./pages/PostPage";
+import CreatePostPage from "./pages/CreatePostPage";
 
 function App() {
   return (
     <div className="App">
-
       <Routes>
         <Route path="/*" element={<Navigate to="/"></Navigate>}></Route>
         <Route path="/" exact={true} Component={DefaultPage} />
@@ -49,7 +50,13 @@ function App() {
           exact={true}
           Component={ProjectCreate}
         ></Route>
-        <Route path="/ProjectCreate" exact={true} Component={ProjectCreate}></Route>
+        <Route
+          path="/ProjectCreate"
+          exact={true}
+          Component={ProjectCreate}
+        ></Route>
+        <Route path="/post" Component={PostPage}></Route>
+        <Route path="/createpost" Component={CreatePostPage}></Route>
       </Routes>
     </div>
   );
