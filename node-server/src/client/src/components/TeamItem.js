@@ -33,6 +33,18 @@ const TeamItem = ({ team = [] }) => {
       </Link>
     </>
   );
+	return (
+		<>
+			<Link to={`/team/${team.tmId}`} className="text-decoration-none">
+				<StyledCard>
+					<Card.Body>
+						<Card.Title>{team.tmName}</Card.Title>
+						<Card.Text>{team.tmIntro}</Card.Text>
+					</Card.Body>
+				</StyledCard>
+			</Link>
+		</>
+	);
 };
 
 export default TeamItem;

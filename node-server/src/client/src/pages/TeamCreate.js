@@ -34,6 +34,9 @@ const TeamCreate = () => {
 
     const teamIndex = sessionStorage.length + 1;
     sessionStorage.setItem(`team${teamIndex}`, JSON.stringify(teamData));
+		/*
+		const teamIndex = sessionStorage.length + 1;
+		sessionStorage.setItem(`team${teamIndex}`, JSON.stringify(teamData));
 
     console.log({
       team_name,
@@ -46,6 +49,13 @@ const TeamCreate = () => {
 
     addTeam();
   };
+		if (sessionStorage.getItem(`team${teamIndex}`) != null) {
+			history("/LoggedIn");
+		} */
+
+		addTeam();
+		history('/LoggedIn', {replace : true})
+	};
 
   const onChangeTeamName = (e) => {
     setTeamName(e.target.value);

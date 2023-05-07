@@ -19,11 +19,14 @@ import TeamDetail from "./pages/TeamDetail";
 import ProjectCreate from "./pages/ProjectCreate";
 import ProjectDetail from "./pages/ProjectDetail";
 import ChattingPage from "./pages/ChattingPage";
+import { Navigate } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
+
       <Routes>
+        <Route path="/*" element={<Navigate to="/"></Navigate>}></Route>
         <Route path="/" exact={true} Component={DefaultPage} />
         <Route path="/SignUp" exact={true} Component={SignUp} />
         <Route path="/login" exact={true} Component={LoginPage} />
@@ -46,6 +49,7 @@ function App() {
           exact={true}
           Component={ProjectCreate}
         ></Route>
+        <Route path="/ProjectCreate" exact={true} Component={ProjectCreate}></Route>
       </Routes>
     </div>
   );
