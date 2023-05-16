@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Builder
@@ -38,6 +39,9 @@ public class Project {
 
     @Column(name = "prj_thumbnail")
     private String prjThumbnail;
+
+    @OneToMany(mappedBy = "project")
+    private List<Board> boards;
 
     public void changePrjName(String prjName){
         this.prjName = prjName;

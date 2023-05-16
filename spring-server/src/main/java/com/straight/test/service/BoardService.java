@@ -1,8 +1,10 @@
 package com.straight.test.service;
 
 import com.straight.test.domain.Board;
+import com.straight.test.domain.Project;
 import com.straight.test.domain.dto.BoardDTO;
 import com.straight.test.repository.SpringDataJpaBoardRepository;
+import com.straight.test.repository.SpringDataJpaProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +17,22 @@ import java.util.Optional;
 public class BoardService implements BoardServiceImp{
 
     private final SpringDataJpaBoardRepository boardRepository;
+    private final SpringDataJpaProjectRepository projectRepository;
 
     public Board createBoard(BoardDTO dto) {
+
+        Project project = projectRepository.findById(dto.getPrj_id())
+                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + dto.getPrj_id()));
+
         Board board = Board.builder()
                 .brdId(dto.getBrd_id())
                 .brdName(dto.getBrd_name())
                 .brdName(dto.getBrd_name())
+                .prjId(dto.getPrj_id())
                 .build();
+
+        Board boards = new Board(project, dto);
+
         boardRepository.save(board);
         return board;
 

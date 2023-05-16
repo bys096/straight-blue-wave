@@ -22,8 +22,7 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long brdId;
 
-    @JoinColumn(name = "prj_id")
-    private String prjId;
+    private Long prjId;
 
     @Column(name = "brd_name")
     private String brdName;
@@ -31,14 +30,21 @@ public class Board {
     @OneToMany(mappedBy = "board")
     private List<Post> posts;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Project project;
+
+    public Board(Project project, BoardDTO dto){
+
+    }
+
     public void changeBrdName(String brdName) {
         this.brdName = brdName;
     }
 
-    public Board(BoardDTO dto){
-        this.brdId = dto.getBrd_id();
-        this.prjId = dto.getPrj_id();
-        this.brdName = dto.getBrd_name();
-    }
+//    public Board(BoardDTO dto){
+//        this.brdId = dto.getBrd_id();
+//        this.prjId = dto.getPrj_id();
+//        this.brdName = dto.getBrd_name();
+//    }
 
 }

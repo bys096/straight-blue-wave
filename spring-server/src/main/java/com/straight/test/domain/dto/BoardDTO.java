@@ -9,7 +9,7 @@ import lombok.*;
 public class BoardDTO {
     private Long brd_id;
 
-    private String prj_id;
+    private Long prj_id;
 
     private String brd_name;
 
