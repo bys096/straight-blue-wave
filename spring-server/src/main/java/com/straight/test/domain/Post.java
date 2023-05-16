@@ -30,7 +30,6 @@ public class Post {
     @JoinColumn(name = "mem_id")
     private Long mem_id;
 
-    @JoinColumn(name = "brd_id")
     private Long brd_id;
 
     @Column(name = "post_content")
@@ -56,6 +55,12 @@ public class Post {
 
     @Column(name = "voting_status")
     private boolean voting_status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Board board;
+
+    public Post(Board board, PostDTO dto) {
+    }
 
     public void changePost(PostDTO dto){
         this.mem_id = dto.getMem_id();

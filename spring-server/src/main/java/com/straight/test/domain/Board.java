@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +28,8 @@ public class Board {
     @Column(name = "brd_name")
     private String brdName;
 
+    @OneToMany(mappedBy = "board")
+    private List<Post> posts;
 
     public void changeBrdName(String brdName) {
         this.brdName = brdName;
@@ -37,4 +40,5 @@ public class Board {
         this.prjId = dto.getPrj_id();
         this.brdName = dto.getBrd_name();
     }
+
 }

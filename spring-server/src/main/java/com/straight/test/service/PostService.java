@@ -1,8 +1,10 @@
 package com.straight.test.service;
 
+import com.straight.test.domain.Board;
 import com.straight.test.domain.Post;
 import com.straight.test.domain.dto.PostDTO;
 import com.straight.test.domain.dto.ProjectDTO;
+import com.straight.test.repository.SpringDataJpaBoardRepository;
 import com.straight.test.repository.SpringDataJpaPostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,13 @@ import java.util.Optional;
 public class PostService implements PostServiceImp{
 
     private final SpringDataJpaPostRepository postRepository;
+    private final SpringDataJpaBoardRepository boardRepository;
 
     public Post createPost(PostDTO dto){
+
+        Board board = boardRepository.findById(dto.getBrd_id())
+                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + dto.getBrd_id()));
+
         Post post = Post.builder()
                 .post_id(dto.getPost_id())
                 .mem_id(dto.getMem_id())
@@ -29,6 +36,9 @@ public class PostService implements PostServiceImp{
                 .file_status(dto.isFile_status())
                 .voting_status(dto.isVoting_status())
                 .build();
+
+        Post posts = new Post(board, dto);
+
         postRepository.save(post);
         return post;
     }
