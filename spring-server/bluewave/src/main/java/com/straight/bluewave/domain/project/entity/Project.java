@@ -56,5 +56,8 @@ public class Project extends BaseEntity {
     private String prjThumbnail;
 */
 
+    public void changePrjName(String prjName){
+        this.prjName = prjName;
+    }
 
 }
