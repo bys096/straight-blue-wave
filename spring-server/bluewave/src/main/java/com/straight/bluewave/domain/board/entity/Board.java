@@ -1,6 +1,7 @@
 package com.straight.bluewave.domain.board.entity;
 
 
+import com.straight.bluewave.domain.board.dto.BoardDTO;
 import com.straight.bluewave.domain.post.entity.Post;
 import com.straight.bluewave.domain.project.entity.Project;
 import lombok.AllArgsConstructor;
@@ -35,5 +36,13 @@ public class Board{
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Project project;
+
+    public Board(Project project, BoardDTO dto){
+
+    }
+
+    public void changeBrdName(String brdName) {
+        this.brdName = brdName;
+    }
 
 }
