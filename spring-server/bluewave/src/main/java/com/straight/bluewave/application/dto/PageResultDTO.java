@@ -21,8 +21,14 @@ public class PageResultDTO<DTO, EN> {
     private List<Integer> pageList;
 
     public PageResultDTO(Page<EN> result, Function<EN, DTO> fn) {
+        System.out.println("진입");
         dtoList = result.stream().map(fn).collect(Collectors.toList());
+
+
+        System.out.println("여기까진 괜찮 ----------------------1");
         totalPage = result.getTotalPages();
+
+        System.out.println("여기까진 괜찮 ----------------------2");
         makePageList(result.getPageable());
     }
 
