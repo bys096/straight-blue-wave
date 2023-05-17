@@ -47,5 +47,8 @@ public class Project extends BaseEntity {
     @OneToMany(mappedBy = "project")
     private List<Board> boards;
 
+    public void changePrjName(String prjName){
+        this.prjName = prjName;
+    }
 
 }

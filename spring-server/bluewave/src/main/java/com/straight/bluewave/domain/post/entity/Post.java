@@ -3,6 +3,7 @@ package com.straight.bluewave.domain.post.entity;
 
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.board.entity.Board;
+import com.straight.bluewave.domain.post.dto.PostDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,5 +64,16 @@ public class Post extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
+
+    public Post(Board board, PostDTO dto) {
+    }
+
+    public void changePost(PostDTO dto){
+        this.mem_id = dto.getMem_id();
+        this.brd_id = dto.getBrd_id();
+        this.post_content = dto.getPost_content();
+        this.post_name = dto.getPost_name();
+        this.attendees_id = dto.getAttendees_id();
+    }
 
 }
