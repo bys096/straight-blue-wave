@@ -30,6 +30,7 @@ public class Project extends BaseEntity {
     private String prjName;
 
     @OneToMany(mappedBy = "project")
+
     private List<Board> boards;
 
 
