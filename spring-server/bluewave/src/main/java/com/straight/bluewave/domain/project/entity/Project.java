@@ -3,6 +3,7 @@ package com.straight.bluewave.domain.project.entity;
 
 import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.application.entity.BaseEntity;
+import com.straight.bluewave.domain.team.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,16 @@ public class Project extends BaseEntity {
     @Column(name = "prj_name")
     private String prjName;
 
+    @OneToMany(mappedBy = "project")
+
+    private List<Board> boards;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
+
+
 /*  공통 엔티티 생성했으므로 주석처리
     @Column(name = "creation_date", updatable = false)
     private Date creationDate;
@@ -44,8 +55,6 @@ public class Project extends BaseEntity {
     @Column(name = "prj_thumbnail")
     private String prjThumbnail;
 */
-    @OneToMany(mappedBy = "project")
-    private List<Board> boards;
 
 
 }
