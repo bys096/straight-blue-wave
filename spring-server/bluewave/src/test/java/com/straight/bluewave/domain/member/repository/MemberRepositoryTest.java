@@ -2,6 +2,7 @@ package com.straight.bluewave.domain.member.repository;
 
 import com.straight.bluewave.application.dto.PageRequestDTO;
 import com.straight.bluewave.domain.member.entity.Member;
+import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
 import com.straight.bluewave.domain.team.repository.TeamRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +43,12 @@ class MemberRepositoryTest {
 
     @Test
     void selectTeam() {
-        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+        TeamPageRequestDTO pageRequestDTO = new TeamPageRequestDTO();
         Page<Object[]> result = teamRepository.searchTeamPage(
-                1L,
-                pageRequestDTO.getType(),
-                pageRequestDTO.getKeyword(),
+//                1L,
+//                pageRequestDTO.getType(),
+//                pageRequestDTO.getKeyword(),
+                pageRequestDTO,
                 pageRequestDTO.getPageable(Sort.by("mem_id").descending())
         );
     }

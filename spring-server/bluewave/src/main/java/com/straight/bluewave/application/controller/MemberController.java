@@ -5,6 +5,7 @@ import com.straight.bluewave.domain.team.service.TeamService;
 import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -13,7 +14,7 @@ public class MemberController {
 
     private final TeamService teamService;
     @GetMapping("/team")
-    public PageResultDTO getTeamList(TeamPageRequestDTO pageRequestDTO) {
+    public PageResultDTO getTeamList(@RequestBody TeamPageRequestDTO pageRequestDTO) {
         PageResultDTO dto = teamService.getList(pageRequestDTO);
         return dto;
     }
