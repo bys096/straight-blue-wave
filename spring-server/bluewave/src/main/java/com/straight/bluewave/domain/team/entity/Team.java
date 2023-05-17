@@ -31,6 +31,11 @@ public class Team extends BaseEntity {
     @Column(name = "team_desc")
     private String teamDesc;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mem_id")
+    private Member member;          // 팀 관리자
+
+
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     private List<TeamMemberMapping> members;
 

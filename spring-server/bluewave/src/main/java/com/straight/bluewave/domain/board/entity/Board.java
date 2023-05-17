@@ -19,13 +19,11 @@ import java.util.List;
 @Builder
 
 
-public class Board{
+public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long brdId;
-
-    private Long prjId;
 
     @Column(name = "brd_name")
     private String brdName;
@@ -34,6 +32,7 @@ public class Board{
     private List<Post> posts;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prj_id")
     private Project project;
 
 }

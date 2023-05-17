@@ -45,15 +45,15 @@ public class Post extends BaseEntity {
     @Column(name = "post_createAt", updatable = false)
     private LocalDateTime post_createAt;
 */
-    @Column(name = "post_modify")
-    private LocalDateTime post_modify;
+//    @Column(name = "post_modify")
+//    private LocalDateTime post_modify;
 /*
     @Column(name = "meeting_date")
     private Date meeting_date;
 */
 
-    @JoinColumn(name = "attendees_id")
-    private Long attendees_id;
+//    @JoinColumn(name = "attendees_id")
+//    private Long attendees_id;
 
     @Column(name = "file_status")
     private boolean file_status;
