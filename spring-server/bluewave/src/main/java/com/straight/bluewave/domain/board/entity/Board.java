@@ -35,16 +35,6 @@ public class Board{
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
-    //수정중
-//    @OneToMany(mappedBy = "project")
-//    @JsonManagedReference
-//    private List<Board> boards = new ArrayList<>();
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "prj_id")
-////    @JsonBackReference
-//    private Project project;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prj_id")
     private Project project;
