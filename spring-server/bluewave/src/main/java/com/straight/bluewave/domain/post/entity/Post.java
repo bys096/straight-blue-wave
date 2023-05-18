@@ -83,4 +83,8 @@ public class Post extends BaseEntity {
         this.attendees_id = dto.getAttendees_id();
     }
 
+    public void setBoard(Board board){
+        this.board = board;
+    }
+
 }

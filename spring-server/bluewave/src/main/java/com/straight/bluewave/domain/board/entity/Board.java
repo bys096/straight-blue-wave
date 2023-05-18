@@ -35,14 +35,20 @@ public class Board{
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "project")
-    @JsonManagedReference
-    private List<Board> boards = new ArrayList<>();
+    //수정중
+//    @OneToMany(mappedBy = "project")
+//    @JsonManagedReference
+//    private List<Board> boards = new ArrayList<>();
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "prj_id")
+////    @JsonBackReference
+//    private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prj_id")
-    @JsonBackReference
     private Project project;
+
 
     public Board(Project project, BoardDTO dto){
 
@@ -52,4 +58,12 @@ public class Board{
         this.brdName = brdName;
     }
 
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public void setBrdId(Long brdId){
+        this.brdId = brdId;
+    }
 }
