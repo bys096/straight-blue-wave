@@ -3,7 +3,9 @@ package com.straight.bluewave.domain.team.entity;
 
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
+import com.straight.bluewave.domain.mapping.entity.TeamProjectMapping;
 import com.straight.bluewave.domain.member.entity.Member;
+import com.straight.bluewave.domain.project.entity.Project;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,6 +40,9 @@ public class Team extends BaseEntity {
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     private List<TeamMemberMapping> members;
 
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    private List<TeamProjectMapping> projects;
+
     public void changeTeamName(String teamName){
         this.teamName = teamName;
     }
@@ -46,5 +51,8 @@ public class Team extends BaseEntity {
         this.teamDesc = teamDesc;
     }
 
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
+    }
 
 }

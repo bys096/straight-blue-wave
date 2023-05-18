@@ -22,4 +22,6 @@ public class ProjectDTO {
     private int member_number;
 
     private String prj_thumbnail;
+
+    private Long team_id;
 }
