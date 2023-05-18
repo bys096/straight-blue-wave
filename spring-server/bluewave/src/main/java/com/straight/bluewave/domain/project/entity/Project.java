@@ -20,6 +20,7 @@ public class Project extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "prj_id")
     private Long prjId;
 
     @Column(name = "prj_name")

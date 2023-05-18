@@ -10,6 +10,7 @@ import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.member.entity.QMember;
 import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
 import com.straight.bluewave.domain.team.entity.QTeam;
+import com.straight.bluewave.domain.team.entity.Team;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,9 @@ import java.util.stream.Collectors;
 @Repository
 public class TeamRepositoryImpl extends QuerydslRepositorySupport implements TeamRepository{
 
-    public TeamRepositoryImpl() { super(Member.class); }
+    public TeamRepositoryImpl() {
+        super(Member.class);
+    }
 
     @Override
     public Page<Object[]> searchTeamPage(TeamPageRequestDTO pageRequestDTO, Pageable pageable) {
@@ -33,7 +36,7 @@ public class TeamRepositoryImpl extends QuerydslRepositorySupport implements Tea
         QMember member = QMember.member;
 
         JPQLQuery<Member> jpqlQuery = from(member)
-                .innerJoin(member.teamMembers, teamMember)
+                .innerJoin(member.teams, teamMember)
                 .innerJoin(teamMember.team, team);
 
         JPQLQuery<Tuple> tuple = jpqlQuery.select(team, member, teamMember);
@@ -87,7 +90,7 @@ public class TeamRepositoryImpl extends QuerydslRepositorySupport implements Tea
         QMember member = QMember.member;
 
         JPQLQuery<Member> jpqlQuery = from(member)
-                .innerJoin(member.teamMembers, teamMember)
+                .innerJoin(member.teams, teamMember)
                 .innerJoin(teamMember.team, team);
 
         BooleanExpression ex1 = teamMember.team.teamId.eq(n);
@@ -96,5 +99,6 @@ public class TeamRepositoryImpl extends QuerydslRepositorySupport implements Tea
         System.out.println("결과 리스트 사이즈:" + list.size());
         return list;
     }
+
 }
 

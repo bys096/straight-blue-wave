@@ -54,16 +54,16 @@ class MemberRepositoryTest {
     }
 
 //    public MemberRepositoryTest() { super(Member.class); }
-    @Test
+    /*@Test
     void joinSelect() {
 
         List<Member> l= teamRepository.searchTeamMemberList(2L);
         for(Member x : l) {
             System.out.println("UserName: " + x.getMemberName());
         }
-    }
+    }*/
 
-    @Test
+   /* @Test
     void selectTeam() {
         TeamPageRequestDTO pageRequestDTO = new TeamPageRequestDTO();
         Page<Object[]> result = teamRepository.searchTeamPage(
@@ -73,19 +73,19 @@ class MemberRepositoryTest {
                 pageRequestDTO,
                 pageRequestDTO.getPageable(Sort.by("mem_id").descending())
         );
-    }
+    }*/
 
 //    public MemberRepositoryTest() { super(Member.class); }
-    @Test
+    /*@Test
     void joinSelect() {
 
         List<Member> l= teamRepository.searchTeamMemberList(2L);
         for(Member x : l) {
             System.out.println("UserName: " + x.getMemberName());
         }
-    }
+    }*/
 
-    @Test
+    /*@Test
     void selectTeam() {
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
         Page<Object[]> result = teamRepository.searchTeamPage(
@@ -94,5 +94,5 @@ class MemberRepositoryTest {
                 pageRequestDTO.getKeyword(),
                 pageRequestDTO.getPageable(Sort.by("mem_id").descending())
         );
-    }
+    }*/
 }

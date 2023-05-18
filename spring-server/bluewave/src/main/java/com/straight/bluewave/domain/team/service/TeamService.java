@@ -15,10 +15,44 @@ public interface TeamService {
         TeamDTO teamDTO = TeamDTO.builder()
                 .teamId(team.getTeamId())
                 .teamName(team.getTeamName())
+//                .teamDesc(team.getTeamDesc())
                 .memberId(member.getMemberId())
                 .memberName(member.getMemberName())
                 .createdAt(teamMember.getCreatedAt())
                 .build();
         return teamDTO;
     }
+
+    default Team dtoToEntity(TeamDTO dto) {
+        Member member = Member.builder()
+                .memberId(dto.getMemberId())
+                .build();
+        Team entity = Team.builder()
+                .teamId(dto.getTeamId())
+                .teamName(dto.getTeamName())
+//                .teamDesc(dto.getTeamDesc())
+                .member(member)
+                .build();
+
+        return entity;
+    }
+
+    default TeamDTO entityToDto(Team team) {
+
+        TeamDTO teamDTO = TeamDTO.builder()
+                .teamId(team.getTeamId())
+                .teamName(team.getTeamName())
+//                .teamDesc(team.getTeamDesc())
+                .build();
+        return teamDTO;
+    }
+
+
+    TeamDTO read(Long tm_id);
+
+    void modify(TeamDTO dto);
+
+    void remove(Long tm_id);
+
+
 }

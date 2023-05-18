@@ -27,4 +27,7 @@ public class TeamMemberMapping extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id")
     private Team team;
+
+    @Column(name = "tm_position")       //ex)매니저, 팀장
+    private String teamPosition;
 }

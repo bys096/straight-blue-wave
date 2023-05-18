@@ -1,4 +1,4 @@
-package com.straight.bluewave.domain.team.dto;
+package com.straight.bluewave.domain.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,14 +11,19 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class TeamDTO {
+public class MemberDTO {
 
-    private Long teamId;
-    private String teamName;
+    private Long member_id;
 
-    private String teamDesc;
-    private Long memberId;
-    private String memberName;
+    private String member_email;
+
+    private String member_pw;
+
+    private String member_name;
+
+    private String member_nick;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 }

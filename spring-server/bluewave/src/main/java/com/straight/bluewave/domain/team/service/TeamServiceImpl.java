@@ -6,12 +6,14 @@ import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.team.dto.TeamDTO;
 import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
 import com.straight.bluewave.domain.team.entity.Team;
+import com.straight.bluewave.domain.team.repository.SpringDataTeamRepository;
 import com.straight.bluewave.domain.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -19,6 +21,9 @@ import java.util.function.Function;
 public class TeamServiceImpl implements TeamService{
 
     private final TeamRepository teamRepository;
+    private final SpringDataTeamRepository springDataTeamRepository;
+
+
     @Override
     public TeamPageResultDTO<TeamDTO, Object[]> getList(TeamPageRequestDTO pageRequestDTO) {
         System.out.println(pageRequestDTO.getTeamId());
@@ -30,5 +35,46 @@ public class TeamServiceImpl implements TeamService{
 
         );
         return new TeamPageResultDTO<>(result, fn);
+    }
+
+
+    public Team joinTeam(TeamDTO dto) {       //팀생성
+        Team team = Team.builder()
+                .teamId(dto.getTeamId())
+                .teamName(dto.getTeamName())
+                .teamDesc(dto.getTeamDesc())
+                .build();
+        springDataTeamRepository.save(team);
+        return team;
+    }
+
+
+
+    //
+    @Override
+    public TeamDTO read(Long teamId) {
+        Optional<Team> result = springDataTeamRepository.findById(teamId);
+
+        // 바꿔야됨
+        return result.isPresent() ? entityToDto(result.get()) : null;
+    }
+
+    @Override
+    public void modify(TeamDTO dto) {
+
+        Long id = dto.getTeamId();
+
+        Team team = springDataTeamRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 팀이 존재하지 않습니다.")
+        );
+
+        team.changeTeamName(dto.getTeamName());
+        team.changeTeamDesc(dto.getTeamDesc());
+    }
+
+    @Override
+    public void remove(Long tm_id) {
+
+        springDataTeamRepository.deleteById(tm_id);
     }
 }
