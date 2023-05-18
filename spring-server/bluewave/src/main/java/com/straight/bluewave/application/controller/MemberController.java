@@ -1,6 +1,7 @@
 package com.straight.bluewave.application.controller;
 
 import com.straight.bluewave.domain.member.dto.MemberDTO;
+import com.straight.bluewave.domain.member.dto.MemberResponseDTO;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.member.service.MemberServiceImp;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,13 @@ import java.util.List;
 public class MemberController {
 
     private final MemberServiceImp memberServiceImp;
+
+    @GetMapping("/{email}")
+    public ResponseEntity<MemberResponseDTO> findMemberInfoByEmail(@PathVariable String memberEmail) {
+        return ResponseEntity.ok(memberServiceImp.findMemberInfoByEmail(memberEmail));
+    }
+
+
 
     @PostMapping("/register")       //회원가입
     public Member join(@RequestBody MemberDTO member) {

@@ -1,6 +1,7 @@
 package com.straight.bluewave.domain.member.service;
 
 import com.straight.bluewave.domain.member.dto.MemberDTO;
+import com.straight.bluewave.domain.member.dto.MemberResponseDTO;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,17 @@ public class MemberServiceImp implements MemberService{
 
     private final MemberRepository memberRepository;
 
+    public MemberResponseDTO findMemberInfoByEmail(String memberEmail) {
+        return memberRepository.findByMemberEmail(memberEmail)
+                .map(MemberResponseDTO::of)
+                .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
+    }
+
+
+
+
+
+
     public Member join(MemberDTO m) {
         Member member = Member.builder()
                 .memberEmail(m.getMember_email())
@@ -27,7 +39,7 @@ public class MemberServiceImp implements MemberService{
     }
 
     public MemberDTO login(MemberDTO m) {
-        Optional<Member> result = memberRepository.findByUserEmailAndUserPw(m.getMember_email(), m.getMember_pw());
+        Optional<Member> result = memberRepository.findByMemberEmail(m.getMember_email());
 
         return result.isPresent() ? entityToDto(result.get()) : null;
     }

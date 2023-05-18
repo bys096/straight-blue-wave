@@ -23,6 +23,8 @@ public interface MemberService {
                 .member_pw(entity.getMemberPw())
                 .member_name(entity.getMemberName())
                 .member_nick(entity.getMemberNick())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
         return dto;
     }

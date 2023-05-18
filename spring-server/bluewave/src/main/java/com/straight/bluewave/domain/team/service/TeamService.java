@@ -15,10 +15,13 @@ public interface TeamService {
         TeamDTO teamDTO = TeamDTO.builder()
                 .teamId(team.getTeamId())
                 .teamName(team.getTeamName())
+                .teamDesc(team.getTeamDesc())
                 .memberId(member.getMemberId())
                 .memberName(member.getMemberName())
                 .createdAt(teamMember.getCreatedAt())
                 .build();
         return teamDTO;
     }
+
+
 }

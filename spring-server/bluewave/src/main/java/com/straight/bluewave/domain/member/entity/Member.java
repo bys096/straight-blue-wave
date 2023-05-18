@@ -34,6 +34,9 @@ public class Member extends BaseEntity {
     @Column(name = "mem_nick")
     private String memberNick;
 
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)     //참조되는 쪽에서 mappedBy
     private List<TeamMemberMapping> teams;
 
