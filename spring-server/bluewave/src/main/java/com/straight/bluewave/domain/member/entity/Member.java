@@ -33,7 +33,7 @@ public class Member extends BaseEntity {
     private String memberName;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<TeamMemberMapping> products;
+    private List<TeamMemberMapping> teamMembers;
 
 /*
     - 중간 엔티티 없이, 매핑 테이블을 생성하는 코드

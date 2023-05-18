@@ -37,10 +37,10 @@ public class Project extends BaseEntity {
     private int memberNumber;
 */
 
-/*  추후 이미지 테이블을 만들 것이므로 주석처리
-    @Column(name = "prj_thumbnail")
-    private String prjThumbnail;
-*/
+    /*  추후 이미지 테이블을 만들 것이므로 주석처리
+        @Column(name = "prj_thumbnail")
+        private String prjThumbnail;
+    */
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boards;
 

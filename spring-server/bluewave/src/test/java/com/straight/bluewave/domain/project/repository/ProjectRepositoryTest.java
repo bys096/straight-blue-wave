@@ -18,12 +18,15 @@ class ProjectRepositoryTest {
     @Test
     void prjBuildTest() {
         List<Board> board = new ArrayList<Board>();
+
         Project prj = Project.builder()
                 .prjName("test1")
                 .boards(board)
                 .build();
         projectRepository.save(prj);
     }
+
+
 
 
 }
