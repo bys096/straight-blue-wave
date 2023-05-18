@@ -16,7 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BoardServiceImp implements BoardService{
     private final BoardRepository boardRepository;
-    private final ProjectRepository projectRepository;
 
     public Board createBoard(BoardDTO dto) {
 
