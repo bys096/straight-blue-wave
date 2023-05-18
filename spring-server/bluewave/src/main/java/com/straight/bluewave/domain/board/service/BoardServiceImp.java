@@ -16,25 +16,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BoardServiceImp implements BoardService{
     private final BoardRepository boardRepository;
-    private final ProjectRepository projectRepository;
 
     public Board createBoard(BoardDTO dto) {
-
-        Project project = projectRepository.findById(dto.getPrj_id())
-                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + dto.getPrj_id()));
 
         Board board = Board.builder()
                 .brdId(dto.getBrd_id())
                 .brdName(dto.getBrd_name())
-                .brdName(dto.getBrd_name())
-                .prjId(dto.getPrj_id())
                 .build();
 
-        Board boards = new Board(project, dto);
+        Project project = new Project();
+        project.setPrjId(dto.getPrj_id());
+        board.setProject(project);
 
         boardRepository.save(board);
         return board;
-
     }
 
 
@@ -68,4 +63,5 @@ public class BoardServiceImp implements BoardService{
         boardRepository.findAll().forEach(u -> boards.add(u));
         return boards;
     }
+
 }
