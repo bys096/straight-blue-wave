@@ -26,8 +26,7 @@ public class BoardServiceImp implements BoardService{
         Board board = Board.builder()
                 .brdId(dto.getBrd_id())
                 .brdName(dto.getBrd_name())
-                .brdName(dto.getBrd_name())
-                .prjId(dto.getPrj_id())
+                .project(project)
                 .build();
 
         Board boards = new Board(project, dto);
@@ -68,4 +67,5 @@ public class BoardServiceImp implements BoardService{
         boardRepository.findAll().forEach(u -> boards.add(u));
         return boards;
     }
+
 }

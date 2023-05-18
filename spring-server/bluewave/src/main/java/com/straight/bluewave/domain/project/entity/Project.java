@@ -44,7 +44,7 @@ public class Project extends BaseEntity {
     @Column(name = "prj_thumbnail")
     private String prjThumbnail;
 */
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boards;
 
     public void changePrjName(String prjName){

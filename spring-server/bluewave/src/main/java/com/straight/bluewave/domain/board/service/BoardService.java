@@ -7,7 +7,6 @@ public interface BoardService {
     default Board dtoToEntity(BoardDTO dto) {
         Board entity = Board.builder()
                 .brdId(dto.getBrd_id())
-                .prjId(dto.getPrj_id())
                 .brdName(dto.getBrd_name())
                 .build();
         return entity;
@@ -16,7 +15,6 @@ public interface BoardService {
     default BoardDTO entityToDto(Board entity) {
         BoardDTO dto = BoardDTO.builder()
                 .brd_id(entity.getBrdId())
-                .prj_id(entity.getPrjId())
                 .brd_name(entity.getBrdName())
                 .build();
         return dto;
