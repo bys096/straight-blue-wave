@@ -48,4 +48,8 @@ public class Project extends BaseEntity {
         this.prjName = prjName;
     }
 
+
+    public void setPrjId(Long prjId) {
+        this.prjId = prjId;
+    }
 }

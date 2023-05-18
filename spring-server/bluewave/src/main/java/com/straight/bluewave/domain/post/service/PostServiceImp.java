@@ -20,9 +20,6 @@ public class PostServiceImp implements PostService{
 
     public Post createPost(PostDTO dto){
 
-        Board board = boardRepository.findById(dto.getBrd_id())
-                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + dto.getBrd_id()));
-
         Post post = Post.builder()
                 .post_id(dto.getPost_id())
                 .mem_id(dto.getMem_id())
@@ -31,10 +28,11 @@ public class PostServiceImp implements PostService{
                 .attendees_id(dto.getAttendees_id())
                 .file_status(dto.isFile_status())
                 .voting_status(dto.isVoting_status())
-                .board(board)
                 .build();
 
-        Post posts = new Post(board, dto);
+        Board board = new Board();
+        board.setBrdId(dto.getBrd_id());
+        post.setBoard(board);
 
         postRepository.save(post);
         return post;

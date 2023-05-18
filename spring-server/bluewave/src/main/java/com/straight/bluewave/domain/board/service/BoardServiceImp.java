@@ -20,20 +20,17 @@ public class BoardServiceImp implements BoardService{
 
     public Board createBoard(BoardDTO dto) {
 
-        Project project = projectRepository.findById(dto.getPrj_id())
-                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + dto.getPrj_id()));
-
         Board board = Board.builder()
                 .brdId(dto.getBrd_id())
                 .brdName(dto.getBrd_name())
-                .project(project)
                 .build();
 
-        Board boards = new Board(project, dto);
+        Project project = new Project();
+        project.setPrjId(dto.getPrj_id());
+        board.setProject(project);
 
         boardRepository.save(board);
         return board;
-
     }
 
 
