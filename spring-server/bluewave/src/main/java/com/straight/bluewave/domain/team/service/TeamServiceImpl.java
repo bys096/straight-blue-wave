@@ -1,10 +1,9 @@
 package com.straight.bluewave.domain.team.service;
 
-import com.straight.bluewave.domain.team.dto.TeamPageResultDTO;
+import com.straight.bluewave.application.dto.PageResultDTO;
+import com.straight.bluewave.domain.team.dto.*;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.member.entity.Member;
-import com.straight.bluewave.domain.team.dto.TeamDTO;
-import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
 import com.straight.bluewave.domain.team.entity.Team;
 import com.straight.bluewave.domain.team.repository.SpringDataTeamRepository;
 import com.straight.bluewave.domain.team.repository.TeamRepository;
@@ -13,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -25,16 +25,28 @@ public class TeamServiceImpl implements TeamService{
 
 
     @Override
-    public TeamPageResultDTO<TeamDTO, Object[]> getList(TeamPageRequestDTO pageRequestDTO) {
+    public TeamMemberPageResultDTO<TeamDTO, Object[]> getList(TeamMemberPageRequestDTO pageRequestDTO) {
         System.out.println(pageRequestDTO.getTeamId());
         System.out.println(pageRequestDTO.getKeyword());
         Function<Object[], TeamDTO> fn = (en -> entityToDTO((Team)en[0], (Member)en[1], (TeamMemberMapping)en[2]));
         Page<Object[]> result = teamRepository.searchTeamPage(
                 pageRequestDTO,
-                pageRequestDTO.getPageable(Sort.by("bno").descending())
+                pageRequestDTO.getPageable(Sort.by("mem_id").descending())
 
         );
-        return new TeamPageResultDTO<>(result, fn);
+        return new TeamMemberPageResultDTO<>(result, fn);
+    }
+
+    public TeamMemberPageResultDTO<TeamDTO, Object[]> getTeamList(TeamMemberPageRequestDTO pageRequestDTO) {
+
+//        System.out.println(pageRequestDTO.getTeamId());
+//        System.out.println(pageRequestDTO.getKeyword());
+        Function<Object[], TeamDTO> fn = (en -> entityToDTO((Team)en[0], (Member)en[1], (TeamMemberMapping)en[2]));
+        Page<Object[]> result = teamRepository.getTeamList(
+                pageRequestDTO,
+                pageRequestDTO.getPageable(Sort.by("mem_id").descending())
+        );
+        return new TeamMemberPageResultDTO<>(result, fn);
     }
 
 

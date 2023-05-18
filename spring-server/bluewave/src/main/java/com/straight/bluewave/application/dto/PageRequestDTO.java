@@ -1,12 +1,10 @@
-package com.straight.bluewave.domain.team.dto;
+package com.straight.bluewave.application.dto;
 
-import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-@Data
-public class TeamPageRequestDTO {
+public class PageRequestDTO {
 
     private int page;
     private int size;
@@ -15,8 +13,7 @@ public class TeamPageRequestDTO {
     private String keyword;
     private String dateOrder;
 
-
-    public TeamPageRequestDTO() {
+    public PageRequestDTO() {
         this.page = 1;
         this.size = 10;
     }
