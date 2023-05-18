@@ -1,6 +1,8 @@
 package com.straight.bluewave.domain.post.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.domain.post.dto.PostDTO;
@@ -14,6 +16,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -32,8 +36,6 @@ public class Post extends BaseEntity {
 
     @JoinColumn(name = "mem_id")
     private Long mem_id;
-
-    private Long brd_id;
 
     @Column(name = "post_content")
     private String post_content;
@@ -62,7 +64,13 @@ public class Post extends BaseEntity {
     @Column(name = "voting_status")
     private boolean voting_status;
 
+    @OneToMany(mappedBy = "board")
+    @JsonManagedReference
+    private List<Post> posts = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brd_id")
+    @JsonBackReference
     private Board board;
 
     public Post(Board board, PostDTO dto) {
@@ -70,7 +78,6 @@ public class Post extends BaseEntity {
 
     public void changePost(PostDTO dto){
         this.mem_id = dto.getMem_id();
-        this.brd_id = dto.getBrd_id();
         this.post_content = dto.getPost_content();
         this.post_name = dto.getPost_name();
         this.attendees_id = dto.getAttendees_id();

@@ -26,12 +26,12 @@ public class PostServiceImp implements PostService{
         Post post = Post.builder()
                 .post_id(dto.getPost_id())
                 .mem_id(dto.getMem_id())
-                .brd_id(dto.getBrd_id())
                 .post_content(dto.getPost_content())
                 .post_name(dto.getPost_name())
                 .attendees_id(dto.getAttendees_id())
                 .file_status(dto.isFile_status())
                 .voting_status(dto.isVoting_status())
+                .board(board)
                 .build();
 
         Post posts = new Post(board, dto);

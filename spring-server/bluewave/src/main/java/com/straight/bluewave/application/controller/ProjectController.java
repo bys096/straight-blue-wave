@@ -1,5 +1,6 @@
 package com.straight.bluewave.application.controller;
 
+import com.straight.bluewave.domain.board.service.BoardServiceImp;
 import com.straight.bluewave.domain.project.dto.ProjectDTO;
 import com.straight.bluewave.domain.project.entity.Project;
 import com.straight.bluewave.domain.project.service.ProjectServiceImp;
@@ -17,6 +18,7 @@ import java.util.List;
 @Log4j2
 public class ProjectController {
     private final ProjectServiceImp projectService;
+    private final BoardServiceImp boardServiceImp;
 
     // 프로젝트 추가
     @PostMapping("/create")
