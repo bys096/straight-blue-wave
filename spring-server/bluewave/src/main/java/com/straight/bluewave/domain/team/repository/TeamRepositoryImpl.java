@@ -1,19 +1,22 @@
 package com.straight.bluewave.domain.team.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.straight.bluewave.domain.mapping.entity.QTeamMemberMapping;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.member.entity.QMember;
+import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
 import com.straight.bluewave.domain.team.entity.QTeam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +26,7 @@ public class TeamRepositoryImpl extends QuerydslRepositorySupport implements Tea
     public TeamRepositoryImpl() { super(Member.class); }
 
     @Override
-    public Page<Object[]> searchTeamPage(Long teamId, String type, String keyword, Pageable pageable) {
+    public Page<Object[]> searchTeamPage(TeamPageRequestDTO pageRequestDTO, Pageable pageable) {
 
         QTeam team = QTeam.team;
         QTeamMemberMapping teamMember = QTeamMemberMapping.teamMemberMapping;
@@ -33,52 +36,46 @@ public class TeamRepositoryImpl extends QuerydslRepositorySupport implements Tea
                 .innerJoin(member.teamMembers, teamMember)
                 .innerJoin(teamMember.team, team);
 
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(team, member);
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(team, member, teamMember);
 
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        BooleanExpression teamIdCondition = teamMember.team.teamId.eq(teamId);
-        tuple.where(teamIdCondition);
+        BooleanExpression teamIdCondition = teamMember.team.teamId.eq(pageRequestDTO.getTeamId());
+        if (pageRequestDTO.getKeyword() != null) {
+            BooleanExpression keywordCondition = member.memberName.contains(pageRequestDTO.getKeyword());
+            booleanBuilder.and(keywordCondition);
+        }
+        booleanBuilder.and(teamIdCondition);
+        String order = pageRequestDTO.getDateOrder()==null ? "default" : pageRequestDTO.getDateOrder();
 
+        OrderSpecifier<LocalDateTime> dateOrderSpecifier;
+        OrderSpecifier<String> memberNameOrderSpecifier;
 
-//        System.out.println("결과 리스트 사이즈:" + list.size());
+        switch (order) {
+            case "dateAsc":
+                dateOrderSpecifier = teamMember.createdAt.asc();
+                tuple.orderBy(dateOrderSpecifier);
+                break;
+            case "dateDesc":
+                dateOrderSpecifier = teamMember.createdAt.desc();
+                tuple.orderBy(dateOrderSpecifier);
+                break;
+            default:
+                memberNameOrderSpecifier = member.memberName.asc();
+                tuple.orderBy(memberNameOrderSpecifier);
+                break;
+        }
 
-        tuple.orderBy(teamMember.member.memberId.desc());
-
-
-        Sort sort = pageable.getSort();
-//        sort.stream().forEach(order -> {
-//            Order direction = order.isAscending()? Order.ASC: Order.DESC;
-//            String prop = order.getProperty();
-//            PathBuilder orderByExpression = new PathBuilder(Member.class, "member");
-//            tuple.orderBy(new OrderSpecifier(direction, orderByExpression.get(prop)));
-//        });
-
+        tuple.where(booleanBuilder);
         tuple.offset(pageable.getOffset());
         tuple.limit(pageable.getPageSize());
 
-
-
-
         List<Tuple> result = tuple.fetch();
-
         Long count = tuple.fetchCount();
-
-
 
 
         return new PageImpl<Object[]>(
                 result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
-
-
-
-
-//        return new PageImpl<>(list, pageable, list.size());
-
-//        return new PageImpl<>(list.stream().map(m -> new Object[]{m}).collect(Collectors.toList()), pageable, list.size());
-//
-//        return new PageImpl<>(Object[]) (
-//                list.stream().collect(Collectors.toList()), pageable
-//                );
 
     }
 
@@ -97,15 +94,6 @@ public class TeamRepositoryImpl extends QuerydslRepositorySupport implements Tea
         jpqlQuery.where(ex1);
         List<Member> list = jpqlQuery.fetch();
         System.out.println("결과 리스트 사이즈:" + list.size());
-//        JPQLQuery<Tuple> tuple = jpqlQuery.select(member, team);
-//        List<Member> members = jpqlQuery.select(member).fetch();
-
-//
-//        List<Tuple> result = tuple.fetch();
-//        return new PageImpl<Object[]>(
-//                result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable);
-//
-//    }
         return list;
     }
 }

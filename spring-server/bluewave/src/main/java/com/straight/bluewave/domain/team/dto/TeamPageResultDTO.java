@@ -1,4 +1,4 @@
-package com.straight.bluewave.application.dto;
+package com.straight.bluewave.domain.team.dto;
 
 import lombok.Data;
 import org.springframework.data.domain.Page;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Data
-public class PageResultDTO<DTO, EN> {
+public class TeamPageResultDTO<DTO, EN> {
 
     private List<DTO> dtoList;
     private int totalPage;
@@ -20,15 +20,10 @@ public class PageResultDTO<DTO, EN> {
     private boolean prev, next;
     private List<Integer> pageList;
 
-    public PageResultDTO(Page<EN> result, Function<EN, DTO> fn) {
-        System.out.println("진입");
+
+    public TeamPageResultDTO(Page<EN> result, Function<EN, DTO> fn) {
         dtoList = result.stream().map(fn).collect(Collectors.toList());
-
-
-        System.out.println("여기까진 괜찮 ----------------------1");
         totalPage = result.getTotalPages();
-
-        System.out.println("여기까진 괜찮 ----------------------2");
         makePageList(result.getPageable());
     }
 
