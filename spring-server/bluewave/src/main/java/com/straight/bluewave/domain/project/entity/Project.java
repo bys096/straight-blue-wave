@@ -16,9 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-
-//@DynamicInsert
-//@DynamicUpdate
 public class Project extends BaseEntity {
 
     @Id
