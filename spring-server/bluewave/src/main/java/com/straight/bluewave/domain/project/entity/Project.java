@@ -3,6 +3,7 @@ package com.straight.bluewave.domain.project.entity;
 
 import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.application.entity.BaseEntity;
+import com.straight.bluewave.domain.mapping.entity.ProjectMemberMapping;
 import com.straight.bluewave.domain.team.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,19 +25,22 @@ public class Project extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "prj_id")
     private Long prjId;
 
     @Column(name = "prj_name")
     private String prjName;
 
     @OneToMany(mappedBy = "project")
-
     private List<Board> boards;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    private List<ProjectMemberMapping> members;
 
 
 /*  공통 엔티티 생성했으므로 주석처리

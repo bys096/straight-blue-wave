@@ -1,15 +1,14 @@
 package com.straight.bluewave.domain.member.entity;
 
 import com.straight.bluewave.application.entity.BaseEntity;
+import com.straight.bluewave.domain.mapping.entity.ProjectMemberMapping;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
-import com.straight.bluewave.domain.team.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,8 +31,14 @@ public class Member extends BaseEntity {
     @Column(name = "mem_name")
     private String memberName;
 
+    @Column(name = "mem_nick")
+    private String memberNick;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)     //참조되는 쪽에서 mappedBy
+    private List<TeamMemberMapping> teams;
+
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<TeamMemberMapping> products;
+    private List<ProjectMemberMapping> projects;
 
 /*
     - 중간 엔티티 없이, 매핑 테이블을 생성하는 코드
