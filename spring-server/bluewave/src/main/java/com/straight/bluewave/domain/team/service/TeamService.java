@@ -1,33 +1,24 @@
 package com.straight.bluewave.domain.team.service;
 
+import com.straight.bluewave.domain.team.dto.TeamPageResultDTO;
+import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
+import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.team.dto.TeamDTO;
+import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
 import com.straight.bluewave.domain.team.entity.Team;
 
 public interface TeamService {
+    TeamPageResultDTO<TeamDTO, Object[]> getList(TeamPageRequestDTO pageRequestDTO);
 
-    default Team dtoToEntity(TeamDTO dto) {
-        Team entity = Team.builder()
-                .teamId(dto.getTeam_id())
-                .teamName(dto.getTeam_name())
-                .teamDesc(dto.getTeam_desc())
+    default TeamDTO entityToDTO(Team team, Member member, TeamMemberMapping teamMember) {
+
+        TeamDTO teamDTO = TeamDTO.builder()
+                .teamId(team.getTeamId())
+                .teamName(team.getTeamName())
+                .memberId(member.getMemberId())
+                .memberName(member.getMemberName())
+                .createdAt(teamMember.getCreatedAt())
                 .build();
-        return entity;
+        return teamDTO;
     }
-
-    default TeamDTO entityToDto(Team entity) {
-        TeamDTO dto = TeamDTO.builder()
-                .team_id(entity.getTeamId())
-                .team_name(entity.getTeamName())
-                .team_desc(entity.getTeamDesc())
-                .build();
-        return dto;
-    }
-
-    //PageResultDTO<TeamDTO, Team> getList(String user_id, PageRequestDTO requestDTO);
-
-    TeamDTO read(Long team_id);
-
-    void modify(TeamDTO dto);
-
-    void remove(Long team_id);
 }

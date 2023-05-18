@@ -1,4 +1,4 @@
-package com.straight.bluewave.application.dto;
+package com.straight.bluewave.domain.team.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,14 +10,16 @@ import org.springframework.data.domain.Sort;
 @Builder
 @AllArgsConstructor
 @Data
-public class PageRequestDTO {
+public class TeamPageRequestDTO {
 
     private int page;
     private int size;
+    private Long teamId;
     private String type;
     private String keyword;
+    private String dateOrder;
 
-    public PageRequestDTO() {
+    public TeamPageRequestDTO() {
         this.page = 1;
         this.size = 10;
     }

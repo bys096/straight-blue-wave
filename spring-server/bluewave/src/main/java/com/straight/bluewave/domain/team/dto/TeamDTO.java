@@ -5,16 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class TeamDTO {
 
-    private Long team_id;
-
-    private String team_name;
-
-    private String team_desc;
-
+    private Long teamId;
+    private String teamName;
+    private Long memberId;
+    private String memberName;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

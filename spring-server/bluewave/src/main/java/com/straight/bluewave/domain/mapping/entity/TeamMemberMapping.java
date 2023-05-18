@@ -3,10 +3,16 @@ package com.straight.bluewave.domain.mapping.entity;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.team.entity.Team;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 //@IdClass(TeamMemberId.class)  복합키 방식 -> 매핑 id를 두는 방식으로 변경
 public class TeamMemberMapping extends BaseEntity {
 
