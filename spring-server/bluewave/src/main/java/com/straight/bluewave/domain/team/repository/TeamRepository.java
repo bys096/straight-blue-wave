@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface TeamRepository  {
+public interface TeamRepository {
     
     Page<Object[]> searchTeamPage(TeamPageRequestDTO pageRequestDTO, Pageable pageable);
 

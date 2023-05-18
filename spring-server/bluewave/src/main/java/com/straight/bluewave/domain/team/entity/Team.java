@@ -38,5 +38,13 @@ public class Team extends BaseEntity {
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     private List<TeamMemberMapping> members;
 
+    public void changeTeamName(String teamName){
+        this.teamName = teamName;
+    }
+
+    public void changeTeamDesc(String teamDesc) {
+        this.teamDesc = teamDesc;
+    }
+
 
 }
