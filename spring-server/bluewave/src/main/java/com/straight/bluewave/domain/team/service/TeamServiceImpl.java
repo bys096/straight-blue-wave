@@ -1,6 +1,7 @@
 package com.straight.bluewave.domain.team.service;
 
-import com.straight.bluewave.application.dto.PageResultDTO;
+import com.straight.bluewave.domain.team.dto.TeamPageResultDTO;
+import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.team.dto.TeamDTO;
 import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
@@ -19,16 +20,15 @@ public class TeamServiceImpl implements TeamService{
 
     private final TeamRepository teamRepository;
     @Override
-    public PageResultDTO<TeamDTO, Object[]> getList(TeamPageRequestDTO pageRequestDTO) {
-        Function<Object[], TeamDTO> fn = (en -> entityToDTO((Team)en[0], (Member)en[1]));
+    public TeamPageResultDTO<TeamDTO, Object[]> getList(TeamPageRequestDTO pageRequestDTO) {
+        System.out.println(pageRequestDTO.getTeamId());
+        System.out.println(pageRequestDTO.getKeyword());
+        Function<Object[], TeamDTO> fn = (en -> entityToDTO((Team)en[0], (Member)en[1], (TeamMemberMapping)en[2]));
         Page<Object[]> result = teamRepository.searchTeamPage(
-                1L,
-                pageRequestDTO.getType(),
-                pageRequestDTO.getKeyword(),
-                pageRequestDTO.getPageable(Sort.by("mem_id").descending())
+                pageRequestDTO,
+                pageRequestDTO.getPageable(Sort.by("bno").descending())
+
         );
-//        PageResultDTO<Page<Object[]>, Function<Object[], TeamDTO>> pr = new PageResultDTO<Page<Object[]>, Function<Object[], TeamDTO>>(result, fn);
-        return new PageResultDTO<>(result, fn);
-//        return null;
+        return new TeamPageResultDTO<>(result, fn);
     }
 }
