@@ -1,6 +1,5 @@
 package com.straight.bluewave.domain.team.repository;
 
-import com.straight.bluewave.application.dto.PageRequestDTO;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,6 @@
 package com.straight.bluewave.domain.member.repository;
 
-import com.straight.bluewave.application.dto.PageResultDTO;
+import com.straight.bluewave.domain.team.dto.TeamPageResultDTO;
 import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
 import com.straight.bluewave.domain.team.service.TeamService;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ class TeamServiceTest {
     @Test
     void getList() {
         TeamPageRequestDTO dto = new TeamPageRequestDTO();
-        PageResultDTO resultDTO = teamService.getList(dto);
+        TeamPageResultDTO resultDTO = teamService.getList(dto);
 
         System.out.println(resultDTO.getDtoList().toString());
     }

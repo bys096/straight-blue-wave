@@ -19,8 +19,6 @@ public class TeamPageRequestDTO {
     private String keyword;
     private String dateOrder;
 
-
-
     public TeamPageRequestDTO() {
         this.page = 1;
         this.size = 10;

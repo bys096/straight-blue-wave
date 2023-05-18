@@ -5,7 +5,6 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
-import com.straight.bluewave.application.dto.PageRequestDTO;
 import com.straight.bluewave.domain.mapping.entity.QTeamMemberMapping;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.member.entity.QMember;
@@ -14,7 +13,6 @@ import com.straight.bluewave.domain.team.entity.QTeam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
