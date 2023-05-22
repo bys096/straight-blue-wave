@@ -12,9 +12,22 @@ import lombok.NoArgsConstructor;
 @Data
 public class MemberResponseDTO {
 
+    private Long member_id;
     private String member_email;
 
+    private String member_name;
+
+    private String member_nick;
+
     public static MemberResponseDTO of(Member member) {
-        return new MemberResponseDTO(member.getMemberEmail());
+
+        return MemberResponseDTO.builder()
+                .member_email(member.getMemberEmail())
+                .member_id(member.getMemberId())
+                .member_name(member.getMemberName())
+                .member_nick(member.getMemberNick())
+                .build();
+
+        //return new MemberResponseDTO(member.getMemberEmail());
     }
 }

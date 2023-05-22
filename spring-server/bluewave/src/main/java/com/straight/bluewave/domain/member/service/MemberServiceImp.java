@@ -22,6 +22,14 @@ public class MemberServiceImp implements MemberService{
                 .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
     }
 
+    public MemberResponseDTO findMemberInfoById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .map(MemberResponseDTO::of)
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+    }
+
+
+
 
 
 
