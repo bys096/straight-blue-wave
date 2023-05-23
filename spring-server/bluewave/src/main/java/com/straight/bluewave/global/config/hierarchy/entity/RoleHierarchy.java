@@ -1,4 +1,4 @@
-package com.straight.bluewave.global.entity;
+package com.straight.bluewave.global.config.hierarchy.entity;
 
 import lombok.*;
 
