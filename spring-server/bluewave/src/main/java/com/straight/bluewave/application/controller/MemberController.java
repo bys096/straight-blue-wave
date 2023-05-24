@@ -71,7 +71,7 @@ public class MemberController {
     }
 
 
-    @PreAuthorize("#id.toString() == principal.username")
+    @PreAuthorize("#id.toString() == principal.username or hasRole('MANAGER')")
     @DeleteMapping("/delete/{id}")      //회원탙퇴
     public void deleteMember(@PathVariable Long id, Principal principal) {
         log.info("id : " + id);
