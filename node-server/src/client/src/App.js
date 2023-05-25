@@ -22,6 +22,7 @@ import ChattingPage from "./pages/ChattingPage";
 import { Navigate } from "react-router-dom";
 import PostPage from "./pages/PostPage";
 import CreatePostPage from "./pages/CreatePostPage";
+import Wbs from "./components/Wbs";
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
         ></Route>
         <Route path="/post" Component={PostPage}></Route>
         <Route path="/createpost" Component={CreatePostPage}></Route>
+        <Route path="/WBS" Component={Wbs}></Route>
       </Routes>
     </div>
   );
