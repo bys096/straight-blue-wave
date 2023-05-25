@@ -6,6 +6,7 @@ import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.mapping.entity.TeamProjectMapping;
 import com.straight.bluewave.domain.member.entity.Member;
+import com.straight.bluewave.domain.schedule.entity.Schedule;
 import com.straight.bluewave.domain.team.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,6 +58,9 @@ public class Project extends BaseEntity {
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<TeamProjectMapping> teamProjectMappings;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schedule> schedule;
 
     public void changePrjName(String prjName){
         this.prjName = prjName;

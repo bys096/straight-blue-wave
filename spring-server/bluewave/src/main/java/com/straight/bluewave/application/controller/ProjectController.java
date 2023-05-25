@@ -45,7 +45,7 @@ public class ProjectController {
 
     // 프로젝트 리스트
     @GetMapping("/list")
-    public ResponseEntity<List<Project>> getAllUsers() {
+    public ResponseEntity<List<Project>> getAllProject() {
         List<Project> users = projectService.findAll();
         return new ResponseEntity<List<Project>>(users, HttpStatus.OK);
     }
