@@ -19,7 +19,7 @@ import javax.persistence.Table;
 public class RefreshToken {
     @Id
     @Column(name = "rt_key")
-    private String key;
+    private String key;         //MemberID값이 들어감
 
     @Column(name = "rt_value")
     private String value;
