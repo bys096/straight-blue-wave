@@ -10,6 +10,19 @@ import java.util.List;
 
 @Transactional
 public interface ScheduleRepository extends JpaRepositoryImplementation<Schedule, Long> {
-    @Query("SELECT s FROM Schedule s WHERE s.project.prjId = :prjId")
-    List<Schedule> findSchedulesByProject(@Param("prjId") Long prjId);
+
+//    @Query("SELECT s FROM Schedule s WHERE s.project.prjId = :prjId")
+
+//    @Query("SELECT s, s.project, s.post FROM Schedule s WHERE s.project.prjId = :prjId")
+//    List<Object[]> findSchedulesByProject(@Param("prjId") Long prjId);
+
+
+
+
+    @Query("SELECT sc, po FROM Schedule sc LEFT JOIN sc.post po WHERE sc.project.prjId = :prjId")
+    List<Object[]> findSchedulesByProject(@Param("prjId") Long prjId);
+
+//    @Query("SELECT pr FROM Project pr LEFT JOIN FETCH pr.boards b LEFT JOIN FETCH b.posts po LEFT JOIN FETCH pr.schedule sc WHERE pr.prjId = :prjId")
+//    List<Object[]> findSchedulesByProject(@Param("prjId") Long prjId);
+
 }

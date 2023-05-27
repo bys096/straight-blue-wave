@@ -2,6 +2,7 @@ package com.straight.bluewave.domain.schedule.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.straight.bluewave.application.entity.BaseEntity;
+import com.straight.bluewave.domain.post.entity.Post;
 import com.straight.bluewave.domain.project.entity.Project;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,7 +43,10 @@ public class Schedule extends BaseEntity {
     @JsonIgnore
     private Project project;
 
-//    private Long post_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+//    @JsonIgnore
+    private Post post;
 
     public void changeChTitle(String scheduleTitle){
         this.scheduleTitle = scheduleTitle;
@@ -66,5 +70,9 @@ public class Schedule extends BaseEntity {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 }
