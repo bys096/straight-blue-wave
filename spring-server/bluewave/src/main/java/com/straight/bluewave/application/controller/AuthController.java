@@ -4,8 +4,11 @@ import com.straight.bluewave.domain.member.dto.MemberRequestDTO;
 import com.straight.bluewave.domain.member.dto.MemberResponseDTO;
 import com.straight.bluewave.domain.member.dto.TokenDTO;
 import com.straight.bluewave.domain.member.dto.TokenRequestDTO;
+import com.straight.bluewave.domain.member.repository.RefreshTokenRepository;
 import com.straight.bluewave.domain.member.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,13 +16,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Log4j2
 public class AuthController {
     private final AuthService authService;
+
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @PostMapping("/signup")         //회원가입
     public ResponseEntity<MemberResponseDTO> signup(@RequestBody MemberRequestDTO memberRequestDto) {
@@ -42,7 +49,9 @@ public class AuthController {
     }
 
     @PostMapping("/logout")     //로그아웃
-    public ResponseEntity<?> logout(HttpServletResponse response) {
+    public ResponseEntity<String> logout(HttpServletResponse response, HttpServletRequest request) {
+        authService.logout(request);
+
         Cookie cookie = new Cookie("token", null);
         cookie.setMaxAge(0);        //쿠키 만료시간을 0으로 설정
         cookie.setPath("/api");
@@ -50,7 +59,7 @@ public class AuthController {
 
         response.setHeader("Authorization", "");
 
-        return ResponseEntity.ok("로그아웃 성공");
+        return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
     }
 
 

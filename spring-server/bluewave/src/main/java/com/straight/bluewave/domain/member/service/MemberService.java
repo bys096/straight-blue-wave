@@ -28,10 +28,4 @@ public interface MemberService {
                 .build();
         return dto;
     }
-
-    MemberDTO read(Long id);
-
-    void modify(MemberDTO member, Long id);
-
-    void remove(Long id);
 }
