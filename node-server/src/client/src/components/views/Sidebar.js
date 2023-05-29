@@ -38,7 +38,7 @@ const Sidebar = () => {
         </Button>
         {isOpen && (
           <div>
-            <Nav className="flex-column">
+            <Nav className="flex-column" style={{ width: "40vh" }}>
               <ButtonGroup className="mt-3">
                 <Button
                   className="nav-link"

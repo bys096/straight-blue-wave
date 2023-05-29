@@ -8,13 +8,10 @@ import Sidebar from "./components/views/Sidebar";
 import DefaultPage from "./pages/DefaultPage";
 import SignUp from "./pages/SignUp";
 import LoggedIn from "./pages/LoggedIn";
-import CommunityPage from "./pages/CommunityPage";
-import ShoppingPage from "./pages/ShoppingPage";
 import LoginPage from "./pages/LoginPage";
 import CalendarForm from "./pages/CalendarForm";
 import SettingPage from "./pages/SettingPage";
 import UpdatePage from "./pages/UpdatePage";
-import TeamCreate from "./pages/TeamCreate";
 import TeamDetail from "./pages/TeamDetail";
 import ProjectCreate from "./pages/ProjectCreate";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -33,8 +30,6 @@ function App() {
         <Route path="/SignUp" exact={true} Component={SignUp} />
         <Route path="/login" exact={true} Component={LoginPage} />
         <Route path="/LoggedIn" exact={true} Component={LoggedIn} />
-        <Route path="/community" exact={true} Component={CommunityPage} />
-        <Route path="/shopping" exact={true} Component={ShoppingPage}></Route>
         <Route path="/calendar" exact={true} Component={CalendarForm}></Route>
         <Route path="/setting" exact={true} Component={SettingPage}></Route>
         <Route path="/update" exact={true} Component={UpdatePage}></Route>
@@ -43,7 +38,6 @@ function App() {
           exact={true}
           Component={ChattingPage}
         ></Route>
-        <Route path="/TeamCreate" exact={true} Component={TeamCreate}></Route>
         <Route path="/team/:tmId" Component={TeamDetail} />
         <Route path="/project/:prjId" Component={ProjectDetail}></Route>
         <Route
