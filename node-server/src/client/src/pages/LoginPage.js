@@ -1,68 +1,89 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import "../assets/css/Register&Login.css";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const [user_id, setUserid] = useState("");
-  const [user_pw, setPassword] = useState("");
+  const [member_email, setMemEmail] = useState("");
+  const [member_pw, setPassword] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await axios
-      .post("http://172.30.1.7:8002/api/member/login", {
-        user_id: user_id,
-        user_pw: user_pw,
+      .post("http://172.30.1.85:8002/api/auth/login", {
+        member_email: member_email,
+        member_pw: member_pw,
       })
       .then((res) => {
-        console.log("res.data.user_id : ", res.data.user_id);
-        console.log("res.data.user_pw : ", res.data.user_pw);
-        if (res.data.user_id === undefined) {
+        if (res.data.accessToken === undefined) {
           alert("입력하신 로그인 정보가 일치하지 않습니다.");
-        } else if (res.data.user_id === user_id) {
-          sessionStorage.setItem("user_num", res.data.id);
-          sessionStorage.setItem("user_id", user_id);
+        } else {
+          sessionStorage.setItem("accessToken", res.data.accessToken);
+          sessionStorage.setItem("refreshToken", res.data.refreshToken);
+          const memberInfo = axios
+            .get(`http://172.30.1.85:8002/api/member/${member_email}`)
+            .then((res) => {
+              sessionStorage.setItem("memid", res.data.member_id);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
           navigate("/LoggedIn");
         }
       })
       .catch((error) => {
         console.error(error);
+        alert("입력하신 로그인 정보가 일치하지 않습니다.");
       });
   };
 
   return (
-    <Container className="d-flex justify-content-center align-items-center vh-100">
-      <Row>
-        <Col>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Userid</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter userid"
-                value={user_id}
-                onChange={(e) => setUserid(e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                value={user_pw}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-
-            <Button variant="primary" type="submit" style={{ margin: "10px" }}>
-              Login
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <div className="Login">
+        <div className="auth-form-container">
+          <h2 onClick={() => navigate("/")}>BlueWave</h2>
+          <form className="login-form" onSubmit={handleSubmit}>
+            <label htmlFor="userid" className="register-label">
+              이메일
+            </label>
+            <input
+              className="register-input"
+              type="text"
+              placeholder="이메일을 입력해주세요..."
+              value={member_email}
+              onChange={(e) => setMemEmail(e.target.value)}
+            ></input>
+            <label htmlFor="password" className="register-label">
+              비밀번호
+            </label>
+            <input
+              className="register-input"
+              type="password"
+              placeholder="비밀번호를 입력해주세요..."
+              value={member_pw}
+              onChange={(e) => setPassword(e.target.value)}
+            ></input>
+            <br></br>
+            <button
+              className="register-button"
+              type="submit"
+              style={{
+                borderRadius: "10px",
+                cursor: "pointer",
+                padding: "20px",
+                margin: "20px 0",
+              }}
+            >
+              로그인
+            </button>
+          </form>
+          <button className="link-btn" onClick={() => navigate("/SignUp")}>
+            아직 회원이 아니신가요? 바로 여기서 회원가입을 진행할 수 있습니다.
+          </button>
+        </div>
+      </div>
+    </>
   );
 }
 

@@ -1,202 +1,152 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Alert, Button, Container, Form } from "react-bootstrap";
+import "../assets/css/Register&Login.css";
 
 const SignUp = () => {
-  const [user_id, setId] = useState("");
-  const [user_name, setName] = useState("");
-  const [user_pw, setPassword] = useState("");
+  const [member_email, setEmail] = useState("");
+  const [member_pw, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
-  const [term, setTerm] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [termError, setTermError] = useState(false);
-  const [user_gender, setGender] = useState("male");
-  const [user_birth, setBirth] = useState("");
-  const [user_email, setEmail] = useState("");
+  const [member_name, setName] = useState("");
+  const [member_nick, setNick] = useState("");
 
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (user_pw !== passwordCheck) {
+    if (member_pw !== passwordCheck) {
       return setPasswordError(true);
-    }
-    if (!term) {
-      return setTermError(true);
-    }
-    console.log({
-      user_id,
-      user_name,
-      user_pw,
-      passwordCheck,
-      user_gender,
-      user_birth,
-      term,
-    });
-
-    sessionStorage.setItem(
-      "user",
-      JSON.stringify({ user_id, user_pw, user_name, user_gender, user_email })
-    );
-
-    if (sessionStorage.getItem("user") != null) {
-      history("/");
     }
   };
 
   // Coustom Hook 이전
-  const onChangeId = (e) => {
-    setId(e.target.value);
-  };
-  const onChangeName = (e) => {
-    setName(e.target.value);
+  const onChangeEmail = (e) => {
+    setEmail(e.target.value);
   };
   const onChangePassword = (e) => {
     setPassword(e.target.value);
   };
   const onChangePasswordChk = (e) => {
-    //비밀번호를 입력할때마다 password 를 검증하는 함수
-    setPasswordError(e.target.value !== user_pw);
+    setPasswordError(e.target.value !== member_pw);
     setPasswordCheck(e.target.value);
   };
-  const onChangeTerm = (e) => {
-    //체크박스 초기화
-    setTermError(false);
-    setTerm(e.target.checked);
+  const onChangeName = (e) => {
+    setName(e.target.value);
   };
-
-  const onChangeGender = (e) => {
-    setGender(e.target.value);
-  };
-
-  const onChangeBirth = (e) => {
-    setBirth(e.target.value);
-  };
-
-  const onChangeEmail = (e) => {
-    setEmail(e.target.value);
+  const onChangeNick = (e) => {
+    setNick(e.target.value);
   };
 
   const addMember = () => {
+    const currentDate = new Date();
+    const formattedDateTime = currentDate
+      .toISOString()
+      .replace("T", " ")
+      .split(".")[0];
+
     return axios
-      .post("http://172.30.1.7:8002/api/member/register", {
-        user_id: user_id,
-        user_pw: user_pw,
-        user_name: user_name,
-        user_gender: user_gender,
-        user_email: user_email,
-        user_birth: user_birth,
+      .post("http://172.30.1.85:8002/api/auth/signup", {
+        member_email: member_email,
+        member_pw: member_pw,
+        member_name: member_name,
+        member_nick: member_nick,
+        createdAt: formattedDateTime,
       })
       .then((res) => {
-        console.log(res);
         alert("회원가입이 완료되었습니다");
+        navigate("/login");
       })
       .catch((error) => {
         console.error(error);
+        alert("회원가입에 실패하였습니다.");
       });
   };
 
   return (
-    <Container>
-      <h1>회원가입</h1>
-      <Form onSubmit={onSubmit}>
-        <Form.Group>
-          <Form.Label htmlFor="user_id">아이디</Form.Label>
-          <Form.Control
-            name="user_id"
-            value={user_id}
+    <div className="SignUp">
+      <div className="auth-form-container">
+        <h2>회원가입</h2>
+        <form className="register-form" onSubmit={onSubmit}>
+          <label htmlFor="member_email" className="register-label">
+            이메일
+          </label>
+          <input
+            className="register-input"
+            id="member_email"
+            type="text"
+            value={member_email}
             required
-            onChange={onChangeId}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label htmlFor="user_pw">비밀번호</Form.Label>
-          <Form.Control
-            name="user_pw"
+            onChange={onChangeEmail}
+          ></input>
+          <label htmlFor="member_pw" className="register-label">
+            비밀번호
+          </label>
+          <input
+            className="register-input"
+            id="member_pw"
             type="password"
-            value={user_pw}
+            value={member_pw}
             required
             onChange={onChangePassword}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label htmlFor="user-password-check">비밀번호체크</Form.Label>
-          <Form.Control
-            name="user-password-check"
+          ></input>
+          <label htmlFor="member-password-check" className="register-label">
+            비밀번호확인
+          </label>
+          <input
+            className="register-input"
+            id="member-password-check"
             type="password"
             value={passwordCheck}
             required
             onChange={onChangePasswordChk}
-          />
+          ></input>
           {passwordError && (
-            <Alert variant="danger">비밀번호가 일치하지 않습니다.</Alert>
+            <div style={{ color: "red" }}>비밀번호가 일치하지 않습니다.</div>
           )}
-        </Form.Group>
-        <Form.Group>
-          <Form.Label htmlFor="user_name">이름</Form.Label>
-          <Form.Control
-            name="user_name"
-            value={user_name}
+          <label htmlFor="member_name" className="register-label">
+            이름
+          </label>
+          <input
+            className="register-input"
+            id="member_name"
+            type="text"
+            value={member_name}
             required
             onChange={onChangeName}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label htmlFor="user_birth">나이</Form.Label>
-          <Form.Control
-            type="date"
-            name="user_birth"
-            value={user_birth}
-            onChange={onChangeBirth}
+          ></input>
+          <label htmlFor="member_nick" className="register-label">
+            닉네임
+          </label>
+          <input
+            className="register-input"
+            id="member_nick"
+            type="text"
+            value={member_nick}
             required
-          ></Form.Control>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label htmlFor="user_email">이메일</Form.Label>
-          <Form.Control
-            type="email"
-            name="user_email"
-            value={user_email}
-            onChange={onChangeEmail}
-            required
-          ></Form.Control>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label htmlFor="user_gender">성별</Form.Label>
-          <Form.Control
-            as="select"
-            name="user_gender"
-            value={user_gender}
-            onChange={onChangeGender}
+            onChange={onChangeNick}
+          ></input>
+          <br></br>
+          <button
+            className="register-button"
+            onClick={() => addMember()}
+            type="submit"
+            style={{
+              borderRadius: "10px",
+              cursor: "pointer",
+              padding: "20px",
+              margin: "20px 0",
+            }}
           >
-            <option value="male">남성</option>
-            <option value="female">여성</option>
-          </Form.Control>
-        </Form.Group>
-        <Form.Group>
-          <Form.Check
-            type="checkbox"
-            name="user-term"
-            value={term}
-            onChange={onChangeTerm}
-            label="동의 합니까?"
-          />
-          {termError && (
-            <Alert variant="danger">약관에 동의하셔야 합니다.</Alert>
-          )}
-        </Form.Group>
-        <Button onClick={() => addMember()} type="primary" htmltype="submit">
-          가입하기
-        </Button>
-      </Form>
-      <div style={{ marginTop: 10 }}>
-        <Link to="/">
-          <Button>홈으로 돌아가기</Button>
-        </Link>
+            가입하기
+          </button>
+        </form>
+        <button className="link-btn" onClick={() => navigate("/")}>
+          홈으로 이동하기
+        </button>
       </div>
-    </Container>
+    </div>
   );
 };
 

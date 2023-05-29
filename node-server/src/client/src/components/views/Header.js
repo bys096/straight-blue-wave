@@ -32,13 +32,13 @@ function Header() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav style={{ marginLeft: "auto" }}>
             <Nav.Link>
-              <Link to="/community" style={{ textDecoration: "none" }}>
-                커뮤니티
+              <Link to="/LoggedIn" style={{ textDecoration: "none" }}>
+                도움말
               </Link>
             </Nav.Link>
             <Nav.Link>
-              <Link to="/shopping" style={{ textDecoration: "none" }}>
-                쇼핑몰
+              <Link to="/LoggedIn" style={{ textDecoration: "none" }}>
+                알림
               </Link>
             </Nav.Link>
             <Nav.Link>
