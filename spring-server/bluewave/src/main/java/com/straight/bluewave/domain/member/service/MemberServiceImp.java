@@ -2,11 +2,14 @@ package com.straight.bluewave.domain.member.service;
 
 import com.straight.bluewave.domain.member.dto.MemberDTO;
 import com.straight.bluewave.domain.member.dto.MemberResponseDTO;
+import com.straight.bluewave.domain.member.dto.MemberUpdateDTO;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.member.repository.MemberRepository;
+import com.straight.bluewave.global.util.SecurityUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,12 +19,16 @@ public class MemberServiceImp implements MemberService{
 
     private final MemberRepository memberRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
+    @Transactional
     public MemberResponseDTO findMemberInfoByEmail(String memberEmail) {
         return memberRepository.findByMemberEmail(memberEmail)
                 .map(MemberResponseDTO::of)
                 .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
     }
 
+    @Transactional
     public MemberResponseDTO findMemberInfoById(Long memberId) {
         return memberRepository.findById(memberId)
                 .map(MemberResponseDTO::of)
@@ -30,54 +37,27 @@ public class MemberServiceImp implements MemberService{
 
 
 
+    @Transactional
+    public void modify(MemberUpdateDTO dto) {
+        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
 
-
-
-
-
-    public Member join(MemberDTO m) {
-        Member member = Member.builder()
-                .memberEmail(m.getMember_email())
-                .memberPw(m.getMember_pw())
-                .memberName(m.getMember_name())
-                .memberNick(m.getMember_nick())
-                .build();
-        memberRepository.save(member);
-        return member;
-    }
-
-    public MemberDTO login(MemberDTO m) {
-        Optional<Member> result = memberRepository.findByMemberEmail(m.getMember_email());
-
-        return result.isPresent() ? entityToDto(result.get()) : null;
-    }
-    @Override
-    public void modify(MemberDTO member, Long id) {
-        Optional<Member> result = memberRepository.findById(id);
-
-        if(result.isPresent()) {
-            Member entity = result.get();
-
-            memberRepository.save(entity);
-        }
+        member.updateMember(dto);
 
     }
 
-    @Override
-    public void remove(Long id) {
-
-        memberRepository.deleteById(id);
+    @Transactional
+    public void delete() {
+        memberRepository.deleteById(SecurityUtil.getCurrentMemberId());
     }
+
+
+
 
     public List<Member> getAllMembers() {
 
         return memberRepository.findAll();
     }
 
-    @Override
-    public MemberDTO read(Long id) {
-        Optional<Member> result = memberRepository.findById(id);
 
-        return result.isPresent() ? entityToDto(result.get()) : null;
-    }
 }

@@ -2,7 +2,9 @@ package com.straight.bluewave.application.controller;
 
 import com.straight.bluewave.domain.member.dto.MemberDTO;
 import com.straight.bluewave.domain.member.dto.MemberResponseDTO;
+import com.straight.bluewave.domain.member.dto.MemberUpdateDTO;
 import com.straight.bluewave.domain.member.entity.Member;
+import com.straight.bluewave.domain.member.service.AuthService;
 import com.straight.bluewave.domain.member.service.MemberServiceImp;
 import com.straight.bluewave.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -20,6 +25,8 @@ import java.util.List;
 public class MemberController {
 
     private final MemberServiceImp memberServiceImp;
+
+    private final AuthService authService;
 
     @GetMapping("/{email}")     //이메일로 사용자 요청
     public ResponseEntity<MemberResponseDTO> findMemberInfoByEmail(@PathVariable String memberEmail) {
@@ -32,28 +39,27 @@ public class MemberController {
         return ResponseEntity.ok(memberServiceImp.findMemberInfoById(SecurityUtil.getCurrentMemberId()));
     }
 
+    @PutMapping("/update")      //회원정보 수정(이메일 X)
+    public ResponseEntity<MemberResponseDTO> updateMyInfo(@RequestBody MemberUpdateDTO dto) {
+        memberServiceImp.modify(dto);
+        return ResponseEntity.ok(memberServiceImp.findMemberInfoById(SecurityUtil.getCurrentMemberId()));
 
-
-
-    /*@PostMapping("/register")       //회원가입
-    public Member join(@RequestBody MemberDTO member) {
-
-        return memberServiceImp.join(member);
-    }*/
-
-    /*@PostMapping("/login")          //로그인
-    public MemberDTO login(@RequestBody MemberDTO member) {
-        MemberDTO dto = memberServiceImp.login(member);
-        return dto;
-    }*/
-
-
-    @GetMapping("/member/{id}")      //회원 정보 불러오기
-    public MemberDTO updateMember(@PathVariable Long id) {
-        log.info("id : " + id);
-        MemberDTO dto = memberServiceImp.read(id);
-        return dto;
     }
+
+    @DeleteMapping("/delete")       //회원탈퇴
+    public ResponseEntity<String> deleteMember(HttpServletRequest request, HttpServletResponse response) {
+        authService.logout(request);
+        memberServiceImp.delete();
+
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/api");
+        response.addCookie(cookie);
+        response.setHeader("Authorization", "");
+
+        return new ResponseEntity<>("회원탈퇴 성공", HttpStatus.OK);
+    }
+
 
     @GetMapping("/listMember")      //회원 전체 불러오기
     public ResponseEntity<List<Member>> getAllMembers() {
@@ -61,15 +67,5 @@ public class MemberController {
         return new ResponseEntity<>(members, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")     //회원 정보 수정
-    public void updateMember(@RequestBody MemberDTO member, @PathVariable Long id) {
 
-        memberServiceImp.modify(member, id);
-    }
-
-    @DeleteMapping("/delete/{id}")      //회원탙퇴
-    public void deleteMember(@PathVariable Long id) {
-        log.info("id : " + id);
-        memberServiceImp.remove(id);
-    }
 }
