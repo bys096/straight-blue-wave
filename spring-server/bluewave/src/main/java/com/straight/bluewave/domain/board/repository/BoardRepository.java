@@ -8,4 +8,8 @@ import java.util.Optional;
 
 @Transactional
 public interface BoardRepository extends JpaRepository<Board, Long>{
+
+    List<Board> findByProject_PrjId(Long prjId);
+
+    Board findByBrdId(Long brdId);
 }

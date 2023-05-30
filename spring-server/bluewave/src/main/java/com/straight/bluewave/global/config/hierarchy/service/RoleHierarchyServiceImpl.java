@@ -1,9 +1,8 @@
-package com.straight.bluewave.global.service;
+package com.straight.bluewave.global.config.hierarchy.service;
 
-import com.straight.bluewave.global.entity.RoleHierarchy;
-import com.straight.bluewave.global.repository.RoleHierarchyRepository;
+import com.straight.bluewave.global.config.hierarchy.entity.RoleHierarchy;
+import com.straight.bluewave.global.config.hierarchy.repository.RoleHierarchyRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

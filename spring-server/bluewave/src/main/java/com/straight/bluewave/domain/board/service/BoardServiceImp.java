@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,10 +59,21 @@ public class BoardServiceImp implements BoardService{
         boardRepository.deleteById(brd_id);
     }
 
-    public List<Board> findAll() {
-        List<Board> boards = new ArrayList<>();
-        boardRepository.findAll().forEach(u -> boards.add(u));
-        return boards;
+    @Override
+    public List<BoardDTO> getBoardListByPrjId(Long prjId) {
+        return boardRepository
+                .findByProject_PrjId(prjId)
+                .stream()
+                .map(board -> entityToDto(board))
+                .collect(Collectors.toList());
     }
+
+//    public List<Board> findAll() {
+//        List<Board> boards = new ArrayList<>();
+//        boardRepository.findAll().forEach(u -> boards.add(u));
+//        return boards;
+//    }
+
+
 
 }
