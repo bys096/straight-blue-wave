@@ -37,9 +37,7 @@ public class PostResponseDTO<DTO> {
     public PostResponseDTO(Page<DTO> result) {
         dtoList = result.getContent();
         totalPage = result.getTotalPages();
-        log.info("pageResponseDTO-------------- before makePateList");
         makePageList(result.getPageable());
-        log.info("after makePageList");
     }
 
     private void makePageList(Pageable pageable) {

@@ -44,10 +44,9 @@ public class PostController {
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
-    // board id에 관한 리스트 반환
+    // board id에 관한 리스트 반환, 조건 검색 추가
     @GetMapping("/list")
     public PostResponseDTO<Post> getBoard(@RequestBody PostRequestDTO pageRequestDTO) {
-        log.info("Post의 게시판 Id: " + pageRequestDTO.getBoardId());
         return postService.getPostListWithCondition(pageRequestDTO);
     }
 
