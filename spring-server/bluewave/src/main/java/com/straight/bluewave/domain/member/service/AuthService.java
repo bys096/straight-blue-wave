@@ -9,6 +9,7 @@ import com.straight.bluewave.domain.member.entity.RefreshToken;
 import com.straight.bluewave.domain.member.jwt.TokenProvider;
 import com.straight.bluewave.domain.member.repository.MemberRepository;
 import com.straight.bluewave.domain.member.repository.RefreshTokenRepository;
+import com.straight.bluewave.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -88,5 +91,13 @@ public class AuthService {
 
         // 토큰 발급
         return tokenDto;
+    }
+
+    @Transactional
+    public void logout(HttpServletRequest request) {
+
+        refreshTokenRepository.deleteByKey(String.valueOf(SecurityUtil.getCurrentMemberId()))
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+
     }
 }
