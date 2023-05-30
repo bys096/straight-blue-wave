@@ -11,11 +11,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -68,4 +71,11 @@ public class MemberController {
     }
 
 
+    @PreAuthorize("#id.toString() == principal.username or hasRole('MANAGER')")
+    @DeleteMapping("/delete/{id}")      //회원탙퇴
+    public void deleteMember(@PathVariable Long id, Principal principal) {
+        log.info("id : " + id);
+//        log.info("principal id: " + principal.na);
+        memberServiceImp.remove(id);
+    }
 }

@@ -1,9 +1,8 @@
 package com.straight.bluewave.global.init;
 
-import com.straight.bluewave.global.service.RoleHierarchyServiceImpl;
+import com.straight.bluewave.global.config.hierarchy.service.RoleHierarchyServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
