@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.board.entity.Board;
+import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
 import com.straight.bluewave.domain.post.dto.PostDTO;
 import com.straight.bluewave.domain.schedule.entity.Schedule;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -56,7 +58,7 @@ public class Post extends BaseEntity {
     private Date meeting_date;
 */
 
-    @JoinColumn(name = "attendees_id")
+    @Column(name = "attendees_id")
     private Long attendees_id;
 
     @Column(name = "file_status")
@@ -71,6 +73,9 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedule;
+
+    @OneToMany(mappedBy = "post")
+    private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
     public Post(Board board, PostDTO dto) {
     }

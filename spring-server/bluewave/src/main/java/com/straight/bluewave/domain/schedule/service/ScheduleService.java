@@ -33,4 +33,5 @@ public interface ScheduleService {
     Long modify(Long schedule_id, ScheduleDTO dto);
 
     void remove(Long schedule_id);
+
 }

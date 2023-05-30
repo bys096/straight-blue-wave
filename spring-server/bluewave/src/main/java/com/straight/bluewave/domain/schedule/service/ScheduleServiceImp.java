@@ -6,7 +6,6 @@ import com.straight.bluewave.domain.schedule.dto.ScheduleDTO;
 import com.straight.bluewave.domain.schedule.entity.Schedule;
 import com.straight.bluewave.domain.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

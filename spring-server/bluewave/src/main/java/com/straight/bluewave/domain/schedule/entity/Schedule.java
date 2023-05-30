@@ -2,6 +2,7 @@ package com.straight.bluewave.domain.schedule.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.straight.bluewave.application.entity.BaseEntity;
+import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
 import com.straight.bluewave.domain.post.entity.Post;
 import com.straight.bluewave.domain.project.entity.Project;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -48,6 +50,9 @@ public class Schedule extends BaseEntity {
 //    @JsonIgnore
     private Post post;
 
+    @OneToMany(mappedBy = "schedule")
+    private Set<ScheduleMemberMapping> scheduleMemberMappings;
+
     public void changeChTitle(String scheduleTitle){
         this.scheduleTitle = scheduleTitle;
     }
@@ -74,5 +79,10 @@ public class Schedule extends BaseEntity {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public void addMapping(ScheduleMemberMapping mapping) {
+        scheduleMemberMappings.add(mapping);
+        mapping.setSchedule(this);
     }
 }
