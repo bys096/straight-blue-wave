@@ -39,8 +39,10 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    public void updateMember(MemberUpdateDTO dto, PasswordEncoder passwordEncoder) {
-        if(dto.getMember_pw() != null) this.memberPw = passwordEncoder.encode(dto.getMember_pw());
+    @Enumerated(EnumType.STRING)
+    private OAuthProvider oAuthProvider;
+
+    public void updateMember(MemberUpdateDTO dto) {
         if(dto.getMember_name() != null) this.memberName = dto.getMember_name();
         if (dto.getMember_nick() != null) this.memberNick = dto.getMember_nick();
     }

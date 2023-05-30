@@ -6,6 +6,8 @@ import com.straight.bluewave.domain.member.dto.TokenDTO;
 import com.straight.bluewave.domain.member.dto.TokenRequestDTO;
 import com.straight.bluewave.domain.member.repository.RefreshTokenRepository;
 import com.straight.bluewave.domain.member.service.AuthService;
+import com.straight.bluewave.global.oauth.naver.NaverLoginParams;
+import com.straight.bluewave.global.oauth.service.OAuthLoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthController {
     private final AuthService authService;
 
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final OAuthLoginService oAuthLoginService;
+
 
     @PostMapping("/signup")         //회원가입
     public ResponseEntity<MemberResponseDTO> signup(@RequestBody MemberRequestDTO memberRequestDto) {
@@ -47,6 +50,19 @@ public class AuthController {
         return ResponseEntity.ok(tokenDTO);
         //return ResponseEntity.ok(authService.login(memberRequestDto));
     }
+
+    @PostMapping("/naver")
+    public ResponseEntity<TokenDTO> loginNaver(@RequestBody NaverLoginParams params, HttpServletResponse response) {
+        TokenDTO tokenDTO = oAuthLoginService.login(params);
+
+        Cookie cookie = new Cookie("token", tokenDTO.getRefreshToken());        //RefreshToken을 쿠키에 저장
+        cookie.setMaxAge(3600);     //초 단위 시간
+        cookie.setPath("/api");        //쿠기 경로 적용하기
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok(tokenDTO);
+    }
+
 
     @PostMapping("/logout")     //로그아웃
     public ResponseEntity<String> logout(HttpServletResponse response, HttpServletRequest request) {

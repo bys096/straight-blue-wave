@@ -2,6 +2,7 @@ package com.straight.bluewave.domain.member.dto;
 
 import com.straight.bluewave.domain.member.entity.Authority;
 import com.straight.bluewave.domain.member.entity.Member;
+import com.straight.bluewave.domain.member.entity.OAuthProvider;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +31,7 @@ public class MemberRequestDTO {
                 .memberName(member_name)
                 .memberNick(member_nick)
                 .authority(Authority.ROLE_USER)
+                .oAuthProvider(OAuthProvider.BLUEWAVE)
                 .build();
     }
 
