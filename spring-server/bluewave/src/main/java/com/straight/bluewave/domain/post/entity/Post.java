@@ -64,13 +64,8 @@ public class Post extends BaseEntity {
     @Column(name = "voting_status")
     private boolean voting_status;
 
-    @OneToMany(mappedBy = "board")
-    @JsonManagedReference
-    private List<Post> posts = new ArrayList<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brd_id")
-    @JsonBackReference
     private Board board;
 
     public Post(Board board, PostDTO dto) {

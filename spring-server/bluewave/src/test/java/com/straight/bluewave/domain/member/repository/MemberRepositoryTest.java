@@ -3,17 +3,11 @@ package com.straight.bluewave.domain.member.repository;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.mapping.repository.SpringDataTeamMemberRepository;
 import com.straight.bluewave.domain.member.entity.Member;
-import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
 import com.straight.bluewave.domain.team.entity.Team;
 import com.straight.bluewave.domain.team.repository.TeamRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
-
-
-import java.util.List;
 
 //@SpringBootTest
 @SpringBootTest

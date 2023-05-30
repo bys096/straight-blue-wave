@@ -1,0 +1,61 @@
+.Login,
+.SignUp {
+  text-align: center;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-image: linear-gradient(79deg, #5433ff, #20bdff, #a5fecb);
+}
+
+.auth-form-container,
+.login-form,
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (min-width: 600px) {
+  .auth-form-container {
+    padding: 5rem;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin: 0.5rem;
+  }
+}
+
+.register-label {
+  text-align: left;
+  padding: 0.25rem 0;
+}
+
+.register-input {
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border: none;
+  border-radius: 10px;
+  width: 600px;
+}
+
+.register-button {
+  border: none;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #7439db;
+  width: 600px;
+}
+
+.register-select {
+  width: 600px;
+}
+
+.link-btn {
+  background: none;
+  color: white;
+  text-decoration: underline;
+  border: none;
+}

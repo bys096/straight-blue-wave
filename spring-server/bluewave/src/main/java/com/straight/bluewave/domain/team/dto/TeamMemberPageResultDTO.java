@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Data
-public class TeamPageResultDTO<DTO> {
+public class TeamMemberPageResultDTO<DTO, EN> {
 
     private List<DTO> dtoList;
     private int totalPage;
@@ -21,8 +21,8 @@ public class TeamPageResultDTO<DTO> {
     private List<Integer> pageList;
 
 
-    public TeamPageResultDTO(Page<TeamDTO> result) {
-//        dtoList = result.getContent();
+    public TeamMemberPageResultDTO(Page<EN> result, Function<EN, DTO> fn) {
+        dtoList = result.stream().map(fn).collect(Collectors.toList());
         totalPage = result.getTotalPages();
         makePageList(result.getPageable());
     }

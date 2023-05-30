@@ -1,4 +1,3 @@
-// TeamList.js
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
@@ -8,33 +7,31 @@ import TeamCreateCard from "../components/TeamCreateCard";
 
 const TeamList = () => {
   const [teams, setTeams] = useState([]);
+  if (sessionStorage.getItem("memid") == null) {
+    window.location.reload();
+  }
 
   const fetchTeams = async () => {
-    try {
-      const response = await axios.get(
-        "http://172.30.1.14:8002/api/team/listTeam"
-      );
-      setTeams(response.data);
-      console.log(teams);
-    } catch (error) {
-      console.error("Error fetching teams:", error);
-    }
+    const response = axios
+      .get(
+        `http://172.30.1.85:8002/api/team/list/${sessionStorage.getItem(
+          "memid"
+        )}`
+      )
+      .then((res) => {
+        setTeams(res.data.dtoList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
-    /*const storedTeams = [];
-		for (let i = 0; i < sessionStorage.length; i++) {
-			const key = sessionStorage.key(i);
-			if (key.startsWith("team")) {
-				storedTeams.push(JSON.parse(sessionStorage.getItem(key)));
-			}
-		}
-		setTeams(storedTeams);*/
     fetchTeams();
   }, []);
 
   const onTeamCreated = () => {
-	fetchTeams();
+    fetchTeams();
   };
 
   return (

@@ -6,12 +6,22 @@ import com.straight.bluewave.domain.member.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Configuration
 @RequiredArgsConstructor
@@ -57,6 +67,10 @@ public class SecurityConfig {
                 // 로그인, 회원가입 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
                 .and()
                 .authorizeRequests()
+                .antMatchers("/api/member/me").hasRole("USER")
+                .antMatchers("/api/project/list").hasRole("ADMIN")
+                .antMatchers("/api/board/list").hasRole("USER")
+                .antMatchers("/api/member/listMember").hasRole("ADMIN")
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()   // 나머지 API 는 전부 인증 필요
 
@@ -66,4 +80,39 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    // 1 RoleHierarchyImpl 빈 생성
+    @Bean
+    public RoleHierarchyImpl roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        return roleHierarchy;
+    }
+    // 2 RoleHierarchyVoter 생성
+    @Bean
+    public AccessDecisionVoter<? extends Object> roleVoter() {
+        RoleHierarchyVoter roleHierarchyVoter = new RoleHierarchyVoter(roleHierarchy());
+        return roleHierarchyVoter;
+    }
+    // 3 생성한 Voter를 담은 Voter 리스트 전달
+    private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
+        List<AccessDecisionVoter<? extends Object>> accessDecisionVoters = new ArrayList<>();
+        accessDecisionVoters.add(roleVoter()); // 계층 voter
+        return accessDecisionVoters;
+    }
+    // 4 AffirmativeBased 규칙 사용
+    private AccessDecisionManager affirmativeBased() {
+        AffirmativeBased affirmativeBased = new AffirmativeBased(getAccessDecisionVoters());
+        return affirmativeBased;
+    }
+    // 5 커스텀 필터 생성(FilterSecurityInterceptor 를 상속받는 클래스)
+//    @Bean
+//    public PermitAllFilter customFilterSecurityInterceptor() throws Exception {
+//        PermitAllFilter permitAllFilter = new PermitAllFilter(permitAllResources);
+//        permitAllFilter.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
+//        permitAllFilter.setAccessDecisionManager(affirmativeBased());
+//        permitAllFilter.setAuthenticationManager(authenticationManagerBean());
+//        return permitAllFilter;
+//    }
+    // 6 커스텀 필터 설정
+
 }

@@ -8,7 +8,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.straight.bluewave.domain.mapping.entity.QTeamMemberMapping;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.member.entity.QMember;
-import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
+import com.straight.bluewave.domain.team.dto.TeamMemberPageRequestDTO;
 import com.straight.bluewave.domain.team.entity.QTeam;
 import com.straight.bluewave.domain.team.entity.Team;
 import org.springframework.data.domain.Page;
@@ -29,7 +29,7 @@ public class TeamRepositoryImpl extends QuerydslRepositorySupport implements Tea
     }
 
     @Override
-    public Page<Object[]> searchTeamPage(TeamPageRequestDTO pageRequestDTO, Pageable pageable) {
+    public Page<Object[]> searchTeamPage(TeamMemberPageRequestDTO pageRequestDTO, Pageable pageable) {
 
         QTeam team = QTeam.team;
         QTeamMemberMapping teamMember = QTeamMemberMapping.teamMemberMapping;
@@ -83,8 +83,7 @@ public class TeamRepositoryImpl extends QuerydslRepositorySupport implements Tea
     }
 
     @Override
-    public List<Member> searchTeamMemberList(Long n) {
-
+    public Page<Object[]> getTeamList(TeamMemberPageRequestDTO pageRequestDTO, Pageable pageable) {
         QTeam team = QTeam.team;
         QTeamMemberMapping teamMember = QTeamMemberMapping.teamMemberMapping;
         QMember member = QMember.member;
@@ -93,11 +92,24 @@ public class TeamRepositoryImpl extends QuerydslRepositorySupport implements Tea
                 .innerJoin(member.teams, teamMember)
                 .innerJoin(teamMember.team, team);
 
-        BooleanExpression ex1 = teamMember.team.teamId.eq(n);
-        jpqlQuery.where(ex1);
-        List<Member> list = jpqlQuery.fetch();
-        System.out.println("결과 리스트 사이즈:" + list.size());
-        return list;
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(team, member, teamMember);
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        BooleanExpression booleanExpression = member.memberId.eq(pageRequestDTO.getMemberId());
+
+        booleanBuilder.and(booleanExpression);
+        tuple.where(booleanBuilder);
+        tuple.offset(pageable.getOffset());
+        tuple.limit(pageable.getPageSize());
+
+        List<Tuple> result = tuple.fetch();
+        Long count = tuple.fetchCount();
+
+
+        return new PageImpl<Object[]>(
+                result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
+
     }
 
 }
