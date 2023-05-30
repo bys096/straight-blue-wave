@@ -26,8 +26,6 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public TeamMemberPageResultDTO<TeamDTO, Object[]> getList(TeamMemberPageRequestDTO pageRequestDTO) {
-        System.out.println(pageRequestDTO.getTeamId());
-        System.out.println(pageRequestDTO.getKeyword());
         Function<Object[], TeamDTO> fn = (en -> entityToDTO((Team)en[0], (Member)en[1], (TeamMemberMapping)en[2]));
         Page<Object[]> result = teamRepository.searchTeamPage(
                 pageRequestDTO,

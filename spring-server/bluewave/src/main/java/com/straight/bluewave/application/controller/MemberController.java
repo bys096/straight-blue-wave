@@ -49,6 +49,7 @@ public class MemberController {
 
     }
 
+    @PreAuthorize("#id.toString() == principal.username or hasRole('MANAGER')")
     @DeleteMapping("/delete")       //회원탈퇴
     public ResponseEntity<String> deleteMember(HttpServletRequest request, HttpServletResponse response) {
         authService.logout(request);
@@ -71,11 +72,4 @@ public class MemberController {
     }
 
 
-    @PreAuthorize("#id.toString() == principal.username or hasRole('MANAGER')")
-    @DeleteMapping("/delete/{id}")      //회원탙퇴
-    public void deleteMember(@PathVariable Long id, Principal principal) {
-        log.info("id : " + id);
-//        log.info("principal id: " + principal.na);
-        memberServiceImp.remove(id);
-    }
 }

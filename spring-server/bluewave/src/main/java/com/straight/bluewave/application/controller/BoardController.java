@@ -38,10 +38,13 @@ public class BoardController {
     }
 
     // 해당 프로젝트에 속하는 게시판 불러오기
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/list/{prj_id}")
-    public List<BoardDTO> getBoard(@PathVariable("prj_id") Long prjId) {
-//        return boardService.findAll();
-        return boardService.getBoardListByPrjId(prjId);
+//    public List<BoardDTO> getBoard(@PathVariable("prj_id") Long prjId) {
+    public ResponseEntity<List<BoardDTO>> getBoard(@PathVariable("prj_id") Long prjId) {
+        List boardList = boardService.getBoardListByPrjId(prjId);
+//        return boardService.getBoardListByPrjId(prjId);
+        return ResponseEntity.ok().body(boardList);
     }
 
 }
