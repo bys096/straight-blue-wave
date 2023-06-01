@@ -2,11 +2,9 @@ package com.straight.bluewave.application.controller;
 
 import com.straight.bluewave.application.dto.PageRequestDTO;
 import com.straight.bluewave.application.dto.PageResultDTO;
+import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.member.entity.Member;
-import com.straight.bluewave.domain.team.dto.TeamDTO;
-import com.straight.bluewave.domain.team.dto.TeamMemberPageRequestDTO;
-import com.straight.bluewave.domain.team.dto.TeamMemberPageResultDTO;
-import com.straight.bluewave.domain.team.dto.TeamPageRequestDTO;
+import com.straight.bluewave.domain.team.dto.*;
 import com.straight.bluewave.domain.team.entity.Team;
 import com.straight.bluewave.domain.team.repository.SpringDataTeamRepository;
 import com.straight.bluewave.domain.team.service.TeamServiceImpl;
@@ -14,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -71,5 +71,18 @@ public class TeamController {
         teamService.remove(tm_id);
     }
 
+    @PostMapping("/inviteTeam")     //팀원 초대
+    public ResponseEntity<String> invite(@RequestParam Long memberId, @RequestParam Long teamId) {
+        teamService.invite(memberId, teamId);
+        return new ResponseEntity<>("팀초대 성공", HttpStatus.OK);
+    }
+
+    @GetMapping("/teamMemList/{teamId}")     //팀에 속한 팀원 목록 조회
+    public ResponseEntity<List<TeamMemberMapping>> getTeamMemberList(@PathVariable Long teamId) {
+            Team team = new Team();
+            team.setTeamId(teamId);
+            List<TeamMemberMapping> teamMember = teamService.getTeamMemberList(team);
+            return new ResponseEntity<>(teamMember, HttpStatus.OK);
+    }
 
 }
