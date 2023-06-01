@@ -1,8 +1,17 @@
 package com.straight.bluewave.domain.post.service;
 
 
+import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.domain.post.dto.PostDTO;
+import com.straight.bluewave.domain.post.dto.PostRequestDTO;
+import com.straight.bluewave.domain.post.dto.PostResponseDTO;
 import com.straight.bluewave.domain.post.entity.Post;
+import com.straight.bluewave.domain.team.dto.TeamDTO;
+import com.straight.bluewave.domain.team.dto.TeamMemberPageRequestDTO;
+import com.straight.bluewave.domain.team.dto.TeamMemberPageResultDTO;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface PostService {
     default Post dtoToEntity(PostDTO dto) {
@@ -32,9 +41,12 @@ public interface PostService {
     }
 
 
+
     PostDTO read(Long post_id);
 
     Long modify(Long post_id, PostDTO dto);
 
     void remove(Long post_id);
+
+    PostResponseDTO<Post> getPostListWithCondition(PostRequestDTO pageRequestDTO);
 }

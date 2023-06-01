@@ -3,6 +3,8 @@ package com.straight.bluewave.domain.board.service;
 import com.straight.bluewave.domain.board.dto.BoardDTO;
 import com.straight.bluewave.domain.board.entity.Board;
 
+import java.util.List;
+
 public interface BoardService {
     default Board dtoToEntity(BoardDTO dto) {
         Board entity = Board.builder()
@@ -25,4 +27,6 @@ public interface BoardService {
     Long modify(Long brd_id, BoardDTO dto);
 
     void remove(Long brd_id);
+
+    List<BoardDTO> getBoardListByPrjId(Long prjId);
 }

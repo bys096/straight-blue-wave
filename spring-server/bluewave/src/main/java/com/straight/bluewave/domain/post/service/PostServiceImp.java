@@ -2,19 +2,31 @@ package com.straight.bluewave.domain.post.service;
 
 import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.domain.board.repository.BoardRepository;
+import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
+import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.post.dto.PostDTO;
+import com.straight.bluewave.domain.post.dto.PostRequestDTO;
+import com.straight.bluewave.domain.post.dto.PostResponseDTO;
 import com.straight.bluewave.domain.post.entity.Post;
 import com.straight.bluewave.domain.post.repository.PostRepository;
+import com.straight.bluewave.domain.post.repository.SpringDataPostRepository;
+import com.straight.bluewave.domain.team.dto.TeamDTO;
+import com.straight.bluewave.domain.team.entity.Team;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostServiceImp implements PostService{
+    private final SpringDataPostRepository springDataPostRepository;
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
 
@@ -34,35 +46,42 @@ public class PostServiceImp implements PostService{
         board.setBrdId(dto.getBrd_id());
         post.setBoard(board);
 
-        postRepository.save(post);
+        springDataPostRepository.save(post);
         return post;
     }
 
     @Override
     public PostDTO read(Long post_id) {
-        Optional<Post> result = postRepository.findById(post_id);
+        Optional<Post> result = springDataPostRepository.findById(post_id);
         return result.isPresent() ? entityToDto(result.get()) : null;
     }
 
     @Override
     public Long modify(Long post_id, PostDTO dto) {
-        Post post = postRepository.findById(post_id).orElseThrow(
+        Post post = springDataPostRepository.findById(post_id).orElseThrow(
                 () -> new IllegalArgumentException("해당 id가 존재하지 않습니다.")
         );
         post.changePost(dto);
-        postRepository.save(post);
+        springDataPostRepository.save(post);
         return post.getPost_id();
     }
 
 
     @Override
     public void remove(Long post_id) {
-        postRepository.deleteById(post_id);
+        springDataPostRepository.deleteById(post_id);
     }
 
-    public List<Post> findAll(){
-        List<Post> posts = new ArrayList<>();
-        postRepository.findAll().forEach(u -> posts.add(u));
-        return posts;
+    @Override
+    public PostResponseDTO<Post> getPostListWithCondition(PostRequestDTO pageRequestDTO) {
+        Page<Post> result = postRepository.searchPostPage(
+                pageRequestDTO, pageRequestDTO.getPageable(Sort.by("post_id").descending())
+        );
+        PostResponseDTO<Post> response = new PostResponseDTO<Post>(result);
+        Board board = boardRepository.findById(pageRequestDTO.getBoardId()).get();
+        response.setBoardName(board.getBrdName());
+        response.setBoardId(board.getBrdId());
+        response.setPrjId(board.getProject().getPrjId());
+        return response;
     }
 }
