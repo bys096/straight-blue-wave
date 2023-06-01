@@ -39,15 +39,15 @@ const SignUp = () => {
     setNick(e.target.value);
   };
 
-  const addMember = () => {
+  const addMember = async () => {
     const currentDate = new Date();
     const formattedDateTime = currentDate
       .toISOString()
       .replace("T", " ")
       .split(".")[0];
 
-    return axios
-      .post("http://172.30.1.85:8002/api/auth/signup", {
+    await axios
+      .post("http://localhost:8002/api/auth/signup", {
         member_email: member_email,
         member_pw: member_pw,
         member_name: member_name,

@@ -7,16 +7,11 @@ import TeamCreateCard from "../components/TeamCreateCard";
 
 const TeamList = () => {
   const [teams, setTeams] = useState([]);
-  if (sessionStorage.getItem("memid") == null) {
-    window.location.reload();
-  }
 
   const fetchTeams = async () => {
     const response = axios
       .get(
-        `http://172.30.1.85:8002/api/team/list/${sessionStorage.getItem(
-          "memid"
-        )}`
+        `http://localhost:8002/api/team/list/${sessionStorage.getItem("memid")}`
       )
       .then((res) => {
         setTeams(res.data.dtoList);
