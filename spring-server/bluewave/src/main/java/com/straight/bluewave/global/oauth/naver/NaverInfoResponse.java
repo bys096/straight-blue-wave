@@ -5,8 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.straight.bluewave.domain.member.entity.OAuthProvider;
 import com.straight.bluewave.global.oauth.OAuthInfoResponse;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+@Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Log4j2
 public class NaverInfoResponse implements OAuthInfoResponse {
 
     @JsonProperty("response")
@@ -46,6 +50,9 @@ public class NaverInfoResponse implements OAuthInfoResponse {
 
     @Override
     public UsernamePasswordAuthenticationToken toAuthentication() {
-        return new UsernamePasswordAuthenticationToken(getEmail(), null);
+
+        log.info("검증할 id : " + getEmail());
+
+        return new UsernamePasswordAuthenticationToken(getEmail(), "");
     }
 }
