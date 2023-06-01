@@ -1,14 +1,13 @@
 package com.straight.bluewave.domain.post.repository;
 
+import com.straight.bluewave.domain.post.dto.PostRequestDTO;
 import com.straight.bluewave.domain.post.entity.Post;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-@Transactional
-public interface PostRepository extends JpaRepository<Post, Long> {
-    @Query("SELECT p.post_id, p.post_name, p.file_status FROM Post p")
-    List<Object[]> findPostColumns();
+public interface PostRepository {
+
+    Page<Post> searchPostPage(PostRequestDTO pageRequestDTO, Pageable pageable);
 }

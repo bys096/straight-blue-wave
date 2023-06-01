@@ -2,10 +2,13 @@ package com.straight.bluewave.domain.post.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.board.entity.Board;
+import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
 import com.straight.bluewave.domain.post.dto.PostDTO;
+import com.straight.bluewave.domain.schedule.entity.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +21,7 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -55,7 +59,7 @@ public class Post extends BaseEntity {
     private Date meeting_date;
 */
 
-    @JoinColumn(name = "attendees_id")
+    @Column(name = "attendees_id")
     private Long attendees_id;
 
     @Column(name = "file_status")
@@ -64,9 +68,18 @@ public class Post extends BaseEntity {
     @Column(name = "voting_status")
     private boolean voting_status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "brd_id")
     private Board board;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schedule> schedule;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "post")
+    private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
     public Post(Board board, PostDTO dto) {
     }
@@ -80,6 +93,10 @@ public class Post extends BaseEntity {
 
     public void setBoard(Board board){
         this.board = board;
+    }
+
+    public void setPostId(Long post_id){
+        this.post_id = post_id;
     }
 
 }

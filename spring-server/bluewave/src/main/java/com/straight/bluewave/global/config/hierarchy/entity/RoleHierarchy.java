@@ -1,4 +1,4 @@
-package com.straight.bluewave.global.entity;
+package com.straight.bluewave.global.config.hierarchy.entity;
 
 import lombok.*;
 
@@ -28,5 +28,5 @@ public class RoleHierarchy implements Serializable {
     private RoleHierarchy parentName;
 
     @OneToMany(mappedBy = "parentName", cascade = {CascadeType.ALL})
-    private Set<RoleHierarchy> roleHierarchy = new HashSet<RoleHierarchy>();
+    private Set<RoleHierarchy> roleHierarchy;
 }

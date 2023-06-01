@@ -1,8 +1,13 @@
 package com.straight.bluewave.domain.project.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.application.entity.BaseEntity;
+import com.straight.bluewave.domain.mapping.entity.TeamProjectMapping;
+import com.straight.bluewave.domain.member.entity.Member;
+import com.straight.bluewave.domain.schedule.entity.Schedule;
+import com.straight.bluewave.domain.team.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,8 +47,20 @@ public class Project extends BaseEntity {
         @Column(name = "prj_thumbnail")
         private String prjThumbnail;
     */
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    @JsonIgnore
+    private Team team;
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boards;
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    private List<TeamProjectMapping> teamProjectMappings;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schedule> schedule;
 
     public void changePrjName(String prjName){
         this.prjName = prjName;
@@ -52,5 +69,9 @@ public class Project extends BaseEntity {
 
     public void setPrjId(Long prjId) {
         this.prjId = prjId;
+    }
+
+    public void setTeam(Team team){
+        this.team = team;
     }
 }

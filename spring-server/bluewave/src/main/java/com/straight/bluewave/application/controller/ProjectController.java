@@ -4,6 +4,7 @@ import com.straight.bluewave.domain.board.service.BoardServiceImp;
 import com.straight.bluewave.domain.project.dto.ProjectDTO;
 import com.straight.bluewave.domain.project.entity.Project;
 import com.straight.bluewave.domain.project.service.ProjectServiceImp;
+import com.straight.bluewave.domain.team.entity.Team;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -44,8 +45,17 @@ public class ProjectController {
 
     // 프로젝트 리스트
     @GetMapping("/list")
-    public ResponseEntity<List<Project>> getAllUsers() {
+    public ResponseEntity<List<Project>> getAllProject() {
         List<Project> users = projectService.findAll();
         return new ResponseEntity<List<Project>>(users, HttpStatus.OK);
+    }
+
+    // 프로젝트 리스트 (특정 팀에 속한 프로젝트만 조회)
+    @GetMapping("/list/{teamId}")
+    public ResponseEntity<List<Project>> getProjectsByTeam(@PathVariable("teamId") Long teamId) {
+        Team team = new Team();
+        team.setTeamId(teamId);
+        List<Project> projects = projectService.findAllByTeam(team);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 }
