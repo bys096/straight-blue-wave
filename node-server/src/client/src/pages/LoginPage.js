@@ -11,7 +11,7 @@ function LoginPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await axios
-      .post("http://172.30.1.85:8002/api/auth/login", {
+      .post("http://localhost:8002/api/auth/login", {
         member_email: member_email,
         member_pw: member_pw,
       })
@@ -22,13 +22,14 @@ function LoginPage() {
           sessionStorage.setItem("accessToken", res.data.accessToken);
           sessionStorage.setItem("refreshToken", res.data.refreshToken);
           const memberInfo = axios
-            .get(`http://172.30.1.85:8002/api/member/${member_email}`)
+            .get(`http://localhost:8002/api/member/${member_email}`)
             .then((res) => {
               sessionStorage.setItem("memid", res.data.member_id);
             })
             .catch((err) => {
               console.log(err);
             });
+          alert("로그인 성공!");
           navigate("/LoggedIn");
         }
       })

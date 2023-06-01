@@ -19,6 +19,14 @@ const ProjectDetail = () => {
     navigate("/calendar");
   };
 
+  const goWBS = () => {
+    navigate("/wbs");
+  };
+
+  const goGPT = () => {
+    navigate("/gpt");
+  };
+
   const makeBoard = () => {
     setShowModal(true);
   };
@@ -83,6 +91,12 @@ const ProjectDetail = () => {
           </Button>
           <Button variant="primary" onClick={makeBoard}>
             게시판만들기
+          </Button>
+          <Button variant="primary" onClick={goWBS}>
+            WBS
+          </Button>
+          <Button variant="primary" onClick={goGPT}>
+            GPT
           </Button>
           <hr />
           <Modal show={showModal} onHide={handleModalClose}>

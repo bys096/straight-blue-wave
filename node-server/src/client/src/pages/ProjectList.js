@@ -4,6 +4,9 @@ import ProjectItem from "../components/ProjectItem";
 import { Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import ProjectCreateCard from "../components/ProjectCreateCard";
+import Header from "../components/views/Header";
+import Sidebar from "../components/views/Sidebar";
+import Footer from "../components/views/Footer";
 
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
@@ -11,7 +14,9 @@ const ProjectList = () => {
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        "http://172.30.1.14:8002/api/project/list"
+        `http://localhost:8002/api/project/list/${sessionStorage.getItem(
+          "tmid"
+        )}`
       );
       setProjects(response.data);
     } catch (error) {
@@ -20,16 +25,6 @@ const ProjectList = () => {
   };
 
   useEffect(() => {
-    /*
-		const storedProjects = [];
-		for (let i = 0; i < sessionStorage.length; i++) {
-			const key = sessionStorage.key(i);
-			if (key.startsWith("project")) {
-				storedProjects.push(JSON.parse(sessionStorage.getItem(key)));
-			}
-		}
-		setProjects(storedProjects);
-		*/
     fetchProjects();
   }, []);
 
@@ -38,19 +33,28 @@ const ProjectList = () => {
   };
 
   return (
-    <Container>
-      <h1>프로젝트 목록</h1>
-      <Row>
-        <Col md={4} lg={3}>
-          <ProjectCreateCard onProjectCreated={onProjectCreated} />
-        </Col>
-        {projects.map((project, index) => (
-          <Col key={index} md={4} lg={3}>
-            <ProjectItem project={project} />
-          </Col>
-        ))}
-      </Row>
-    </Container>
+    <div className="main">
+      <Header />
+      <div className="article">
+        <Sidebar />
+        <div className="section">
+          <Container>
+            <h1>프로젝트 목록</h1>
+            <Row>
+              <Col md={4} lg={3}>
+                <ProjectCreateCard onProjectCreated={onProjectCreated} />
+              </Col>
+              {projects.map((project, index) => (
+                <Col key={index} md={4} lg={3}>
+                  <ProjectItem project={project} />
+                </Col>
+              ))}
+            </Row>
+          </Container>
+        </div>
+      </div>
+      <Footer />
+    </div>
   );
 };
 
