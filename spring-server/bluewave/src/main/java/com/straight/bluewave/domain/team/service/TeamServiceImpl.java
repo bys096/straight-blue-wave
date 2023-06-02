@@ -54,13 +54,24 @@ public class TeamServiceImpl implements TeamService{
     }
 
 
-    public Team joinTeam(TeamDTO dto) {       //팀생성
+    public Team joinTeam(TeamDTO dto, Long memberId) {       //팀생성
+        Member member = memberRepository.findById(memberId).get();
+
         Team team = Team.builder()
-                .teamId(dto.getTeamId())
                 .teamName(dto.getTeamName())
                 .teamDesc(dto.getTeamDesc())
+                .member(member)
                 .build();
         springDataTeamRepository.save(team);
+
+        TeamMemberMapping teamMemberMapping = TeamMemberMapping.builder()
+                .member(member)
+                .team(team)
+                .teamName(member.getMemberName())
+                .teamPosition("팀장")
+                .build();
+        teamMemberRepository.save(teamMemberMapping);
+
         return team;
     }
 

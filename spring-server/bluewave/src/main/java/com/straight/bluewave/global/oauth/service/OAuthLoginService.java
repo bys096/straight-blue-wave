@@ -31,6 +31,8 @@ public class OAuthLoginService {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     private final RequestOAuthInfoService requestOAuthInfoService;
 
     public TokenDTO login(OAuthLoginParams params) {
@@ -46,6 +48,10 @@ public class OAuthLoginService {
 
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
+            log.info("ID : " + authentication.getPrincipal());
+
+            log.info("권한 : " + authentication.getAuthorities());
+
             TokenDTO tokenDto = tokenProvider.generateTokenDto(authentication);
 
             RefreshToken refreshToken = RefreshToken.builder()
@@ -59,6 +65,7 @@ public class OAuthLoginService {
         } else {
             Member member = Member.builder()
                     .memberEmail(oAuthInfoResponse.getEmail())
+                    .memberPw(passwordEncoder.encode("1111"))
                     .memberName(oAuthInfoResponse.getName())
                     .memberNick(oAuthInfoResponse.getNickname())
                     .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
