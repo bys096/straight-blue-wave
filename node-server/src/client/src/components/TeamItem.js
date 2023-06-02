@@ -20,26 +20,15 @@ const TeamItem = ({ team = [] }) => {
 
   return (
     <>
-      <Routes>
-        <Route path={`/team/${team.teamId}`} Component={ProjectList} />
-      </Routes>
-      <Link to={`/team/${team.teamId}`} className="text-decoration-none">
+      <Link
+        to={`/team/${team.teamId}`}
+        className="text-decoration-none"
+        onClick={() => sessionStorage.setItem("tmid", team.teamId)}
+      >
         <StyledCard>
           <Card.Body>
             <Card.Title>{team.teamName}</Card.Title>
             <Card.Text>{team.teamDesc}</Card.Text>
-          </Card.Body>
-        </StyledCard>
-      </Link>
-    </>
-  );
-  return (
-    <>
-      <Link to={`/team/${team.tmId}`} className="text-decoration-none">
-        <StyledCard>
-          <Card.Body>
-            <Card.Title>{team.tmName}</Card.Title>
-            <Card.Text>{team.tmIntro}</Card.Text>
           </Card.Body>
         </StyledCard>
       </Link>

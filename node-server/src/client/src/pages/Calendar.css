@@ -1,6 +1,7 @@
 .CalendarWrapper {
     display: flex;
     flex-direction: column;
+    height: 100%;
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
@@ -25,10 +26,17 @@
 .DateCell {
     flex: 1;
     text-align: center;
-    height: 80px;
+    height: 100px;
     border: 1px solid #ccc;
-
+    overflow: hidden; /* 초과하는 내용 숨기기 */    
 }
 .DateCell:hover {
     background-color: #ccb;
 }
+
+.Event .badge {
+    max-width: 100px; /* 최대 너비 설정. 원하는 값으로 변경 가능 */
+    white-space: nowrap; /* 줄바꿈 없애기 */
+    overflow: hidden; /* 초과하는 내용 숨기기 */
+    text-overflow: ellipsis; /* 초과하는 텍스트를 ...로 표시 */
+  }

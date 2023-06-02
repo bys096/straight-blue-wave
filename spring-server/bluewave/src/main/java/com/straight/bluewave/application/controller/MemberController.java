@@ -32,8 +32,8 @@ public class MemberController {
     private final AuthService authService;
 
     @GetMapping("/{email}")     //이메일로 사용자 요청
-    public ResponseEntity<MemberResponseDTO> findMemberInfoByEmail(@PathVariable String memberEmail) {
-        return ResponseEntity.ok(memberServiceImp.findMemberInfoByEmail(memberEmail));
+    public ResponseEntity<MemberResponseDTO> findMemberInfoByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(memberServiceImp.findMemberInfoByEmail(email));
     }
 
 
@@ -49,7 +49,7 @@ public class MemberController {
 
     }
 
-    @PreAuthorize("#id.toString() == principal.username or hasRole('MANAGER')")
+    //@PreAuthorize("#id.toString() == principal.username or hasRole('MANAGER')")
     @DeleteMapping("/delete")       //회원탈퇴
     public ResponseEntity<String> deleteMember(HttpServletRequest request, HttpServletResponse response) {
         authService.logout(request);
