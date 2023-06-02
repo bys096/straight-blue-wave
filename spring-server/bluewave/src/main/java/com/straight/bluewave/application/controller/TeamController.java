@@ -46,7 +46,6 @@ public class TeamController {
         return teamService.getTeamList(rdto);
     }
 
-
     @PostMapping("/joinTeam/{memberId}")       //팀 생성시 생성자는 팀장 권한을 가짐
     public Team join(@RequestBody TeamDTO dto, @PathVariable Long memberId) {
         return teamService.joinTeam(dto, memberId);
