@@ -16,15 +16,13 @@ function getFirstDayOfMonth(month, year) {
 	return new Date(year, month - 1, 1).getDay();
 }
 
-const Calendar = ({ prjId }) => {
+const Calendar = ({ }) => {
 	const [currentDate, setCurrentDate] = useState(new Date());
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [events, setEvents] = useState({});
 	const [selectedDate, setSelectedDate] = useState();
 
 	const [schedules, setSchedules] = useState([]);
-
-	prjId = 1;
 
 	useEffect(() => {
 		const savedEvents = JSON.parse(localStorage.getItem("events")) || {};
@@ -33,70 +31,70 @@ const Calendar = ({ prjId }) => {
 
 	
 	// Axios 통신 - DB 통신할때 사용할것.
-	// useEffect(() => {
-	// 	fetchSchedules(prjId);
-	// 	setEvents(schedules);
-	// }, []);
+	useEffect(() => {
+		fetchSchedules();
+		setEvents(schedules);
+	}, []);
 
-	// const fetchSchedules = async (prjId) => {
-	// 	try {
-	// 		const response = await axios.get(
-	// 			`http://localhost:8002/api/schedule/list/${prjId}`
-	// 		);
-	// 		const fetchedData = response.data;
+	const fetchSchedules = async () => {
+		try {
+			const response = await axios.get(
+				`http://localhost:8002/api/schedule/list/${sessionStorage.getItem("prjid")}`
+			);
+			const fetchedData = response.data;
 
-	// 		setEvents((prevEvents) => {
-	// 			const newSchedules = { ...prevEvents };
+			setEvents((prevEvents) => {
+				const newSchedules = { ...prevEvents };
 
-	// 			// API에서 받아온 데이터를 순회하면서 각 일정을 처리.
-	// 			fetchedData.forEach((itemArray) => {
-	// 				itemArray.forEach((item) => {
-	// 					if (item.startDate && item.endDate) {
-	// 						// 각 일정에 대해 startDate와 endDate 사이의 모든 날짜를 가져옴.
-	// 						let start = new Date(item.startDate);
-	// 						const end = new Date(item.endDate);
-	// 						const dateArray = [];
+				// API에서 받아온 데이터를 순회하면서 각 일정을 처리.
+				fetchedData.forEach((itemArray) => {
+					itemArray.forEach((item) => {
+						if (item.startDate && item.endDate) {
+							// 각 일정에 대해 startDate와 endDate 사이의 모든 날짜를 가져옴.
+							let start = new Date(item.startDate);
+							const end = new Date(item.endDate);
+							const dateArray = [];
 
-	// 						while (start <= end) {
-	// 							dateArray.push(new Date(start));
-	// 							start.setDate(start.getDate() + 1);
-	// 						}
+							while (start <= end) {
+								dateArray.push(new Date(start));
+								start.setDate(start.getDate() + 1);
+							}
 
-	// 						// 각 날짜에 대해 이벤트를 추가.
-	// 						dateArray.forEach((date) => {
-	// 							const formattedDate = `${date.getFullYear()}-${String(
-	// 								date.getMonth() + 1
-	// 							).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-	// 							newSchedules[formattedDate] = newSchedules[formattedDate]
-	// 								? [
-	// 										...newSchedules[formattedDate],
-	// 										{
-	// 											title: item.scheduleTitle,
-	// 											startDate: item.startDate,
-	// 											endDate: item.endDate,
-	// 										},
-	// 								  ]
-	// 								: [
-	// 										{
-	// 											title: item.scheduleTitle,
-	// 											startDate: item.startDate,
-	// 											endDate: item.endDate,
-	// 										},
-	// 								  ];
-	// 						});
-	// 					}
-	// 				});
-	// 			});
+							// 각 날짜에 대해 이벤트를 추가.
+							dateArray.forEach((date) => {
+								const formattedDate = `${date.getFullYear()}-${String(
+									date.getMonth() + 1
+								).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+								newSchedules[formattedDate] = newSchedules[formattedDate]
+									? [
+											...newSchedules[formattedDate],
+											{
+												title: item.scheduleTitle,
+												startDate: item.startDate,
+												endDate: item.endDate,
+											},
+									  ]
+									: [
+											{
+												title: item.scheduleTitle,
+												startDate: item.startDate,
+												endDate: item.endDate,
+											},
+									  ];
+							});
+						}
+					});
+				});
 
-	// 			// 변경된 이벤트를 localStorage에 저장.
-	// 			localStorage.setItem("schedules", JSON.stringify(newSchedules));
+				// 변경된 이벤트를 localStorage에 저장.
+				localStorage.setItem("schedules", JSON.stringify(newSchedules));
 
-	// 			return newSchedules;
-	// 		});
-	// 	} catch (error) {
-	// 		console.error("An error occurred while fetching the schedules:", error);
-	// 	}
-	// };
+				return newSchedules;
+			});
+		} catch (error) {
+			console.error("An error occurred while fetching the schedules:", error);
+		}
+	};
 
 	const addEvent = (startDate, event) => {
 		// startDate와 endDate 사이의 모든 날짜 가져오기

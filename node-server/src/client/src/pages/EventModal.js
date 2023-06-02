@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import "./EventModal.css";
 import { Accordion, Badge, Button, Form, Modal } from "react-bootstrap";
+import axios from "axios";
 
 const EventModal = ({ onClose, onAddEvent, selectedDate }) => {
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
+	const [scheduleTitle, setScheduleTitle] = useState("");
+	const [scheduleDescription, setShcheduleDescription] = useState("");
 	const [startDate, setStartDate] = useState(selectedDate);
 	const [endDate, setEndDate] = useState(selectedDate);
 	const [eventsForSelectedDate, setEventsForSelectedDate] = useState([]);
@@ -17,10 +18,30 @@ const EventModal = ({ onClose, onAddEvent, selectedDate }) => {
 		}
 	}, [selectedDate]);
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		onAddEvent(selectedDate, { title, description, startDate, endDate });
+		await axios
+			.post("http://localhost:8002/api/schedule/create", {
+				schedule_title : scheduleTitle,
+				schedule_description : scheduleDescription,
+				start_date : startDate,
+				end_date : endDate
+			})
+			.then((res) => {
+				alert("스케줄 등록");
+			})
+			.catch((error) => {
+				console.error(error);
+				alert("스케줄 등록 실패");
+			});
+
+		onAddEvent(selectedDate, {
+			scheduleTitle,
+			scheduleDescription,
+			startDate,
+			endDate,
+		});
 		onClose();
 	};
 
@@ -50,8 +71,8 @@ const EventModal = ({ onClose, onAddEvent, selectedDate }) => {
 									<Form.Label>Title</Form.Label>
 									<Form.Control
 										type="text"
-										value={title}
-										onChange={(e) => setTitle(e.target.value)}
+										value={scheduleTitle}
+										onChange={(e) => setScheduleTitle(e.target.value)}
 										required
 									/>
 								</Form.Group>
@@ -59,8 +80,8 @@ const EventModal = ({ onClose, onAddEvent, selectedDate }) => {
 									<Form.Label>Description</Form.Label>
 									<Form.Control
 										type="text"
-										value={description}
-										onChange={(e) => setDescription(e.target.value)}
+										value={scheduleDescription}
+										onChange={(e) => setShcheduleDescription(e.target.value)}
 										required
 									/>
 								</Form.Group>

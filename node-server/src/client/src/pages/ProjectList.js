@@ -1,12 +1,51 @@
 // TeamList.js
 import React, { useState, useEffect } from "react";
 import ProjectItem from "../components/ProjectItem";
-import { Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import ProjectCreateCard from "../components/ProjectCreateCard";
 import Header from "../components/views/Header";
 import Sidebar from "../components/views/Sidebar";
 import Footer from "../components/views/Footer";
+import styled from "styled-components";
+
+const Title = styled.h1`
+	font-size: 2.5em;
+	font-weight: bold;
+	color: black;
+	text-align: center;
+	margin-bottom: 2em;
+`;
+
+const Container = styled.div`
+	margin: 10px;
+	display: flex;
+	flex-direction: column;
+  width : 100%
+`;
+
+const Projects = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: flex-start;
+	gap: 4rem;
+`;
+
+const Line = styled.hr`
+	border: none;
+	border-top: 1px solid #aaa;
+	background: linear-gradient(
+		to right,
+		rgba(0, 0, 0, 0),
+		rgba(0, 0, 0, 0.75),
+		rgba(0, 0, 0, 0)
+	);
+	height: 1px;
+	width: 100%;
+	margin: 0.5em 0;
+`;
+
 
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
@@ -39,17 +78,17 @@ const ProjectList = () => {
         <Sidebar />
         <div className="section">
           <Container>
-            <h1>프로젝트 목록</h1>
-            <Row>
-              <Col md={4} lg={3}>
+            <Title>프로젝트 목록</Title>
+            <Line />
+            <Projects>
                 <ProjectCreateCard onProjectCreated={onProjectCreated} />
-              </Col>
               {projects.map((project, index) => (
-                <Col key={index} md={4} lg={3}>
-                  <ProjectItem project={project} />
-                </Col>
+                <div key={index}>
+                  {console.log(project)}
+                  <ProjectItem project={project} prjId={project.prjId} />
+                </div>
               ))}
-            </Row>
+            </Projects>
           </Container>
         </div>
       </div>
