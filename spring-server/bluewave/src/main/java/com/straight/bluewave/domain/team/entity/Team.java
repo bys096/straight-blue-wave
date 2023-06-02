@@ -1,6 +1,7 @@
 package com.straight.bluewave.domain.team.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.mapping.entity.TeamProjectMapping;
@@ -35,6 +36,7 @@ public class Team extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_id")
+    @JsonIgnore
     private Member member;                  // 관리자
 
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
