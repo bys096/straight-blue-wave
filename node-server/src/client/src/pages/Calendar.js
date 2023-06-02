@@ -1,6 +1,8 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import "./Calendar.css";
 import EventModal from "./EventModal";
+import { Badge } from "react-bootstrap";
+import axios from "axios";
 
 const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -14,17 +16,117 @@ function getFirstDayOfMonth(month, year) {
 	return new Date(year, month - 1, 1).getDay();
 }
 
-const Calendar = () => {
+const Calendar = ({ prjId }) => {
 	const [currentDate, setCurrentDate] = useState(new Date());
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [events, setEvents] = useState({});
 	const [selectedDate, setSelectedDate] = useState();
 
-	const addEvent = (date, event) => {
-		setEvents((prevEvents) => ({
-			...prevEvents,
-			[date]: prevEvents[date] ? [...prevEvents[date], event] : [event],
-		}));
+	const [schedules, setSchedules] = useState([]);
+
+	prjId = 1;
+
+	useEffect(() => {
+		const savedEvents = JSON.parse(localStorage.getItem("events")) || {};
+		setEvents(savedEvents);
+	}, []);
+
+	
+	// Axios 통신 - DB 통신할때 사용할것.
+	// useEffect(() => {
+	// 	fetchSchedules(prjId);
+	// 	setEvents(schedules);
+	// }, []);
+
+	// const fetchSchedules = async (prjId) => {
+	// 	try {
+	// 		const response = await axios.get(
+	// 			`http://localhost:8002/api/schedule/list/${prjId}`
+	// 		);
+	// 		const fetchedData = response.data;
+
+	// 		setEvents((prevEvents) => {
+	// 			const newSchedules = { ...prevEvents };
+
+	// 			// API에서 받아온 데이터를 순회하면서 각 일정을 처리.
+	// 			fetchedData.forEach((itemArray) => {
+	// 				itemArray.forEach((item) => {
+	// 					if (item.startDate && item.endDate) {
+	// 						// 각 일정에 대해 startDate와 endDate 사이의 모든 날짜를 가져옴.
+	// 						let start = new Date(item.startDate);
+	// 						const end = new Date(item.endDate);
+	// 						const dateArray = [];
+
+	// 						while (start <= end) {
+	// 							dateArray.push(new Date(start));
+	// 							start.setDate(start.getDate() + 1);
+	// 						}
+
+	// 						// 각 날짜에 대해 이벤트를 추가.
+	// 						dateArray.forEach((date) => {
+	// 							const formattedDate = `${date.getFullYear()}-${String(
+	// 								date.getMonth() + 1
+	// 							).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+	// 							newSchedules[formattedDate] = newSchedules[formattedDate]
+	// 								? [
+	// 										...newSchedules[formattedDate],
+	// 										{
+	// 											title: item.scheduleTitle,
+	// 											startDate: item.startDate,
+	// 											endDate: item.endDate,
+	// 										},
+	// 								  ]
+	// 								: [
+	// 										{
+	// 											title: item.scheduleTitle,
+	// 											startDate: item.startDate,
+	// 											endDate: item.endDate,
+	// 										},
+	// 								  ];
+	// 						});
+	// 					}
+	// 				});
+	// 			});
+
+	// 			// 변경된 이벤트를 localStorage에 저장.
+	// 			localStorage.setItem("schedules", JSON.stringify(newSchedules));
+
+	// 			return newSchedules;
+	// 		});
+	// 	} catch (error) {
+	// 		console.error("An error occurred while fetching the schedules:", error);
+	// 	}
+	// };
+
+	const addEvent = (startDate, event) => {
+		// startDate와 endDate 사이의 모든 날짜 가져오기
+		const start = new Date(startDate);
+		const end = new Date(event.endDate);
+		const dateArray = [];
+
+		while (start <= end) {
+			dateArray.push(new Date(start));
+			start.setDate(start.getDate() + 1);
+		}
+
+		setEvents((prevEvents) => {
+			const newEvents = { ...prevEvents };
+
+			// 각 날짜에 이벤트 추가
+			dateArray.forEach((date) => {
+				const formattedDate = `${date.getFullYear()}-${String(
+					date.getMonth() + 1
+				).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+				newEvents[formattedDate] = newEvents[formattedDate]
+					? [...newEvents[formattedDate], event]
+					: [event];
+			});
+
+			// 변경된 이벤트를 localStorage에 저장
+			localStorage.setItem("events", JSON.stringify(newEvents));
+
+			return newEvents;
+		});
 	};
 
 	const daysInMonth = getDaysInMonth(
@@ -40,7 +142,7 @@ const Calendar = () => {
 
 	// 현재 월에 날짜 표시
 	for (let i = 1; i <= daysInMonth; i++) {
-		dates.push({date: i, isCurrentMonth: true});
+		dates.push({ date: i, isCurrentMonth: true });
 	}
 
 	//이전 월 날짜 표시
@@ -49,13 +151,13 @@ const Calendar = () => {
 		currentDate.getFullYear()
 	);
 	for (let i = 1; i <= firstDayOfMonth; i++) {
-		dates.unshift({date: daysInPrevMonth - i + 1, isCurrentMonth: false});
+		dates.unshift({ date: daysInPrevMonth - i + 1, isCurrentMonth: false });
 	}
 
 	//다음 월 날짜 표시
 	let nextMonthDate = 1;
 	while (dates.length % 7 !== 0) {
-		dates.push({date: nextMonthDate++, isCurrentMonth: false});
+		dates.push({ date: nextMonthDate++, isCurrentMonth: false });
 	}
 
 	const weeks = [];
@@ -114,27 +216,48 @@ const Calendar = () => {
 			</div>
 			{weeks.map((week, index) => (
 				<div className="DaysRow" key={index}>
-					{week.map(({date, isCurrentMonth}, i) => {
+					{week.map(({ date, isCurrentMonth }, i) => {
 						const formattedDate = `${currentDate.getFullYear()}-${String(
 							currentDate.getMonth() + 1
 						).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
 
 						return (
 							<div
-								className={`DateCell ${
-									isCurrentMonth ? "currentMonth" : "otherMonth"
-								}`}
+								className={`DateCell ${isCurrentMonth ? "currentMonth" : "otherMonth"}`}
 								key={i}
 								onClick={handleDateClick}
 								data-date={formattedDate}
-								data-is-current-month={isCurrentMonth}>
+								data-is-current-month={isCurrentMonth}
+							>
 								{date}
 								{isCurrentMonth &&
 									events[formattedDate]?.map((event, idx) => (
-										<div className="Event" key={idx}>
-											{event}
+										<div
+											className="Event"
+											key={idx}
+											onClick={(e) => {
+												e.stopPropagation();
+												setSelectedDate(formattedDate);
+												setIsModalOpen(true);
+											}}
+										>
+											<Badge pill>{event.title}</Badge>
 										</div>
 									))}
+								{/* {isCurrentMonth &&
+									schedules[formattedDate]?.map((schedule, idx) => (
+										<div
+											className="schedules"
+											key={idx}
+											onClick={(e) => {
+												e.stopPropagation();
+												setSelectedDate(formattedDate);
+												setIsModalOpen(true);
+											}}
+										>
+											<Badge pill>{schedule.scheduleTitle}</Badge>
+										</div>
+									))} */}
 							</div>
 						);
 					})}
