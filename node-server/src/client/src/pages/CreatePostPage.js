@@ -31,7 +31,7 @@ const CreatePostPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post("http://172.30.1.7:8002/api/post/create", post); // url은 백엔드 API 주소로 변경해주어야 합니다.
+      await axios.post("http://localhost:8002/api/post/create", post); // url은 백엔드 API 주소로 변경해주어야 합니다.
       alert("게시글이 등록되었습니다.");
       navigate("/post");
     } catch (error) {

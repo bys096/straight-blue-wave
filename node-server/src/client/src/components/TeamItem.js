@@ -16,6 +16,11 @@ const TeamItem = ({ team = [] }) => {
     width: 130px; // 원하는 너비 지정
     height: 180px; // 원하는 높이 지정
     border-radius: 10px; // 카드 모서리 둥글게 처리
+
+    &:hover {
+      transform: scale(1.05);
+      transition: all 0.2s ease-in-out;
+    }
   `;
 
   return (

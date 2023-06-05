@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import "./EventModal.css";
 import { Accordion, Badge, Button, Form, Modal } from "react-bootstrap";
+import axios from "axios";
 
-const EventModal = ({ onClose, onAddEvent, selectedDate }) => {
+const EventModal = ({ onClose, /*onAddEvent,*/ selectedDate }) => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [startDate, setStartDate] = useState(selectedDate);
@@ -11,33 +12,65 @@ const EventModal = ({ onClose, onAddEvent, selectedDate }) => {
 
 	useEffect(() => {
 		if (selectedDate) {
-			const savedEvents = JSON.parse(localStorage.getItem("events")) || {};
+			const savedEvents = JSON.parse(localStorage.getItem("schedules")) || {};
 			const events = savedEvents[selectedDate] || [];
 			setEventsForSelectedDate(events);
 		}
 	}, [selectedDate]);
 
+	const createSchecule = async () => {
+		try {
+			const res = await axios.post("http://localhost:8002/api/schedule/create", {
+				schedule_title: title,
+				schedule_description: description,
+				start_date: startDate,
+				end_date: endDate,
+				prj_id: sessionStorage.getItem("prjid"),
+			});
+			console.log(res.data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		onAddEvent(selectedDate, { title, description, startDate, endDate });
+		createSchecule();
+		// onAddEvent(selectedDate, { title, description, startDate, endDate });
 		onClose();
 	};
+
+	const handleDeleteSchedule = async (scheduleId) => {
+		try {
+			if (scheduleId) {
+				await axios.delete(`http://localhost:8002/api/schedule/delete/${scheduleId}`);
+				const updatedEvents = eventsForSelectedDate.filter(schedule => schedule.schedule_id !== scheduleId);
+				setEventsForSelectedDate(updatedEvents);
+			}
+		} catch (error) {
+			console.log(error);
+			alert("스케줄 삭제에 실패하였습니다.");
+		}
+	};
+
+	const handleModifySchedule = () => {};
 
 	return (
 		<Modal show onHide={onClose}>
 			<Modal.Header closeButton>
-				<Modal.Title>{selectedDate} 일정</Modal.Title>
+				<Modal.Title>{selectedDate} 일정 </Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				{eventsForSelectedDate.map((event, index) => (
+				{eventsForSelectedDate.map((schedule, index) => (
 					<div key={index}>
 						<h5>
-							<Badge style={{ backgroundColor: event.color }}>{event.title}</Badge>
+							<Badge>{schedule.schedule_title}</Badge>
 						</h5>
-						<p>{event.description}</p>
-						<p>Start Date: {event.startDate}</p>
-						<p>End Date: {event.endDate}</p>
+						<p>{schedule.schedule_description}</p>
+						<p>Start Date: {schedule.start_date}</p>
+						<p>End Date: {schedule.end_date}</p>
+						<Button onClick={() => handleDeleteSchedule(schedule.schedule_id)}>삭제</Button>
 					</div>
 				))}
 				<hr />
