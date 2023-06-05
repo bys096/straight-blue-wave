@@ -1,6 +1,7 @@
 package com.straight.bluewave.domain.member.entity;
 
 import com.straight.bluewave.application.entity.BaseEntity;
+import com.straight.bluewave.domain.mapping.entity.FriendMapping;
 import com.straight.bluewave.domain.mapping.entity.ProjectMemberMapping;
 import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
@@ -57,6 +58,16 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<FriendMapping> friends1;
+
+    @OneToMany(mappedBy = "friend", fetch = FetchType.LAZY)
+    private List<FriendMapping> friends2;
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
 
 /*
     - 중간 엔티티 없이, 매핑 테이블을 생성하는 코드

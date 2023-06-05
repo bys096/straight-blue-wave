@@ -56,7 +56,6 @@ public class TeamServiceImpl implements TeamService{
 
     public Team joinTeam(TeamDTO dto, Long memberId) {       //팀생성
         Member member = memberRepository.findById(memberId).get();
-
         Team team = Team.builder()
                 .teamName(dto.getTeamName())
                 .teamDesc(dto.getTeamDesc())
