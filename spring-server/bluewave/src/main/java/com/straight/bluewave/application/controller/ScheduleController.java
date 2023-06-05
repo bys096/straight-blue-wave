@@ -38,12 +38,23 @@ public class ScheduleController {
         scheduleServiceImp.remove(schedule_id);
     }
 
+
     //일정 조회 (특정 프로젝트에 속한 일정만 조회)
     @GetMapping("/list/{prjId}")
-    public ResponseEntity<List<Object[]>> getSchedulesByProject(@PathVariable("prjId") Long prjId) {
-        List<Object[]> schedules = scheduleServiceImp.findAllByProject(prjId);
+    public ResponseEntity<List<Schedule>> getSchedulesByProject(@PathVariable("prjId") Long prjId){
+        Project project = new Project();
+        project.setPrjId(prjId);
+        List<Schedule> schedules = scheduleServiceImp.findAllByProject(project);
         return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
+
+
+    //      post, schedule join 해당하는 project만 보기
+//    @GetMapping("/list/{prjId}")
+//    public ResponseEntity<List<Object[]>> getSchedulesByProject(@PathVariable("prjId") Long prjId) {
+//        List<Object[]> schedules = scheduleServiceImp.findAllByProject(prjId);
+//        return new ResponseEntity<>(schedules, HttpStatus.OK);
+//    }
 
 //    @GetMapping("/list/{prjId}")
 //    public ResponseEntity<List<Object[]>> getSchedulesByProject(@PathVariable("prjId") Long prjId){
@@ -53,10 +64,5 @@ public class ScheduleController {
 //        return new ResponseEntity<>(schedules, HttpStatus.OK);
 //    }
 
-//    public ResponseEntity<List<Schedule>> getSchedulesByProject(@PathVariable("prjId") Long prjId){
-//        Project project = new Project();
-//        project.setPrjId(prjId);
-//        List<Schedule> schedules = scheduleServiceImp.findAllByProject(project);
-//        return new ResponseEntity<>(schedules, HttpStatus.OK);
-//    }
+
 }

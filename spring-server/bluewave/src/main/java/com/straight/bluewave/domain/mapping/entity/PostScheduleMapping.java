@@ -8,22 +8,22 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+//@Entity
+//@Builder
+//@NoArgsConstructor
+//@AllArgsConstructor
 public class PostScheduleMapping {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pt_id")
-    private Long postScheduleId;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_id")
-    private Project post;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "schedule_id")
-    private Schedule schedule;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "pt_id")
+//    private Long postScheduleId;
+//
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "post_id")
+//    private Project post;
+//
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "schedule_id")
+//    private Schedule schedule;
 }
