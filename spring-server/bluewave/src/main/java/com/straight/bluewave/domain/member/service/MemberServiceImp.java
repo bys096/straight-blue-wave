@@ -1,5 +1,7 @@
 package com.straight.bluewave.domain.member.service;
 
+import com.straight.bluewave.domain.mapping.entity.FriendMapping;
+import com.straight.bluewave.domain.mapping.repository.SpringDataFriendRepository;
 import com.straight.bluewave.domain.member.dto.MemberDTO;
 import com.straight.bluewave.domain.member.dto.MemberResponseDTO;
 import com.straight.bluewave.domain.member.dto.MemberUpdateDTO;
@@ -18,6 +20,8 @@ import java.util.Optional;
 public class MemberServiceImp implements MemberService{
 
     private final MemberRepository memberRepository;
+
+    private final SpringDataFriendRepository friendRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -57,6 +61,39 @@ public class MemberServiceImp implements MemberService{
     public List<Member> getAllMembers() {
 
         return memberRepository.findAll();
+    }
+
+    public void addFriend(Long memId, Long friendId) {
+        Member member1 = memberRepository.findById(memId).get();
+
+        Member member2 = memberRepository.findById(friendId).get();
+
+        FriendMapping fri1 = FriendMapping.builder()
+                .member(member1)
+                .friend(member2)
+                .friendName(member2.getMemberName())
+                .build();
+
+       friendRepository.save(fri1);
+
+        FriendMapping fri2 = FriendMapping.builder()
+                .member(member2)
+                .friend(member1)
+                .friendName(member1.getMemberName())
+              .build();
+        friendRepository.save(fri2);
+    }
+
+    public List<FriendMapping> getFriendList(Member member) {
+        return friendRepository.findAllFriend(member.getMemberId());
+    }
+
+    @Transactional
+    public void remove(Member member1, Member member2) {
+
+        friendRepository.removeMemId(member1.getMemberId(), member2.getMemberId());
+        friendRepository.removeFriId(member2.getMemberId(), member1.getMemberId());
+
     }
 
 

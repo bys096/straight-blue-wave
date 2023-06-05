@@ -40,9 +40,6 @@ public class Board{
     private Project project;
 
 
-    public Board(Project project, BoardDTO dto){
-
-    }
 
     public void changeBrdName(String brdName) {
         this.brdName = brdName;
