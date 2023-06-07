@@ -73,9 +73,9 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "brd_id")
     private Board board;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Schedule> schedule;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Schedule> schedule;
 
     @JsonIgnore
     @OneToMany(mappedBy = "post")

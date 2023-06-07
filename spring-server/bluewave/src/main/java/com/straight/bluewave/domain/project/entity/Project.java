@@ -53,7 +53,7 @@ public class Project extends BaseEntity {
     @JsonIgnore
     private Team team;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boards;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
