@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import "./EventModal.css";
 import { Accordion, Badge, Button, Form, Modal } from "react-bootstrap";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const EventModal = ({ onClose, /*onAddEvent,*/ selectedDate }) => {
+const EventModal = ({ onClose, /*onAddEvent*/ selectedDate }) => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [startDate, setStartDate] = useState(selectedDate);
 	const [endDate, setEndDate] = useState(selectedDate);
 	const [eventsForSelectedDate, setEventsForSelectedDate] = useState([]);
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (selectedDate) {
@@ -37,7 +40,6 @@ const EventModal = ({ onClose, /*onAddEvent,*/ selectedDate }) => {
 		e.preventDefault();
 
 		createSchecule();
-		// onAddEvent(selectedDate, { title, description, startDate, endDate });
 		onClose();
 	};
 

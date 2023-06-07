@@ -1,15 +1,58 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/views/Header";
 import Sidebar from "../components/views/Sidebar";
-import { Button, Modal, Form, ListGroup } from "react-bootstrap";
+import { Button, Modal, Form, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
+import styled from "styled-components";
+
+const Main = styled.div`
+	height: 100%;
+	width: 100%;
+`;
+
+const Article = styled.div`
+	display: flex;
+	height: 100%;
+	width: 100%;
+`;
+
+const Content = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	height: 100%;
+	width: 100%;
+`;
+
+const BoardList = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 80%;
+`;
+const BoardItem = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+	margin: 1rem;
+	padding: 20px;
+
+	background-color: #aaaaaa;
+`;
 
 const ProjectDetail = (prjId) => {
 	const navigate = useNavigate();
 	const [showModal, setShowModal] = useState(false);
 	const [boardName, setBoardName] = useState("");
 	const [boardList, setBoardList] = useState([]);
+	const [posts, setPosts] = useState([]);
 
 	const goChattingRoom = () => {
 		navigate("/chattingroom");
@@ -47,9 +90,29 @@ const ProjectDetail = (prjId) => {
 			)
 			.then((response) => {
 				setBoardList(response.data);
+				console.log(response.data);
 			})
 			.catch((error) => {
 				console.error(error);
+			});
+	};
+
+	const fetchPosts = (boardId) => {
+		axios
+			.post("http://localhost:8002/api/post/list", {
+				page: 1,
+				size: 5,
+				boardId: boardId,
+			})
+			.then((res) => {
+				setPosts((prevPosts) => ({
+					...prevPosts,
+					[boardId]: res.data.dtoList,
+				}));
+				console.log(res.data);
+			})
+			.catch((err) => {
+				console.log(err);
 			});
 	};
 
@@ -57,12 +120,18 @@ const ProjectDetail = (prjId) => {
 		getBoardList();
 	}, []);
 
+	useEffect(() => {
+		boardList.forEach((board) => {
+			fetchPosts(board.brd_id);
+		});
+	}, [boardList]);
+
 	const handleBoardSubmit = () => {
 		axios
-			.post("http://localhost:8002/api/board/create", { 
-        brd_name: boardName,
-        prj_id: `${sessionStorage.getItem("prjid")}`
-      })
+			.post("http://localhost:8002/api/board/create", {
+				brd_name: boardName,
+				prj_id: `${sessionStorage.getItem("prjid")}`,
+			})
 			.then((response) => {
 				alert("게시판이 생성되었습니다.");
 				getBoardList();
@@ -75,19 +144,18 @@ const ProjectDetail = (prjId) => {
 	};
 
 	return (
-		<div className="main">
+		<Main>
 			<Header />
-			<div className="article">
+			<Article>
 				<Sidebar />
-				<div
-					style={{
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-						height: "100%",
-						width: "100%",
-					}}
-				>
+
+				<Content>
+					<div>
+						<Button variant="primary" onClick={() => navigate(-1)}>
+							프로젝트 목록
+						</Button>
+					</div>
+
 					<Button variant="primary" onClick={goChattingRoom}>
 						채팅방
 					</Button>
@@ -125,16 +193,40 @@ const ProjectDetail = (prjId) => {
 						</Modal.Footer>
 					</Modal>
 					<br />
-					<ListGroup>
+
+					<BoardList>
+						<h2>최근 이슈</h2>
 						{boardList.map((board) => (
-							<ListGroup.Item key={board.brdId} onClick={() => navigate("/post")}>
-								{board.brdName}
-							</ListGroup.Item>
+							<BoardItem
+								key={board.brd_id}
+								onClick={() => {
+									navigate("/post");
+									sessionStorage.setItem("boardid", board.brd_id);
+								}}
+							>
+								<h4>{board.brd_name}</h4>
+								<Table>
+									<tr>
+										<th>작성일</th>
+										<th>제목</th>
+										<th>작성자</th>
+									</tr>
+									{posts[board.brd_id]?.map((post) => (
+										<tbody>
+											<tr key={post.post_id}>
+												<td>{post.createdAt}</td>
+												<td>{post.post_name}</td>
+												<td>{post.mem_id}</td>
+											</tr>
+										</tbody>
+									))}
+								</Table>
+							</BoardItem>
 						))}
-					</ListGroup>
-				</div>
-			</div>
-		</div>
+					</BoardList>
+				</Content>
+			</Article>
+		</Main>
 	);
 };
 

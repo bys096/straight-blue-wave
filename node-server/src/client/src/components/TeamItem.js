@@ -5,8 +5,7 @@ import { Route, Routes } from "react-router-dom/dist";
 import styled from "styled-components";
 import ProjectList from "../pages/ProjectList";
 
-const TeamItem = ({ team = [] }) => {
-  const StyledCard = styled(Card)`
+const StyledCard = styled(Card)`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,6 +22,7 @@ const TeamItem = ({ team = [] }) => {
     }
   `;
 
+const TeamItem = ({ team = [] }) => {
   return (
     <>
       <Link
