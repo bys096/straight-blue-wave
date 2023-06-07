@@ -25,6 +25,7 @@ function LoginPage() {
             .get(`http://localhost:8002/api/member/${member_email}`)
             .then((res) => {
               sessionStorage.setItem("memid", res.data.member_id);
+              sessionStorage.setItem("email", member_email);
             })
             .catch((err) => {
               console.log(err);
