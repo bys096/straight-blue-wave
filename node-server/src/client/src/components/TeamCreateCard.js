@@ -43,18 +43,18 @@ const TeamCreateCard = () => {
 
   const handleCreateTeam = async () => {
     await axios
-      .post("http://localhost:8002/api/team/joinTeam", {
-        teamName: teamName,
-        teamDesc: teamDesc,
-      })
+      .post(
+        `http://localhost:8002/api/team/joinTeam/${sessionStorage.getItem(
+          "memid"
+        )}`,
+        {
+          teamName: teamName,
+          teamDesc: teamDesc,
+        }
+      )
       .then((res) => {
         // Team created successfully
         alert("팀 생성이 완료되었습니다");
-        axios.post(
-          `http://localhost:8002/api/team/inviteTeam?memberId=${sessionStorage.getItem(
-            "memid"
-          )}&teamId=${res.data.teamId}`
-        );
         handleClose();
         window.location.reload();
       })
