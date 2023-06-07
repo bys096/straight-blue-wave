@@ -16,30 +16,24 @@ const TeamItem = ({ team = [] }) => {
     width: 130px; // 원하는 너비 지정
     height: 180px; // 원하는 높이 지정
     border-radius: 10px; // 카드 모서리 둥글게 처리
+
+    &:hover {
+      transform: scale(1.05);
+      transition: all 0.2s ease-in-out;
+    }
   `;
 
   return (
     <>
-      <Routes>
-        <Route path={`/team/${team.teamId}`} Component={ProjectList} />
-      </Routes>
-      <Link to={`/team/${team.teamId}`} className="text-decoration-none">
+      <Link
+        to={`/team/${team.teamId}`}
+        className="text-decoration-none"
+        onClick={() => sessionStorage.setItem("tmid", team.teamId)}
+      >
         <StyledCard>
           <Card.Body>
             <Card.Title>{team.teamName}</Card.Title>
             <Card.Text>{team.teamDesc}</Card.Text>
-          </Card.Body>
-        </StyledCard>
-      </Link>
-    </>
-  );
-  return (
-    <>
-      <Link to={`/team/${team.tmId}`} className="text-decoration-none">
-        <StyledCard>
-          <Card.Body>
-            <Card.Title>{team.tmName}</Card.Title>
-            <Card.Text>{team.tmIntro}</Card.Text>
           </Card.Body>
         </StyledCard>
       </Link>

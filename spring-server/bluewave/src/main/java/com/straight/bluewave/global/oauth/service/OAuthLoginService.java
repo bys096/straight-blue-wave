@@ -10,16 +10,20 @@ import com.straight.bluewave.domain.member.repository.RefreshTokenRepository;
 import com.straight.bluewave.global.oauth.OAuthInfoResponse;
 import com.straight.bluewave.global.oauth.OAuthLoginParams;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class OAuthLoginService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -27,17 +31,26 @@ public class OAuthLoginService {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     private final RequestOAuthInfoService requestOAuthInfoService;
 
     public TokenDTO login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
+
+        log.info("email : " + oAuthInfoResponse.getEmail());
 
         Optional<Member> dbInfo = memberRepository.findByMemberEmail(oAuthInfoResponse.getEmail());
 
         if(dbInfo.isPresent()) {
             UsernamePasswordAuthenticationToken authenticationToken = oAuthInfoResponse.toAuthentication();
 
+
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+            log.info("ID : " + authentication.getPrincipal());
+
+            log.info("권한 : " + authentication.getAuthorities());
 
             TokenDTO tokenDto = tokenProvider.generateTokenDto(authentication);
 
@@ -52,6 +65,7 @@ public class OAuthLoginService {
         } else {
             Member member = Member.builder()
                     .memberEmail(oAuthInfoResponse.getEmail())
+                    .memberPw(passwordEncoder.encode("1111"))
                     .memberName(oAuthInfoResponse.getName())
                     .memberNick(oAuthInfoResponse.getNickname())
                     .oAuthProvider(oAuthInfoResponse.getOAuthProvider())

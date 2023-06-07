@@ -14,6 +14,11 @@ const StyledCard = styled(Card)`
   width: 130px; // 원하는 너비 지정
   height: 180px; // 원하는 높이 지정
   border-radius: 10px; // 카드 모서리 둥글게 처리
+
+  &:hover {
+    transform: scale(1.05);
+    transition: all 0.2s ease-in-out;
+  }
 `;
 
 const AddImage = styled.img`
@@ -21,7 +26,7 @@ const AddImage = styled.img`
   height: 50px;
 `;
 
-const TeamCreateCard = ({ onTeamCreated }) => {
+const TeamCreateCard = () => {
   const [showModal, setShowModal] = useState(false);
   const [teamName, setTeamName] = useState("");
   const [teamDesc, setTeamDesc] = useState("");
@@ -36,19 +41,22 @@ const TeamCreateCard = ({ onTeamCreated }) => {
     setShowModal(true);
   };
 
-  const handleCreateTeam = () => {
-    axios
-      .post("http://172.30.1.85:8002/api/team/joinTeam", {
+  const handleCreateTeam = async () => {
+    await axios
+      .post("http://localhost:8002/api/team/joinTeam", {
         teamName: teamName,
         teamDesc: teamDesc,
       })
       .then((res) => {
         // Team created successfully
         alert("팀 생성이 완료되었습니다");
-        if (onTeamCreated) {
-          onTeamCreated(); // Call the callback function to refresh the team list
-        }
+        axios.post(
+          `http://localhost:8002/api/team/inviteTeam?memberId=${sessionStorage.getItem(
+            "memid"
+          )}&teamId=${res.data.teamId}`
+        );
         handleClose();
+        window.location.reload();
       })
       .catch((err) => {
         alert("팀 생성에 실패하였습니다");

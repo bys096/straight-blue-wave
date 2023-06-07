@@ -60,6 +60,8 @@ public class AuthController {
         cookie.setPath("/api");        //쿠기 경로 적용하기
         response.addCookie(cookie);
 
+        response.setHeader("Authorization", "Bearer " + tokenDTO.getAccessToken());
+
         return ResponseEntity.ok(tokenDTO);
     }
 

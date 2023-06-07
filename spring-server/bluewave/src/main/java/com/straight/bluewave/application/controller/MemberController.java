@@ -1,5 +1,6 @@
 package com.straight.bluewave.application.controller;
 
+import com.straight.bluewave.domain.mapping.entity.FriendMapping;
 import com.straight.bluewave.domain.member.dto.MemberDTO;
 import com.straight.bluewave.domain.member.dto.MemberResponseDTO;
 import com.straight.bluewave.domain.member.dto.MemberUpdateDTO;
@@ -32,8 +33,8 @@ public class MemberController {
     private final AuthService authService;
 
     @GetMapping("/{email}")     //이메일로 사용자 요청
-    public ResponseEntity<MemberResponseDTO> findMemberInfoByEmail(@PathVariable String memberEmail) {
-        return ResponseEntity.ok(memberServiceImp.findMemberInfoByEmail(memberEmail));
+    public ResponseEntity<MemberResponseDTO> findMemberInfoByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(memberServiceImp.findMemberInfoByEmail(email));
     }
 
 
@@ -49,7 +50,7 @@ public class MemberController {
 
     }
 
-    @PreAuthorize("#id.toString() == principal.username or hasRole('MANAGER')")
+    //@PreAuthorize("#id.toString() == principal.username or hasRole('MANAGER')")
     @DeleteMapping("/delete")       //회원탈퇴
     public ResponseEntity<String> deleteMember(HttpServletRequest request, HttpServletResponse response) {
         authService.logout(request);
@@ -69,6 +70,30 @@ public class MemberController {
     public ResponseEntity<List<Member>> getAllMembers() {
         List<Member> members = memberServiceImp.getAllMembers();
         return new ResponseEntity<>(members, HttpStatus.OK);
+    }
+
+    @PostMapping("/addFriend")      //친구 추가
+    public ResponseEntity<String> addFriend(@RequestParam Long memId, @RequestParam Long friendId) {
+        memberServiceImp.addFriend(memId, friendId);
+        return new ResponseEntity<>("친구추가 성공", HttpStatus.OK);
+    }
+
+    @GetMapping("/friendList/{memId}")      //친구 리스트
+    public ResponseEntity<List<FriendMapping>> friends(@PathVariable Long memId) {
+        Member member = new Member();
+        member.setMemberId(memId);
+        List<FriendMapping> friend = memberServiceImp.getFriendList(member);
+        return new ResponseEntity<>(friend, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteFriend")      //친구 삭제
+    public ResponseEntity<String> removeFriend(@RequestParam Long memId, @RequestParam Long friendId) {
+       Member member1 = new Member();
+       member1.setMemberId(memId);
+       Member member2 = new Member();
+       member2.setMemberId(friendId);
+        memberServiceImp.remove(member1, member2);
+        return new ResponseEntity<>("친구삭제 성공", HttpStatus.OK);
     }
 
 

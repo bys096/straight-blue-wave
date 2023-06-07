@@ -1,6 +1,8 @@
 package com.straight.bluewave.domain.team.service;
 
 import com.straight.bluewave.application.dto.PageResultDTO;
+import com.straight.bluewave.domain.mapping.repository.SpringDataTeamMemberRepository;
+import com.straight.bluewave.domain.member.repository.MemberRepository;
 import com.straight.bluewave.domain.team.dto.*;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.member.entity.Member;
@@ -21,6 +23,10 @@ import java.util.function.Function;
 public class TeamServiceImpl implements TeamService{
 
     private final TeamRepository teamRepository;
+
+    private final MemberRepository memberRepository;
+
+    private final SpringDataTeamMemberRepository teamMemberRepository;
     private final SpringDataTeamRepository springDataTeamRepository;
 
 
@@ -48,13 +54,23 @@ public class TeamServiceImpl implements TeamService{
     }
 
 
-    public Team joinTeam(TeamDTO dto) {       //팀생성
+    public Team joinTeam(TeamDTO dto, Long memberId) {       //팀생성
+        Member member = memberRepository.findById(memberId).get();
         Team team = Team.builder()
-                .teamId(dto.getTeamId())
                 .teamName(dto.getTeamName())
                 .teamDesc(dto.getTeamDesc())
+                .member(member)
                 .build();
         springDataTeamRepository.save(team);
+
+        TeamMemberMapping teamMemberMapping = TeamMemberMapping.builder()
+                .member(member)
+                .team(team)
+                .teamName(member.getMemberName())
+                .teamPosition("팀장")
+                .build();
+        teamMemberRepository.save(teamMemberMapping);
+
         return team;
     }
 
@@ -86,5 +102,24 @@ public class TeamServiceImpl implements TeamService{
     public void remove(Long tm_id) {
 
         springDataTeamRepository.deleteById(tm_id);
+    }
+
+    public void invite(Long memberId, Long teamId) {
+        Member member = memberRepository.findById(memberId).get();
+
+        Team team = springDataTeamRepository.findById(teamId).get();
+
+        TeamMemberMapping teamMemberMapping = TeamMemberMapping.builder()
+                .member(member)
+                .team(team)
+                .teamName(member.getMemberName())
+                .teamPosition("팀원")
+                .build();
+        teamMemberRepository.save(teamMemberMapping);
+    }
+
+    public List<TeamMemberMapping> getTeamMemberList(Team team) {
+
+        return teamMemberRepository.findAllByTeam(team.getTeamId());
     }
 }

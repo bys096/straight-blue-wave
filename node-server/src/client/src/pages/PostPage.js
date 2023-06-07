@@ -19,7 +19,7 @@ const PostPage = () => {
 
   const fetchPosts = () => {
     axios
-      .get("http://172.30.1.7:8002/api/post/list")
+      .get("http://localhost:8002/api/post/list")
       .then((res) => {
         setPosts(res.data);
       })

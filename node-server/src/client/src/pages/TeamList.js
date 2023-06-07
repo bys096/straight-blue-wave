@@ -1,54 +1,86 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { Route, Routes } from "react-router-dom/dist";
 import TeamItem from "../components/TeamItem";
 import TeamCreateCard from "../components/TeamCreateCard";
+import styled from "styled-components";
+
+const Title = styled.h1`
+	font-size: 2.5em;
+	font-weight: bold;
+	color: black;
+	text-align: center;
+	margin-bottom: 2em;
+`;
+
+const Container = styled.div`
+	margin: 10px;
+	display: flex;
+	flex-direction: column;
+  width : 100%
+`;
+
+const Teams = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: flex-start;
+	gap: 4rem;
+`;
+
+const Line = styled.hr`
+	border: none;
+	border-top: 1px solid #aaa;
+	background: linear-gradient(
+		to right,
+		rgba(0, 0, 0, 0),
+		rgba(0, 0, 0, 0.75),
+		rgba(0, 0, 0, 0)
+	);
+	height: 1px;
+	width: 100%;
+	margin: 0.5em 0;
+`;
 
 const TeamList = () => {
-  const [teams, setTeams] = useState([]);
-  if (sessionStorage.getItem("memid") == null) {
-    window.location.reload();
-  }
+	const [teams, setTeams] = useState([]);
 
-  const fetchTeams = async () => {
-    const response = axios
-      .get(
-        `http://172.30.1.85:8002/api/team/list/${sessionStorage.getItem(
-          "memid"
-        )}`
-      )
-      .then((res) => {
-        setTeams(res.data.dtoList);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+	const fetchTeams = async () => {
+		const response = axios
+			.get(
+				`http://localhost:8002/api/team/list/${sessionStorage.getItem("memid")}`
+			)
+			.then((res) => {
+				setTeams(res.data.dtoList);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
-  useEffect(() => {
-    fetchTeams();
-  }, []);
+	useEffect(() => {
+		fetchTeams();
+	}, []);
 
-  const onTeamCreated = () => {
-    fetchTeams();
-  };
+	const onTeamCreated = () => {
+		fetchTeams();
+	};
 
-  return (
-    <Container>
-      <h1>팀 목록</h1>
-      <Row>
-        <Col md={4} lg={3}>
-          <TeamCreateCard onTeamCreated={onTeamCreated} />
-        </Col>
-        {teams.map((team, index) => (
-          <Col key={index} md={4} lg={3}>
-            <TeamItem team={team} />
-          </Col>
-        ))}
-      </Row>
-    </Container>
-  );
+	return (
+		<Container>
+			<Title>팀 목록</Title>
+			<Line />
+			<Teams>
+				<TeamCreateCard onTeamCreated={onTeamCreated} />
+				{teams.map((team, index) => (
+          <div key={index}>
+            <TeamItem  team={team} />
+          </div>
+					
+				))}
+			</Teams>
+		</Container>
+	);
 };
 
 export default TeamList;

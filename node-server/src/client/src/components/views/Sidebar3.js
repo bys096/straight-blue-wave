@@ -16,7 +16,7 @@ function Sidebar() {
   const handleSearch = async () => {
     try {
       const response = await axios
-        .get(`http://172.30.1.85:8002/api/member/${userEmail}`)
+        .get(`http://localhost:8002/api/member/${userEmail}`)
         .then((res) => {
           setUserData({ email: res.data.member_email });
         })
