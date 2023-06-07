@@ -15,15 +15,19 @@ function Sidebar() {
 
   const handleSearch = async () => {
     try {
-      const response = await axios
-        .get(`http://localhost:8002/api/member/${userEmail}`)
-        .then((res) => {
-          setUserData({ email: res.data.member_email });
-        })
-        .catch((err) => {
-          alert("검색에 실패했습니다.");
-          console.error(err);
-        });
+      if (userEmail === sessionStorage.getItem("email")) {
+        alert("자기 자신은 검색할 수 없습니다.");
+      } else {
+        const response = await axios
+          .get(`http://localhost:8002/api/member/${userEmail}`)
+          .then((res) => {
+            setUserData({ email: res.data.member_email });
+          })
+          .catch((err) => {
+            alert("검색에 실패했습니다.");
+            console.error(err);
+          });
+      }
     } catch (error) {
       console.error(error);
     }
