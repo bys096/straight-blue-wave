@@ -23,17 +23,18 @@ const Calendar = ({}) => {
 	const [selectedDate, setSelectedDate] = useState();
 
 	const [schedules, setSchedules] = useState([]);
-	
+	const [reload, setReload] = useState(false);
 
-	useEffect(() => {
-		const savedSchedules = JSON.parse(localStorage.getItem("schedules")) || {};
-		setSchedules(savedSchedules);
-	}, []);
+	// useEffect(() => {
+	// 	const savedSchedules = JSON.parse(localStorage.getItem("schedules")) || {};
+	// 	setSchedules(savedSchedules);
+	// }, []);
 
 	// Axios 통신 - DB 통신할때 사용할것.
 	useEffect(() => {
 		fetchSchedules();
-	}, [schedules]);
+		console.log(reload)
+	}, [reload]);
 
 	const fetchSchedules = async () => {
 		try {
@@ -41,26 +42,26 @@ const Calendar = ({}) => {
 				`http://localhost:8002/api/schedule/list/${sessionStorage.getItem("prjid")}`
 			);
 			const fetchedData = response.data;
-	
-			setEvents((prevEvents) => {
+
+			setSchedules((prevEvents) => {
 				const newSchedules = { ...prevEvents };
-	
+
 				fetchedData.forEach((item) => {
 					if (item.startDate && item.endDate) {
 						let start = new Date(item.startDate);
 						const end = new Date(item.endDate);
 						const dateArray = [];
-	
+
 						while (start <= end) {
 							dateArray.push(new Date(start));
 							start.setDate(start.getDate() + 1);
 						}
-	
+
 						dateArray.forEach((date) => {
 							const formattedDate = `${date.getFullYear()}-${String(
 								date.getMonth() + 1
 							).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-	
+
 							if (!newSchedules[formattedDate]) {
 								newSchedules[formattedDate] = [];
 							}
@@ -80,13 +81,14 @@ const Calendar = ({}) => {
 						});
 					}
 				});
-	
 				localStorage.setItem("schedules", JSON.stringify(newSchedules));
+				setReload(false);
 				return newSchedules;
 			});
 		} catch (error) {
 			console.error("An error occurred while fetching the schedules:", error);
 		}
+		
 	};
 
 	// const addEvent = (startDate, event) => {
@@ -187,6 +189,7 @@ const Calendar = ({}) => {
 
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
+		setReload(true);
 	};
 
 	return (
@@ -257,7 +260,7 @@ const Calendar = ({}) => {
 			{isModalOpen && (
 				<EventModal
 					onClose={handleCloseModal}
-					// onAddEvent={addEvent}
+					//  onAddEvent={isUpdate}
 					selectedDate={selectedDate}
 				/>
 			)}

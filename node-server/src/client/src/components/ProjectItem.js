@@ -5,8 +5,7 @@ import { Route, Routes } from "react-router-dom/dist";
 import styled from "styled-components";
 import ProjectList from "../pages/ProjectList";
 
-const ProjectItem = ({ project = [] }) => {
-	const StyledCard = styled(Card)`
+const StyledCard = styled(Card)`
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -17,6 +16,9 @@ const ProjectItem = ({ project = [] }) => {
 		height: 180px; // 원하는 높이 지정
 		border-radius: 10px; // 카드 모서리 둥글게 처리
 	`;
+
+const ProjectItem = ({ project = [] }) => {
+	
 
 	return (
 		<>

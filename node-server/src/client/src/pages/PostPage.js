@@ -4,6 +4,14 @@ import Sidebar from "../components/views/Sidebar";
 import { Button, Table, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import styled from "styled-components";
+
+const PostList = styled.div`
+  display : flex;
+  justify-content : between;
+  align-items: center;
+  flex-wrap: wrap;
+`
 
 const PostPage = () => {
   const navigate = useNavigate();
@@ -19,9 +27,14 @@ const PostPage = () => {
 
   const fetchPosts = () => {
     axios
-      .get("http://localhost:8002/api/post/list")
+      .post("http://localhost:8002/api/post/list", {
+        "page" : 1,
+        "size" : 10,
+        "boardId" : sessionStorage.getItem("boardid")
+    })
       .then((res) => {
-        setPosts(res.data);
+        setPosts(res.data.dtoList);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -30,6 +43,7 @@ const PostPage = () => {
 
   useEffect(() => {
     fetchPosts();
+    
   }, []);
 
   return (
@@ -38,7 +52,7 @@ const PostPage = () => {
         <Header />
         <div className="article">
           <Sidebar />
-          <div>
+          <PostList>
             <div className="d-flex justify-content-between align-items-center">
               <h2>게시글 목록</h2>
               <Button onClick={() => navigate("/createpost")}>
@@ -63,7 +77,7 @@ const PostPage = () => {
                 ))}
               </tbody>
             </Table>
-          </div>
+          </PostList>
         </div>
       </div>
       <Modal show={show} onHide={handleClose}>
