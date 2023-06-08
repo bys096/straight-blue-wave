@@ -21,6 +21,7 @@ import ProjectList from "./pages/ProjectList";
 import GptPage from "./pages/GptPage";
 import MemberList from "./pages/MemberList";
 
+
 function App() {
   return (
     <div className="App">
@@ -54,6 +55,7 @@ function App() {
         <Route path="/wbs" Component={Wbs}></Route>
         <Route path="/gpt" Component={GptPage}></Route>
         <Route path="/memlist" Component={MemberList}></Route>
+
       </Routes>
     </div>
   );

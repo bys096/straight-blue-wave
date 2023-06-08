@@ -1,9 +1,37 @@
 import React, { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, FormCheck } from "react-bootstrap";
 import Header from "../components/views/Header";
 import Sidebar from "../components/views/Sidebar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+const Main = styled.div`
+	height: 100%;
+	width: 100%;
+`;
+
+const Article = styled.div`
+	display: flex;
+	height: 100%;
+	width: 100%;
+`;
+
+const Content = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	height: 100%;
+	width: 100%;
+`;
+
+const CreateForm = styled.div`
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+`;
 
 const CreatePostPage = () => {
 	const navigate = useNavigate();
@@ -19,6 +47,12 @@ const CreatePostPage = () => {
 		post_name: "",
 		voting_status: false,
 	});
+
+	const [isChecked, setIsChecked] = useState(false);
+
+	const handleCheckboxChange = (event) => {
+		setIsChecked(event.target.checked);
+	};
 
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
@@ -46,13 +80,15 @@ const CreatePostPage = () => {
 	};
 
 	return (
-		<div>
+		<Main>
 			<Header />
-			<div className="main">
-				<div className="article">
-					<Sidebar />
-					<div className="section">
+			<Article>
+				<Sidebar />
+				<Content>
+					<div>
 						<h2>게시글 작성</h2>
+					</div>
+					<CreateForm>
 						<Form onSubmit={handleSubmit}>
 							<Form.Group>
 								<Form.Label>게시글 제목</Form.Label>
@@ -77,14 +113,32 @@ const CreatePostPage = () => {
 									required
 								/>
 							</Form.Group>
+							<Form.Group>
+								<FormCheck
+									type="checkbox"
+									id="toCalendar"
+									label="일정 추가"
+									onChange={handleCheckboxChange}
+								/>
+								<Form.Label>일정 날짜</Form.Label>
+								<Form.Control
+									type="date"
+									name="meeting_date"
+									value={post.meeting_date}
+									onChange={handleInputChange}
+									required
+									disabled={!isChecked}
+								/>
+							</Form.Group>
+
 							<Button variant="primary" type="submit">
 								등록
 							</Button>
 						</Form>
-					</div>
-				</div>
-			</div>
-		</div>
+					</CreateForm>
+				</Content>
+			</Article>
+		</Main>
 	);
 };
 
