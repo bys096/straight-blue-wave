@@ -8,6 +8,7 @@ import Sidebar from "../components/views/Sidebar";
 import Footer from "../components/views/Footer";
 import styled from "styled-components";
 import { Button, Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const Title = styled.h1`
   font-size: 2.5em;
@@ -52,6 +53,9 @@ const ProjectList = () => {
   const [showModal, setShowModal] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userData, setUserData] = useState(null);
+
+  const navigate = useNavigate();
+
   const addUser = async (email) => {
     await axios
       .get(`http://localhost:8002/api/member/${email}`)
@@ -146,18 +150,27 @@ const ProjectList = () => {
                 variant="primary"
                 onClick={() => setShowModal(true)}
                 style={{
-                  width: "100px",
+                  width: "150px",
                   height: "50px",
                 }}
               >
                 회원 추가
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => navigate("/memlist")}
+                style={{
+                  width: "150px",
+                  height: "50px",
+                }}
+              >
+                회원 목록 조회
               </Button>
               <Line />
               <Projects>
                 <ProjectCreateCard onProjectCreated={onProjectCreated} />
                 {projects.map((project, index) => (
                   <div key={index}>
-                    {console.log(project)}
                     <ProjectItem project={project} prjId={project.prjId} />
                   </div>
                 ))}

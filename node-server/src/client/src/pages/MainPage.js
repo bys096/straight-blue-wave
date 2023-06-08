@@ -1,12 +1,12 @@
-import {Container} from "react-bootstrap";
-import React, {useRef, useState, useEffect} from "react";
+import { Container } from "react-bootstrap";
+import React, { useRef, useState, useEffect } from "react";
 import io from "socket.io-client";
 import "./MainPage.css";
 import "../assets/css/ChatUI.css";
-import $ from 'jquery';
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import $ from "jquery";
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
 
 function MainPage(props) {
   const socket = io();
@@ -27,6 +27,7 @@ function MainPage(props) {
   const senderRef = useRef(null);
   const chatLogsRef = useRef(null);
   const chatInputRef = useRef(null);
+  const navigate = useNavigate();
   let myStream;
   let muted = false;
   let cameraOff = false;
@@ -38,19 +39,17 @@ function MainPage(props) {
   useEffect(() => {
     setUserId(sessionStorage.getItem("user_id"));
     setChatHidden(true);
-  
-  $("#chat-circle").click(function() {    
-    $("#chat-circle").toggle('scale');
-    $(".chat-box").toggle('scale');
-  })
-  
-  $(".chat-box-toggle").click(function() {
-    $("#chat-circle").toggle('scale');
-    $(".chat-box").toggle('scale');
-  })
-  
-  }, []);
 
+    $("#chat-circle").click(function () {
+      $("#chat-circle").toggle("scale");
+      $(".chat-box").toggle("scale");
+    });
+
+    $(".chat-box-toggle").click(function () {
+      $("#chat-circle").toggle("scale");
+      $(".chat-box").toggle("scale");
+    });
+  }, []);
 
   async function getCameras() {
     try {
@@ -142,7 +141,7 @@ function MainPage(props) {
     event.preventDefault();
     const roomForm = welcomeFormRef.current.querySelector("input");
 
-    if(socket.disconnected) {
+    if (socket.disconnected) {
       socket.connect();
     }
     socket.emit("join_room", roomForm.value, userId);
@@ -151,8 +150,6 @@ function MainPage(props) {
     roomForm.value = "";
     // console.log(`입장, 방이름?: ${roomName}`);
   }
-
-
 
   // socket.on("reject_join", () => {
   //   // Paint modal
@@ -219,7 +216,6 @@ function MainPage(props) {
     --peopleInRoom;
     // sortStreams();
   });
-
 
   // RTC code
   function createConnection(remoteSocketId, remoteUserId) {
@@ -291,7 +287,6 @@ function MainPage(props) {
   //   streamArr.forEach((stream) => (stream.className = `people${peopleInRoom}`));
   // }
 
-
   // chatting
   function addMessage(msg, type) {
     const chatLogs = chatLogsRef.current;
@@ -301,8 +296,8 @@ function MainPage(props) {
     const text = document.createElement("div");
     text.innerText = msg;
     div.className = type;
-    span.className="mssg-avatar";
-    text.className="cm-msg-text";
+    span.className = "mssg-avatar";
+    text.className = "cm-msg-text";
 
     console.log("text divtag " + text.value);
 
@@ -313,10 +308,7 @@ function MainPage(props) {
 
     // chatList.appendChild(li);
   }
-  
 
-
-  
   function sendChat(event) {
     event.preventDefault();
     const chatBox = chatInputRef.current;
@@ -327,31 +319,25 @@ function MainPage(props) {
       roomName: roomName,
       msg: msg,
       sid: socket.id,
-      userId: userId
-    }
+      userId: userId,
+    };
 
     socket.emit("sendChat", chat);
     chatBox.value = "";
     senderRef.current = socket.id;
   }
 
-  socket.on("newMessage", chat => {
+  socket.on("newMessage", (chat) => {
     // console.log("recieve msg: " + chat.msg);
 
-    if(userId === chat.userId) {
-      addMessage(`${chat.userId}: ${chat.msg}`, 'chat-msg self');
-    }
-    else
-      addMessage(`${chat.userId}: ${chat.msg}`, 'chat-msg user');
-
-
+    if (userId === chat.userId) {
+      addMessage(`${chat.userId}: ${chat.msg}`, "chat-msg self");
+    } else addMessage(`${chat.userId}: ${chat.msg}`, "chat-msg user");
   });
 
   socket.on("welcome", (user) => {
     addMessage(user.msg);
   });
-
-
 
   socket.on("left", (user) => {
     console.log(user.msg);
@@ -359,92 +345,117 @@ function MainPage(props) {
     console.log(`left my user id: ${user.mid}`);
     addMessage(`${user.mid} 님이 퇴실하셨습니다`);
 
-    const streamArr = myStreamRef.current.querySelectorAll('div');
+    const streamArr = myStreamRef.current.querySelectorAll("div");
 
     streamArr.forEach((e) => {
-      console.log(`현재 등록된 div id: ${e.id}`)
-      if(e.id === user.mid) {
+      console.log(`현재 등록된 div id: ${e.id}`);
+      if (e.id === user.mid) {
         myStreamRef.current.removeChild(e);
       }
-    });    
+    });
   });
 
-  
   function leaveRoom() {
     // console.log(`try to leave sokcet id: ${socket.id}`);
-    window.location.href = 'http://localhost:4000';
+    navigate("/project/:prjid");
     setChatHidden(true);
     socket.disconnect();
   }
-
-
-
-  
-  
 
   return (
     <Container>
       <h1>영상통화</h1>
       <div className="video">
         <div>
-            <div id="welcome" ref={welcomeRef} 
-                style={{display: welHidden ? "none" : "block"}}>
-                <form ref={welcomeFormRef}>
-                    <input placeholder="room name" required type="text"/>
-                    <button onClick={handleWelcomeSubmit}>Enter room</button>
-                </form>
+          <div
+            id="welcome"
+            ref={welcomeRef}
+            style={{ display: welHidden ? "none" : "block" }}
+          >
+            <form ref={welcomeFormRef}>
+              <input placeholder="room name" required type="text" />
+              <button onClick={handleWelcomeSubmit}>Enter room</button>
+            </form>
+          </div>
+          <div
+            id="call"
+            ref={callRef}
+            style={{ display: hidden ? "none" : "block" }}
+          >
+            <div id="myStream" ref={myStreamRef}>
+              <video
+                id="myFace"
+                ref={myFaceRef}
+                autoPlay
+                playsInline
+                width="400"
+                height="400"
+              ></video>
+              <button id="mute" ref={muteRef} onClick={handleMuteClick}>
+                Mute
+              </button>
+              <button id="camera" ref={cameraRef} onClick={handleCameraClick}>
+                Turn Camera Off
+              </button>
+              <select
+                id="cameras"
+                ref={camerasRef}
+                onChange={handleCameraChange}
+              ></select>
+              <video
+                id="peerFace"
+                ref={peerFaceRef}
+                autoPlay
+                playsInline
+                width="400"
+                height="400"
+              ></video>
             </div>
-            <div id="call" ref={callRef}
-                style={{ display: hidden ? "none" : "block" }}>
-                <div id="myStream" ref={myStreamRef}>
-                    <video id="myFace"ref={myFaceRef} autoPlay playsInline width="400" height="400"></video>
-                    <button id="mute" ref={muteRef} onClick={handleMuteClick}>Mute</button>
-                    <button id="camera" ref={cameraRef} onClick={handleCameraClick}>Turn Camera Off</button>
-                    <select id="cameras" ref={camerasRef} onChange={handleCameraChange}></select>
-                    <video id="peerFace" ref={peerFaceRef} autoPlay playsInline width="400" height="400"></video>
-                </div>
 
-                <button onClick={leaveRoom}>Leave</button>
-            </div>
-            
-            
+            <button onClick={leaveRoom}>Leave</button>
+          </div>
         </div>
       </div>
 
+      <div style={{ display: chatHidden ? "none" : "block" }}>
+        <div id="chat-circle" className="btn btn-raised">
+          <div id="chat-overlay"></div>
+          <i className="material-icons">speaker_phone</i>
+        </div>
 
-
-
-
-
-<div style={{display: chatHidden ? "none" : "block"}}>
-  <div id="chat-circle" className="btn btn-raised">
-    <div id="chat-overlay"></div>
-      <i className="material-icons">speaker_phone</i>
-	</div>
-  
-  <div className="chat-box">
-    <div class="chat-box-header">
-      ChatBot
-      <span className="chat-box-toggle"><i className="material-icons">close</i></span>
-    </div>
-    <div className="chat-box-body">
-      <div className="chat-box-overlay">   
+        <div className="chat-box">
+          <div class="chat-box-header">
+            ChatBot
+            <span className="chat-box-toggle">
+              <i className="material-icons">close</i>
+            </span>
+          </div>
+          <div className="chat-box-body">
+            <div className="chat-box-overlay"></div>
+            <div className="chat-logs" ref={chatLogsRef}></div>
+          </div>
+          <div className="chat-input">
+            <form>
+              <input
+                ref={chatInputRef}
+                type="text"
+                id="chat-input"
+                placeholder="Send a message..."
+              />
+              <button
+                type="submit"
+                class="chat-submit"
+                id="chat-submit"
+                onClick={sendChat}
+              >
+                <i class="material-icons">send</i>
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
-      <div className="chat-logs" ref={chatLogsRef}>
-       
-      </div>
-    </div>
-    <div className="chat-input">      
-      <form>
-        <input ref={chatInputRef} type="text" id="chat-input" placeholder="Send a message..."/>
-        <button type="submit" class="chat-submit" id="chat-submit" onClick={sendChat}><i class="material-icons">send</i></button>
-      </form>      
-    </div>
-  </div>
-  </div>
     </Container>
   );
-
 }
 
 export default MainPage;
