@@ -19,6 +19,8 @@ import CreatePostPage from "./pages/CreatePostPage";
 import Wbs from "./components/Wbs";
 import ProjectList from "./pages/ProjectList";
 import GptPage from "./pages/GptPage";
+import test from "./pages/test";
+
 
 function App() {
   return (
@@ -52,6 +54,7 @@ function App() {
         <Route path="/createpost" Component={CreatePostPage}></Route>
         <Route path="/wbs" Component={Wbs}></Route>
         <Route path="/gpt" Component={GptPage}></Route>
+        <Route path="/test" Component={test}></Route>
       </Routes>
     </div>
   );
