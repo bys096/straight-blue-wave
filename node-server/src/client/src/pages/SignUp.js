@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../assets/css/Register&Login.css";
+import { Button } from "react-bootstrap";
 
 const SignUp = () => {
   const [member_email, setEmail] = useState("");
@@ -64,6 +65,21 @@ const SignUp = () => {
       });
   };
 
+  const checkEmail = async () => {
+    if (member_email === "") {
+      alert("값이 비어있습니다");
+      return;
+    }
+    await axios
+      .get(`http://localhost:8002/api/member/${member_email}`)
+      .then(() => {
+        alert("이미 가입되어 있는 이메일입니다.");
+      })
+      .catch(() => {
+        alert("가입할 수 있는 이메일입니다.");
+      });
+  };
+
   return (
     <div className="SignUp">
       <div className="auth-form-container">
@@ -80,6 +96,12 @@ const SignUp = () => {
             required
             onChange={onChangeEmail}
           ></input>
+          <Button
+            style={{ backgroundColor: "white", margin: "0 0 10px" }}
+            onClick={checkEmail}
+          >
+            중복체크
+          </Button>
           <label htmlFor="member_pw" className="register-label">
             비밀번호
           </label>
