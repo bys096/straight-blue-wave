@@ -39,7 +39,7 @@ const Calendar = () => {
 				`http://localhost:8002/api/board/list/${sessionStorage.getItem("prjid")}`
 			);
 			setBoards(response.data);
-			setReload(false);
+
 			return response.data; // boards를 반환
 		} catch (error) {
 			console.error("An error occurred while fetching the boards:", error);
@@ -82,13 +82,10 @@ const Calendar = () => {
 								post_content: post.post_content,
 							});
 						}
-						
+
 						return newSchedules;
 					});
-					
 				}
-				
-
 			});
 		} catch (error) {
 			console.error("An error occurred while fetching the posts:", error);
@@ -141,6 +138,7 @@ const Calendar = () => {
 					}
 				});
 				// localStorage.setItem("schedules", JSON.stringify(newSchedules));
+				setReload(false);
 				return newSchedules;
 			});
 		} catch (error) {
@@ -148,20 +146,18 @@ const Calendar = () => {
 		}
 	};
 
-	// Axios 통신 - DB 통신할때 사용할것.
+	
 	useEffect(() => {
-    const fetchData = async () => {
-        const fetchedBoards = await fetchBoards();
-        fetchedBoards.forEach((board) => {
-            fetchPosts(board.brd_id);
-        });
-        console.log(posts);
-        fetchSchedules();
-    };
-
-    fetchData();
-    console.log(reload);
-}, [reload]);
+		const fetchData = async () => {
+			const fetchedBoards = await fetchBoards();
+			fetchedBoards.forEach((board) => {
+				fetchPosts(board.brd_id);
+			});
+			console.log(posts);
+			fetchSchedules();
+		};
+		fetchData();
+	}, [reload]);
 
 	// const addEvent = (startDate, event) => {
 	// 	// startDate와 endDate 사이의 모든 날짜 가져오기
@@ -336,7 +332,9 @@ const Calendar = () => {
 												setIsModalOpen(true);
 											}}
 										>
-											<Badge pill bg="danger">{post.post_name}</Badge>
+											<Badge pill bg="danger">
+												{post.post_name}
+											</Badge>
 										</div>
 									))}
 							</div>
@@ -350,6 +348,7 @@ const Calendar = () => {
 					//  onAddEvent={isUpdate}
 					selectedDate={selectedDate}
 					postList={posts}
+					scheduleList={schedules}
 				/>
 			)}
 		</div>
