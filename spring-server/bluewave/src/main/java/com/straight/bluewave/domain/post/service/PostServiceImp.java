@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -37,6 +38,7 @@ public class PostServiceImp implements PostService{
                 .mem_id(dto.getMem_id())
                 .post_content(dto.getPost_content())
                 .post_name(dto.getPost_name())
+                .meeting_date(dto.getMeeting_date())
                 .attendees_id(dto.getAttendees_id())
                 .file_status(dto.isFile_status())
                 .voting_status(dto.isVoting_status())
