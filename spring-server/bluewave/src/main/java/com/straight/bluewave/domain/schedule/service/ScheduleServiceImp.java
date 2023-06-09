@@ -30,9 +30,9 @@ public class ScheduleServiceImp implements ScheduleService{
         project.setPrjId(dto.getPrj_id());
         schedule.setProject(project);
 
-        Post post = new Post();
-        post.setPostId(dto.getPost_id());
-        schedule.setPost(post);
+//        Post post = new Post();
+//        post.setPostId(dto.getPost_id());
+//        schedule.setPost(post);
 
         scheduleRepository.save(schedule);
         return schedule;
@@ -69,13 +69,14 @@ public class ScheduleServiceImp implements ScheduleService{
         scheduleRepository.deleteById(schedule_id);
     }
 
-//    public List<Schedule> findAllByProject(Project project) {
-//        return scheduleRepository.findSchedulesByProject(project.getPrjId());
-//    }
-
-    public List<Object[]> findAllByProject(Long prjId) {
-        return scheduleRepository.findSchedulesByProject(prjId);
+    public List<Schedule> findAllByProject(Project project) {
+        return scheduleRepository.findSchedulesByProject(project.getPrjId());
     }
+
+    //      post, schedule join 해당하는 project만 보기
+//    public List<Object[]> findAllByProject(Long prjId) {
+//        return scheduleRepository.findSchedulesByProject(prjId);
+//    }
 
 
 }

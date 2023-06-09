@@ -45,10 +45,9 @@ public class Schedule extends BaseEntity {
     @JsonIgnore
     private Project project;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-//    @JsonIgnore
-    private Post post;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "post_id")
+//    private Post post;
 
     @OneToMany(mappedBy = "schedule")
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
@@ -77,12 +76,12 @@ public class Schedule extends BaseEntity {
         this.project = project;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
-    }
+//    public void setPost(Post post) {
+//        this.post = post;
+//    }
 
-    public void addMapping(ScheduleMemberMapping mapping) {
-        scheduleMemberMappings.add(mapping);
-        mapping.setSchedule(this);
-    }
+//    public void addMapping(ScheduleMemberMapping mapping) {
+//        scheduleMemberMappings.add(mapping);
+//        mapping.setSchedule(this);
+//    }
 }

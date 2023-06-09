@@ -16,118 +16,183 @@ function getFirstDayOfMonth(month, year) {
 	return new Date(year, month - 1, 1).getDay();
 }
 
-const Calendar = ({ prjId }) => {
+const Calendar = () => {
 	const [currentDate, setCurrentDate] = useState(new Date());
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [events, setEvents] = useState({});
 	const [selectedDate, setSelectedDate] = useState();
 
 	const [schedules, setSchedules] = useState([]);
+	const [boards, setBoards] = useState([]);
+	const [posts, setPosts] = useState([]);
 
-	prjId = 1;
+	const [reload, setReload] = useState(true);
 
-	useEffect(() => {
-		const savedEvents = JSON.parse(localStorage.getItem("events")) || {};
-		setEvents(savedEvents);
-	}, []);
-
-	
-	// Axios 통신 - DB 통신할때 사용할것.
 	// useEffect(() => {
-	// 	fetchSchedules(prjId);
-	// 	setEvents(schedules);
+	// 	const savedSchedules = JSON.parse(localStorage.getItem("schedules")) || {};
+	// 	setSchedules(savedSchedules);
 	// }, []);
 
-	// const fetchSchedules = async (prjId) => {
-	// 	try {
-	// 		const response = await axios.get(
-	// 			`http://localhost:8002/api/schedule/list/${prjId}`
-	// 		);
-	// 		const fetchedData = response.data;
-
-	// 		setEvents((prevEvents) => {
-	// 			const newSchedules = { ...prevEvents };
-
-	// 			// API에서 받아온 데이터를 순회하면서 각 일정을 처리.
-	// 			fetchedData.forEach((itemArray) => {
-	// 				itemArray.forEach((item) => {
-	// 					if (item.startDate && item.endDate) {
-	// 						// 각 일정에 대해 startDate와 endDate 사이의 모든 날짜를 가져옴.
-	// 						let start = new Date(item.startDate);
-	// 						const end = new Date(item.endDate);
-	// 						const dateArray = [];
-
-	// 						while (start <= end) {
-	// 							dateArray.push(new Date(start));
-	// 							start.setDate(start.getDate() + 1);
-	// 						}
-
-	// 						// 각 날짜에 대해 이벤트를 추가.
-	// 						dateArray.forEach((date) => {
-	// 							const formattedDate = `${date.getFullYear()}-${String(
-	// 								date.getMonth() + 1
-	// 							).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-	// 							newSchedules[formattedDate] = newSchedules[formattedDate]
-	// 								? [
-	// 										...newSchedules[formattedDate],
-	// 										{
-	// 											title: item.scheduleTitle,
-	// 											startDate: item.startDate,
-	// 											endDate: item.endDate,
-	// 										},
-	// 								  ]
-	// 								: [
-	// 										{
-	// 											title: item.scheduleTitle,
-	// 											startDate: item.startDate,
-	// 											endDate: item.endDate,
-	// 										},
-	// 								  ];
-	// 						});
-	// 					}
-	// 				});
-	// 			});
-
-	// 			// 변경된 이벤트를 localStorage에 저장.
-	// 			localStorage.setItem("schedules", JSON.stringify(newSchedules));
-
-	// 			return newSchedules;
-	// 		});
-	// 	} catch (error) {
-	// 		console.error("An error occurred while fetching the schedules:", error);
-	// 	}
-	// };
-
-	const addEvent = (startDate, event) => {
-		// startDate와 endDate 사이의 모든 날짜 가져오기
-		const start = new Date(startDate);
-		const end = new Date(event.endDate);
-		const dateArray = [];
-
-		while (start <= end) {
-			dateArray.push(new Date(start));
-			start.setDate(start.getDate() + 1);
+	// 보드를 가져오는 함수
+	const fetchBoards = async () => {
+		try {
+			const response = await axios.get(
+				`http://localhost:8002/api/board/list/${sessionStorage.getItem("prjid")}`
+			);
+			setBoards(response.data);
+			setReload(false);
+			return response.data; // boards를 반환
+		} catch (error) {
+			console.error("An error occurred while fetching the boards:", error);
 		}
-
-		setEvents((prevEvents) => {
-			const newEvents = { ...prevEvents };
-
-			// 각 날짜에 이벤트 추가
-			dateArray.forEach((date) => {
-				const formattedDate = `${date.getFullYear()}-${String(
-					date.getMonth() + 1
-				).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-				newEvents[formattedDate] = newEvents[formattedDate]
-					? [...newEvents[formattedDate], event]
-					: [event];
-			});
-
-			// 변경된 이벤트를 localStorage에 저장
-			localStorage.setItem("events", JSON.stringify(newEvents));
-
-			return newEvents;
-		});
 	};
+
+	// 각 보드에서 포스트를 가져오는 함수
+	const fetchPosts = async (brdid) => {
+		try {
+			const response = await axios.post(`http://localhost:8002/api/post/list`, {
+				page: 1,
+				size: 10,
+				boardId: brdid,
+			});
+			const fetchedPosts = response.data.dtoList;
+
+			fetchedPosts.forEach((post) => {
+				if (post.meeting_date) {
+					let meetingDate = new Date(post.meeting_date);
+
+					const formattedDate = `${meetingDate.getFullYear()}-${String(
+						meetingDate.getMonth() + 1
+					).padStart(2, "0")}-${String(meetingDate.getDate()).padStart(2, "0")}`;
+
+					setPosts((prevPosts) => {
+						const newSchedules = { ...prevPosts };
+
+						if (!newSchedules[formattedDate]) {
+							newSchedules[formattedDate] = [];
+						}
+						if (
+							!newSchedules[formattedDate].find(
+								(schedule) => schedule.post_id === post.post_id
+							)
+						) {
+							newSchedules[formattedDate].push({
+								post_id: post.post_id,
+								post_name: post.post_name,
+								post_meeting_date: post.meeting_date,
+								post_content: post.post_content,
+							});
+						}
+						
+						return newSchedules;
+					});
+					
+				}
+				
+
+			});
+		} catch (error) {
+			console.error("An error occurred while fetching the posts:", error);
+		}
+	};
+	// 스케줄을 가져오는 함수
+	const fetchSchedules = async () => {
+		try {
+			const response = await axios.get(
+				`http://localhost:8002/api/schedule/list/${sessionStorage.getItem("prjid")}`
+			);
+			const fetchedData = response.data;
+
+			setSchedules((prevEvents) => {
+				const newSchedules = { ...prevEvents };
+
+				fetchedData.forEach((item) => {
+					if (item.startDate && item.endDate) {
+						let start = new Date(item.startDate);
+						const end = new Date(item.endDate);
+						const dateArray = [];
+
+						while (start <= end) {
+							dateArray.push(new Date(start));
+							start.setDate(start.getDate() + 1);
+						}
+
+						dateArray.forEach((date) => {
+							const formattedDate = `${date.getFullYear()}-${String(
+								date.getMonth() + 1
+							).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+							if (!newSchedules[formattedDate]) {
+								newSchedules[formattedDate] = [];
+							}
+							if (
+								!newSchedules[formattedDate].find(
+									(schedule) => schedule.schedule_id === item.scheduleId
+								)
+							) {
+								newSchedules[formattedDate].push({
+									schedule_id: item.scheduleId,
+									schedule_description: item.scheduleDescription,
+									schedule_title: item.scheduleTitle,
+									start_date: item.startDate,
+									end_date: item.endDate,
+								});
+							}
+						});
+					}
+				});
+				// localStorage.setItem("schedules", JSON.stringify(newSchedules));
+				return newSchedules;
+			});
+		} catch (error) {
+			console.error("An error occurred while fetching the schedules:", error);
+		}
+	};
+
+	// Axios 통신 - DB 통신할때 사용할것.
+	useEffect(() => {
+    const fetchData = async () => {
+        const fetchedBoards = await fetchBoards();
+        fetchedBoards.forEach((board) => {
+            fetchPosts(board.brd_id);
+        });
+        console.log(posts);
+        fetchSchedules();
+    };
+
+    fetchData();
+    console.log(reload);
+}, [reload]);
+
+	// const addEvent = (startDate, event) => {
+	// 	// startDate와 endDate 사이의 모든 날짜 가져오기
+	// 	const start = new Date(startDate);
+	// 	const end = new Date(event.endDate);
+	// 	const dateArray = [];
+
+	// 	while (start <= end) {
+	// 		dateArray.push(new Date(start));
+	// 		start.setDate(start.getDate() + 1);
+	// 	}
+
+	// 	setEvents((prevEvents) => {
+	// 		const newEvents = { ...prevEvents };
+
+	// 		// 각 날짜에 이벤트 추가
+	// 		dateArray.forEach((date) => {
+	// 			const formattedDate = `${date.getFullYear()}-${String(
+	// 				date.getMonth() + 1
+	// 			).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+	// 			newEvents[formattedDate] = newEvents[formattedDate]
+	// 				? [...newEvents[formattedDate], event]
+	// 				: [event];
+	// 		});
+
+	// 		// 변경된 이벤트를 localStorage에 저장
+	// 		localStorage.setItem("events", JSON.stringify(newEvents));
+
+	// 		return newEvents;
+	// 	});
+	// };
 
 	const daysInMonth = getDaysInMonth(
 		currentDate.getMonth() + 1,
@@ -196,6 +261,7 @@ const Calendar = ({ prjId }) => {
 
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
+		setReload(true);
 	};
 
 	return (
@@ -230,7 +296,7 @@ const Calendar = ({ prjId }) => {
 								data-is-current-month={isCurrentMonth}
 							>
 								{date}
-								{isCurrentMonth &&
+								{/* {isCurrentMonth &&
 									events[formattedDate]?.map((event, idx) => (
 										<div
 											className="Event"
@@ -243,8 +309,8 @@ const Calendar = ({ prjId }) => {
 										>
 											<Badge pill>{event.title}</Badge>
 										</div>
-									))}
-								{/* {isCurrentMonth &&
+									))} */}
+								{isCurrentMonth &&
 									schedules[formattedDate]?.map((schedule, idx) => (
 										<div
 											className="schedules"
@@ -255,9 +321,24 @@ const Calendar = ({ prjId }) => {
 												setIsModalOpen(true);
 											}}
 										>
-											<Badge pill>{schedule.scheduleTitle}</Badge>
+											<Badge pill>{schedule.schedule_title}</Badge>
 										</div>
-									))} */}
+									))}
+
+								{isCurrentMonth &&
+									posts[formattedDate]?.map((post, idx) => (
+										<div
+											className="schedules"
+											key={idx}
+											onClick={(e) => {
+												e.stopPropagation();
+												setSelectedDate(formattedDate);
+												setIsModalOpen(true);
+											}}
+										>
+											<Badge pill bg="danger">{post.post_name}</Badge>
+										</div>
+									))}
 							</div>
 						);
 					})}
@@ -266,8 +347,9 @@ const Calendar = ({ prjId }) => {
 			{isModalOpen && (
 				<EventModal
 					onClose={handleCloseModal}
-					onAddEvent={addEvent}
+					//  onAddEvent={isUpdate}
 					selectedDate={selectedDate}
+					postList={posts}
 				/>
 			)}
 		</div>

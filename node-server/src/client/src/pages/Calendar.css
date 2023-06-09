@@ -34,7 +34,7 @@
     background-color: #ccb;
 }
 
-.Event .badge {
+.schedules .badge {
     max-width: 100px; /* 최대 너비 설정. 원하는 값으로 변경 가능 */
     white-space: nowrap; /* 줄바꿈 없애기 */
     overflow: hidden; /* 초과하는 내용 숨기기 */

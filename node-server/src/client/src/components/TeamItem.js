@@ -5,8 +5,7 @@ import { Route, Routes } from "react-router-dom/dist";
 import styled from "styled-components";
 import ProjectList from "../pages/ProjectList";
 
-const TeamItem = ({ team = [] }) => {
-  const StyledCard = styled(Card)`
+const StyledCard = styled(Card)`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -16,8 +15,14 @@ const TeamItem = ({ team = [] }) => {
     width: 130px; // 원하는 너비 지정
     height: 180px; // 원하는 높이 지정
     border-radius: 10px; // 카드 모서리 둥글게 처리
+
+    &:hover {
+      transform: scale(1.05);
+      transition: all 0.2s ease-in-out;
+    }
   `;
 
+const TeamItem = ({ team = [] }) => {
   return (
     <>
       <Link
