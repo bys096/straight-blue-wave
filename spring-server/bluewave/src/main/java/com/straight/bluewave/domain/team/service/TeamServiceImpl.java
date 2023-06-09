@@ -79,10 +79,28 @@ public class TeamServiceImpl implements TeamService{
     //
     @Override
     public TeamDTO read(Long teamId) {
-        Optional<Team> result = springDataTeamRepository.findById(teamId);
+        //Optional<Team> result = springDataTeamRepository.findById(teamId);
 
         // 바꿔야됨
-        return result.isPresent() ? entityToDto(result.get()) : null;
+        //return result.isPresent() ? entityToDto(result.get()) : null;
+
+        Team team = springDataTeamRepository.findById(teamId).orElseThrow(
+                () -> new IllegalArgumentException("해당 팀이 존재하지 않습니다.")
+        );
+
+        Member member = memberRepository.findById(team.getMember().getMemberId()).get();
+
+        TeamDTO teamDTO = TeamDTO.builder()
+                .teamId(team.getTeamId())
+                .teamName(team.getTeamName())
+                .teamDesc(team.getTeamDesc())
+                .memberId(member.getMemberId())
+                .memberName(member.getMemberName())
+                .createdAt(team.getCreatedAt())
+                .updatedAt(team.getUpdatedAt())
+                .build();
+
+        return teamDTO;
     }
 
     @Override
