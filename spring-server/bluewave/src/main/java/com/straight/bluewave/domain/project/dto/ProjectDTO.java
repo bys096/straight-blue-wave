@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.sql.Date;
+import java.util.UUID;
 
 @Builder
 @NoArgsConstructor
@@ -24,4 +26,7 @@ public class ProjectDTO {
     private String prj_thumbnail;
 
     private Long team_id;
+
+    //socket.io Room
+    private UUID prjRoom;
 }
