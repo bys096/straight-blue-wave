@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
+import Notification from "./notification";
+
 const PostList = styled.div`
   display : flex;
   justify-content : between;
@@ -48,6 +50,7 @@ const PostPage = () => {
 
   return (
     <div>
+      <Notification></Notification>
       <div className="main">
         <Header />
         <div className="article">

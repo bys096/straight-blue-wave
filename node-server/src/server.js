@@ -3,14 +3,12 @@ import SocketIO from "socket.io";
 import express from "express";
 import cors from "cors"; // 추가
 
-
-
 const path = require('path');
 const app = express();
 
 app.use(express.static(path.join(__dirname, "/client/build")));
 
- //app.use(cors({
+//app.use(cors({
 // origin: 'http://192.168.0.79:8002'
 // }));
 
@@ -53,6 +51,7 @@ let roomObjArr = [
 const MAXIMUM = 5;
 
 wsServer.on("connection", (socket) => {
+
   let myRoomName = null;
   let myUserId = null;
   // let myNickname = null;
@@ -118,7 +117,8 @@ wsServer.on("connection", (socket) => {
     socket.to(remoteSocketId).emit("ice", ice, socket.id);
   });
 
-  
+
+
 
 
   socket.on("disconnecting", () => {
@@ -136,18 +136,55 @@ wsServer.on("connection", (socket) => {
 
 
 
-  
-  
+
+
   socket.on("sendChat", (chat) => {
     // console.log(`roomName: ${roomName}, msg: ${msg}, sid: ${socket.id}`);
     // console.log(`myroomName: ${myRoomName}, msg: ${msg}`);
-    
+
 
     socket.to(chat.roomName).emit("newMessage", chat);
-    
+
   });
 
 });
 
+
 const handleListen = () => console.log(`Listening on http://localhost:4000`);
 httpServer.listen(4000, handleListen);
+
+
+
+
+
+// notification.js
+
+wsServer.on('connection', (socket) => {
+  console.log('notification connected');
+
+  let myPrjName = null;
+  let myUserId = null;
+
+
+socket.on("join_prj", (roomName) => {
+  socket.join(roomName);
+  socket.to(roomName).emit("join_accept");
+});
+
+
+  // Handle the "addEvent" event
+  socket.on("addEvent", (eventData) => {
+    // Broadcast the event data to other connected users
+    socket.broadcast.emit("newEvent", eventData);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('notification disconnected');
+
+    socket.rooms.forEach((room) =>
+      socket.to(room).emit("left", user)
+    );
+  });
+});
+
+

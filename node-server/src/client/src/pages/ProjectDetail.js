@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
+import Notification from "./notification";
+
 const Main = styled.div`
 	height: 100%;
 	width: 100%;
@@ -145,10 +147,10 @@ const ProjectDetail = (prjId) => {
 
 	return (
 		<Main>
+			<Notification></Notification>
 			<Header />
 			<Article>
 				<Sidebar />
-
 				<Content>
 					<div>
 						<Button variant="primary" onClick={() => navigate(-1)}>

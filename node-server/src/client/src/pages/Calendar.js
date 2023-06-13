@@ -4,6 +4,8 @@ import EventModal from "./EventModal";
 import { Badge } from "react-bootstrap";
 import axios from "axios";
 
+import Notification from "./notification";
+
 const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
 
 // 해당 월의 총 일수
@@ -194,6 +196,7 @@ const Calendar = ({}) => {
 
 	return (
 		<div className="CalendarWrapper">
+			<Notification></Notification>
 			<div className="CalendarHeader">
 				<button onClick={handlePrevMonth}>이전</button>
 				<h2>

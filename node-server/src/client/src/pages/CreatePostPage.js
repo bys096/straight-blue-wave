@@ -5,6 +5,8 @@ import Sidebar from "../components/views/Sidebar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+import Notification from "./notification";
+
 const CreatePostPage = () => {
 	const navigate = useNavigate();
 	const [post, setPost] = useState({
@@ -47,6 +49,7 @@ const CreatePostPage = () => {
 
 	return (
 		<div>
+			<Notification></Notification>
 			<Header />
 			<div className="main">
 				<div className="article">

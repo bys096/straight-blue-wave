@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 
+import Notification from "./notification";
+
 const GptPage = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -57,6 +59,7 @@ const GptPage = () => {
 
   return (
     <div>
+      <Notification></Notification>
       <div>
         {messages.map((message, index) => (
           <div key={index}>
