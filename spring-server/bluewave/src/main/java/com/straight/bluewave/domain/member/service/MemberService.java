@@ -1,5 +1,7 @@
 package com.straight.bluewave.domain.member.service;
 
+import com.straight.bluewave.domain.mapping.entity.FriendMapping;
+import com.straight.bluewave.domain.member.dto.FriendDTO;
 import com.straight.bluewave.domain.member.dto.MemberDTO;
 import com.straight.bluewave.domain.member.entity.Member;
 
@@ -25,6 +27,15 @@ public interface MemberService {
                 .member_nick(entity.getMemberNick())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .build();
+        return dto;
+    }
+
+    default FriendDTO entityToDTO(FriendMapping entity) {
+        FriendDTO dto = FriendDTO.builder()
+                .frId(entity.getFrId())
+                .friendName(entity.getFriendName())
+                .friendId(entity.getFriend().getMemberId())
                 .build();
         return dto;
     }

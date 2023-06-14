@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SpringDataFriendRepository extends JpaRepository<FriendMapping, Long> {
 
@@ -23,4 +24,7 @@ public interface SpringDataFriendRepository extends JpaRepository<FriendMapping,
     @Query("delete from FriendMapping f where f.member.memberId = :memId and f.friend.memberId = :friendId")
     void removeFriId(@Param("memId")Long friendId, @Param("friendId")Long memId);
 
+    Optional<FriendMapping> findByMember(Member member);
+
+    Optional<FriendMapping> findByFriend(Member member);
 }

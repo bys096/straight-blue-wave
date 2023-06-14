@@ -49,7 +49,7 @@ public class Schedule extends BaseEntity {
 //    @JoinColumn(name = "post_id")
 //    private Post post;
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
     public void changeChTitle(String scheduleTitle){

@@ -3,6 +3,8 @@ package com.straight.bluewave.domain.team.service;
 import com.straight.bluewave.application.dto.PageResultDTO;
 import com.straight.bluewave.domain.mapping.repository.SpringDataTeamMemberRepository;
 import com.straight.bluewave.domain.member.repository.MemberRepository;
+import com.straight.bluewave.domain.project.entity.Project;
+import com.straight.bluewave.domain.project.repository.ProjectRepository;
 import com.straight.bluewave.domain.team.dto.*;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.member.entity.Member;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -28,6 +31,8 @@ public class TeamServiceImpl implements TeamService{
 
     private final SpringDataTeamMemberRepository teamMemberRepository;
     private final SpringDataTeamRepository springDataTeamRepository;
+
+    private final ProjectRepository projectRepository;
 
 
     @Override
@@ -104,6 +109,7 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
+    @Transactional
     public void modify(TeamDTO dto) {
 
         Long id = dto.getTeamId();
@@ -117,7 +123,16 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
+    @Transactional
     public void remove(Long tm_id) {
+        Team team = springDataTeamRepository.findById(tm_id).get();
+
+        Optional<Project> result = projectRepository.findByTeam(team);
+
+        if(result.isPresent()) {
+            Project project = projectRepository.findByTeam(team).get();
+            project.setTeam(null);
+        }
 
         springDataTeamRepository.deleteById(tm_id);
     }
