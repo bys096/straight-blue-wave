@@ -53,6 +53,8 @@ const ProjectList = () => {
   const [showModal, setShowModal] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userData, setUserData] = useState(null);
+  const [showButton, setShowButton] = useState(false);
+  const [friendList, setFriendList] = useState([]);
 
   const navigate = useNavigate();
 
@@ -69,6 +71,21 @@ const ProjectList = () => {
           .then(() => {
             alert("회원이 정상적으로 가입되었습니다");
           });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const addUserFriend = async (id) => {
+    await axios
+      .post(
+        `http://localhost:8002/api/team/inviteTeam?memberId=${id}&teamId=${sessionStorage.getItem(
+          "tmid"
+        )}`
+      )
+      .then((res) => {
+        alert("회원이 정상적으로 가입되었습니다");
       })
       .catch((err) => {
         console.log(err);
@@ -129,8 +146,44 @@ const ProjectList = () => {
     }
   };
 
+  const whoIsAdmin = async () => {
+    await axios
+      .get(
+        `http://localhost:8002/api/team/readTeam/${sessionStorage.getItem(
+          "tmid"
+        )}`
+      )
+      .then((res) => {
+        if (
+          parseInt(res.data.memberId) ===
+          parseInt(sessionStorage.getItem("memid"))
+        ) {
+          setShowButton(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const fetchFriendList = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8002/api/member/friendList/${sessionStorage.getItem(
+          "memid"
+        )}`
+      );
+      setFriendList(response.data);
+    } catch (error) {
+      console.error("Error fetching friend list:", error);
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
+    setShowButton(false);
+    whoIsAdmin();
+    fetchFriendList();
   }, [sessionStorage.getItem("tmid")]);
 
   const onProjectCreated = () => {
@@ -146,16 +199,18 @@ const ProjectList = () => {
           <div className="section">
             <Container>
               <Title>프로젝트 목록</Title>
-              <Button
-                variant="primary"
-                onClick={() => setShowModal(true)}
-                style={{
-                  width: "150px",
-                  height: "50px",
-                }}
-              >
-                회원 추가
-              </Button>
+              {showButton && (
+                <Button
+                  variant="primary"
+                  onClick={() => setShowModal(true)}
+                  style={{
+                    width: "150px",
+                    height: "50px",
+                  }}
+                >
+                  회원 추가
+                </Button>
+              )}
               <Button
                 variant="primary"
                 onClick={() => navigate("/memlist")}
@@ -201,6 +256,23 @@ const ProjectList = () => {
           ) : (
             <p>No user found</p>
           )}
+          <hr />
+          <div>
+            <h4>친구 목록</h4>
+            <ul>
+              {friendList.map((friend) => (
+                <li key={friend.friendId}>
+                  {friend.friendName}{" "}
+                  <Button
+                    variant="primary"
+                    onClick={() => addUser(friend.frId)}
+                  >
+                    회원추가
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </Modal.Body>
       </Modal>
     </>

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class ProjectServiceImp implements ProjectService{
     public Project createProject(ProjectDTO dto){
         Project project = Project.builder()
                 .prjName(dto.getPrj_name())
+                .prjRoom(UUID.randomUUID())
                 .build();
 
         Team team = new Team();
@@ -73,5 +75,6 @@ public class ProjectServiceImp implements ProjectService{
     public List<Project> findAllByTeam(Team team) {
         return projectRepository.findProjectsByTeam(team.getTeamId());
     }
+
 
 }

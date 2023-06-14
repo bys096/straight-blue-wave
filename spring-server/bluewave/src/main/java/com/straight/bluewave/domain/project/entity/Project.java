@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -61,6 +62,10 @@ public class Project extends BaseEntity {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedule;
+
+    //socket.io Room
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID prjRoom;
 
     public void changePrjName(String prjName){
         this.prjName = prjName;
