@@ -78,7 +78,7 @@ public class Post extends BaseEntity {
 //    private List<Schedule> schedule;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
     public Post(Board board, PostDTO dto) {

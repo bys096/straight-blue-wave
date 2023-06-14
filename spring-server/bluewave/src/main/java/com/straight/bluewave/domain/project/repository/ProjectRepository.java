@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 public interface ProjectRepository extends JpaRepository<Project, Long> {
@@ -24,4 +25,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("SELECT p FROM Project p WHERE p.team.teamId = :teamId")
     List<Project> findProjectsByTeam(@Param("teamId") Long teamId);
 
+    Optional<Project> findByTeam(Team team);
 }

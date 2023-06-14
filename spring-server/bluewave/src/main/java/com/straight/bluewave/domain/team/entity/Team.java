@@ -7,10 +7,7 @@ import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.mapping.entity.TeamProjectMapping;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.project.entity.Project;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class Team extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,10 +37,10 @@ public class Team extends BaseEntity {
     @JsonIgnore
     private Member member;                  // 관리자
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
     private List<TeamMemberMapping> members;
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
     private List<TeamProjectMapping> projects;
 
     public void changeTeamName(String teamName){

@@ -1,5 +1,6 @@
 package com.straight.bluewave.domain.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.mapping.entity.FriendMapping;
 import com.straight.bluewave.domain.mapping.entity.ProjectMemberMapping;
@@ -50,19 +51,19 @@ public class Member extends BaseEntity {
         if (dto.getMember_nick() != null) this.memberNick = dto.getMember_nick();
     }
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)     //참조되는 쪽에서 mappedBy
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)     //참조되는 쪽에서 mappedBy
     private List<TeamMemberMapping> teams;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
     private List<ProjectMemberMapping> projects;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
     private List<FriendMapping> friends1;
 
-    @OneToMany(mappedBy = "friend", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "friend", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
     private List<FriendMapping> friends2;
 
     public void setMemberId(Long memberId) {

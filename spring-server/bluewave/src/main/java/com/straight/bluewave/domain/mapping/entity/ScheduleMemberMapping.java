@@ -3,9 +3,7 @@ package com.straight.bluewave.domain.mapping.entity;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.post.entity.Post;
 import com.straight.bluewave.domain.schedule.entity.Schedule;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +12,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class ScheduleMemberMapping {
 
     @Id
