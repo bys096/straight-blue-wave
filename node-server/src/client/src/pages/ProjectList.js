@@ -55,7 +55,6 @@ const ProjectList = () => {
   const [userData, setUserData] = useState(null);
   const [showButton, setShowButton] = useState(false);
   const [friendList, setFriendList] = useState([]);
-
   const navigate = useNavigate();
 
   const addUser = async (email) => {
