@@ -125,15 +125,8 @@ public class TeamServiceImpl implements TeamService{
     @Override
     @Transactional
     public void remove(Long tm_id) {
-        Team team = springDataTeamRepository.findById(tm_id).get();
 
-        Optional<Project> result = projectRepository.findByTeam(team);
-
-        if(result.isPresent()) {
-            Project project = projectRepository.findByTeam(team).get();
-            project.setTeam(null);
-        }
-
+        projectRepository.deleteProjectByTeamTeamId(tm_id);
         springDataTeamRepository.deleteById(tm_id);
     }
 

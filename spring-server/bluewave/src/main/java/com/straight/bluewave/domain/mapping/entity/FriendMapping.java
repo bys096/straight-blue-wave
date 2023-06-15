@@ -14,7 +14,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
 public class FriendMapping extends BaseEntity {
 
     @Id

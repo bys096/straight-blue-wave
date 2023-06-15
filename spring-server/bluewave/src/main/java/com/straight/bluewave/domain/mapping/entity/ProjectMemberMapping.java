@@ -12,7 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
 public class ProjectMemberMapping extends BaseEntity {
 
     @Id

@@ -36,12 +36,6 @@ public class MemberServiceImp implements MemberService{
 
     private final SpringDataFriendRepository friendRepository;
 
-    private final SpringDataTeamMemberRepository teamMemberRepository;
-
-    private final SpringDataProjectMemberMapping projectMemberRepository;
-
-    private final SpringDataScheduleMemberRepository scheduleMemberRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -71,50 +65,11 @@ public class MemberServiceImp implements MemberService{
 
     @Transactional
     public void delete() {
-        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId()).get();
 
-        Optional<Team> result1 = teamRepository.findByMember(member);
-
-        if(result1.isPresent()) {
-            Team team = teamRepository.findByMember(member).get();
-            team.setMember(null);
-        }
-
-        /*Optional<TeamMemberMapping> result2 = teamMemberRepository.findByMember(member);
-
-        if(result2.isPresent()) {
-            TeamMemberMapping teamMemberMapping = teamMemberRepository.findByMember(member).get();
-            teamMemberMapping.setMember(null);
-        }
-
-        Optional<FriendMapping> result3 = friendRepository.findByMember(member);
-
-        if(result3.isPresent()) {
-            FriendMapping friendMapping1 = friendRepository.findByMember(member).get();
-            friendMapping1.setMember(null);
-        }
-
-        Optional<FriendMapping> result4 = friendRepository.findByFriend(member);
-
-        if(result4.isPresent()) {
-            FriendMapping friendMapping2 = friendRepository.findByFriend(member).get();
-            friendMapping2.setFriend(null);
-        }
-
-        Optional<ProjectMemberMapping> result5 = projectMemberRepository.findByMember(member);
-
-        if(result5.isPresent()) {
-            ProjectMemberMapping projectMemberMapping = projectMemberRepository.findByMember(member).get();
-            projectMemberMapping.setMember(null);
-        }
-
-        Optional<ScheduleMemberMapping> result6 = scheduleMemberRepository.findByMember(member);
-        if(result6.isPresent()) {
-            ScheduleMemberMapping scheduleMemberMapping = scheduleMemberRepository.findByMember(member).get();
-            scheduleMemberMapping.setMember(null);
-        }*/
+        teamRepository.deleteTeamByMemberMemberId(SecurityUtil.getCurrentMemberId());
 
         memberRepository.deleteById(SecurityUtil.getCurrentMemberId());
+
     }
 
 
