@@ -22,8 +22,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@SQLDelete(sql = "UPDATE schedule SET deleted_at = current_timestamp WHERE schedule_id = ?")
-@Where(clause = "deleted_at is null")
+//@SQLDelete(sql = "UPDATE schedule SET deleted_at = current_timestamp WHERE schedule_id = ?")
+//@Where(clause = "deleted_at is null")
 public class Schedule extends BaseEntity {
 
     @Id
@@ -45,8 +45,8 @@ public class Schedule extends BaseEntity {
     @Column(name = "meeting_format")
     private String meetingFormat;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    /*@Column(name = "deleted_at")
+    private LocalDateTime deletedAt;*/
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prj_id")
@@ -57,7 +57,7 @@ public class Schedule extends BaseEntity {
 //    @JoinColumn(name = "post_id")
 //    private Post post;
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
     public void changeChTitle(String scheduleTitle){

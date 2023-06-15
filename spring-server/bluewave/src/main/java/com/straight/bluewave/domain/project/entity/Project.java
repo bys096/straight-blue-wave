@@ -25,8 +25,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@SQLDelete(sql = "UPDATE project SET deleted_at = current_timestamp WHERE prj_id = ?")
-@Where(clause = "deleted_at is null")
+//@SQLDelete(sql = "UPDATE project SET deleted_at = current_timestamp WHERE prj_id = ?")
+//@Where(clause = "deleted_at is null")
 public class Project extends BaseEntity {
 
     @Id
@@ -54,26 +54,26 @@ public class Project extends BaseEntity {
         private String prjThumbnail;
     */
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     @JsonIgnore
     private Team team;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boards;
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamProjectMapping> teamProjectMappings;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedule;
 
     //socket.io Room
     @Column(columnDefinition = "BINARY(16)")
     private UUID prjRoom;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    /*@Column(name = "deleted_at")
+    private LocalDateTime deletedAt;*/
 
     public void changePrjName(String prjName){
         this.prjName = prjName;

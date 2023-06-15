@@ -126,7 +126,6 @@ public class TeamServiceImpl implements TeamService{
     @Transactional
     public void remove(Long tm_id) {
 
-        projectRepository.deleteProjectByTeamTeamId(tm_id);
         springDataTeamRepository.deleteById(tm_id);
     }
 
