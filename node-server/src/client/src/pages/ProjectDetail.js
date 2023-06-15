@@ -9,6 +9,8 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { boardConnect } from "../actions/board";
 
+import Notification from "./notification";
+
 const Main = styled.div`
   height: 100%;
   width: 100%;
@@ -191,8 +193,10 @@ const ProjectDetail = () => {
       });
   };
 
+
   return (
     <Main>
+    <Notification></Notification>
       <Header />
       <Article>
         <Sidebar />

@@ -4,6 +4,9 @@ import { Accordion, Badge, Button, Form, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+import Notification from "./notification";
+import io from "socket.io-client";
+
 const EventModal = ({ onClose, /*onAddEvent*/ selectedDate, scheduleList, postList }) => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
@@ -37,8 +40,25 @@ const EventModal = ({ onClose, /*onAddEvent*/ selectedDate, scheduleList, postLi
 		}
 	};
 
+
+	const socket = io();
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
+		// notification
+		// Collect the event data
+		const eventData = {
+			prjRoom: sessionStorage.getItem('prjroom'), 
+			title,
+			description,
+			startDate,
+			endDate
+		  };
+	  
+		// Emit the event data through the socket
+		socket.emit("eventData", eventData);
+
 		createSchecule();
 		onClose();
 	};
