@@ -157,34 +157,52 @@ httpServer.listen(4000, handleListen);
 
 
 
-// notification.js
+// notification
 
 wsServer.on('connection', (socket) => {
-  console.log('notification connected');
+  // console.log('notification connected');
 
-  let myPrjName = null;
-  let myUserId = null;
+socket.on("join_prj", (prjRoom) => {
+  let targetRoomObj = roomObjArr.find((roomObj) => roomObj.roomName === prjRoom);
 
+  if (!targetRoomObj) {
+    targetRoomObj = {
+      roomName: prjRoom,
+      currentNum: 0,
+      users: [],
+    };
+    roomObjArr.push(targetRoomObj);
+  }
 
-socket.on("join_prj", (roomName) => {
-  socket.join(roomName);
-  socket.to(roomName).emit("join_accept");
+  targetRoomObj.users.push({
+    socketId: socket.id,
+  });
+  targetRoomObj.currentNum++;
+
+  socket.join(prjRoom);
+  socket.to(prjRoom).emit("join_accept");
+
+  // console.log(`Socket ${socket.id} joined room: ${prjRoom}`);
 });
 
 
-  // Handle the "addEvent" event
-  socket.on("addEvent", (eventData) => {
-    // Broadcast the event data to other connected users
-    socket.broadcast.emit("newEvent", eventData);
-  });
-
   socket.on('disconnect', () => {
-    console.log('notification disconnected');
-
+    // console.log('notification disconnected');
+    
     socket.rooms.forEach((room) =>
       socket.to(room).emit("left", user)
     );
   });
+
+
+
+  socket.on("eventData", (eventData) => {
+    // console.log("Received event data:", eventData);
+
+    socket.to(eventData.prjRoom).emit("eventData", eventData);
+  });
+  
+
 });
 
 
