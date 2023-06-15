@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +60,7 @@ public class PostServiceImp implements PostService{
     }
 
     @Override
+    @Transactional
     public Long modify(Long post_id, PostDTO dto) {
         Post post = springDataPostRepository.findById(post_id).orElseThrow(
                 () -> new IllegalArgumentException("해당 id가 존재하지 않습니다.")
@@ -70,6 +72,7 @@ public class PostServiceImp implements PostService{
 
 
     @Override
+    @Transactional
     public void remove(Long post_id) {
         springDataPostRepository.deleteById(post_id);
     }

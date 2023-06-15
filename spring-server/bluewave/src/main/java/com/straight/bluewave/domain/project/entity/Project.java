@@ -12,8 +12,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +25,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@SQLDelete(sql = "UPDATE project SET deleted_at = current_timestamp WHERE prj_id = ?")
+@Where(clause = "deleted_at is null")
 public class Project extends BaseEntity {
 
     @Id
@@ -54,18 +59,21 @@ public class Project extends BaseEntity {
     @JsonIgnore
     private Team team;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Board> boards;
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<TeamProjectMapping> teamProjectMappings;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Schedule> schedule;
 
     //socket.io Room
     @Column(columnDefinition = "BINARY(16)")
     private UUID prjRoom;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     public void changePrjName(String prjName){
         this.prjName = prjName;

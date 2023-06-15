@@ -27,7 +27,13 @@ const DefaultBody = () => {
     display: "block",
   };
   return (
-    <>
+    <div
+      style={{
+        backgroundColor: "white",
+        overflowX: "hidden",
+        overflowY: "hidden",
+      }}
+    >
       <div style={{ margin: "100px 0 20px", textAlign: "center" }}>
         <h1 style={{ color: "deepskyblue" }}>프로젝트 관리를</h1>
         <h1 style={{ color: "dodgerblue", margin: "50px 0 50px" }}>
@@ -51,7 +57,7 @@ const DefaultBody = () => {
           <img src={pig} alt="돼지" style={imgStyle} />
         </div>
       </Slider>
-    </>
+    </div>
   );
 };
 

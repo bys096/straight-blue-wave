@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { projectConnect } from "../actions/project";
 
 const StyledCard = styled(Card)`
+
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -31,7 +32,9 @@ const ProjectItem = ({ project = [] }) => {
 			<Link
 				to={`/project/${project.prjId}`}
 				className="text-decoration-none"
-				onClick={() => {sessionStorage.setItem("prjid", project.prjId)
+				onClick={() => {
+        sessionStorage.setItem("prjid", project.prjId);
+        sessionStorage.setItem("prjroom", project.prjRoom);
 				dispatch(projectConnect(project));}}
 			>
 				<StyledCard>

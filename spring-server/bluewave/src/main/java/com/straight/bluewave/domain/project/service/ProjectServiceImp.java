@@ -8,6 +8,7 @@ import com.straight.bluewave.domain.team.entity.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,7 @@ public class ProjectServiceImp implements ProjectService{
     }
 
     @Override
+    @Transactional
     public Long modify(Long prj_id, ProjectDTO dto) {
         Optional<Project> result = projectRepository.findById(prj_id);
 
@@ -53,6 +55,7 @@ public class ProjectServiceImp implements ProjectService{
     }
 
     @Override
+    @Transactional
     public void remove(Long prj_id) {
         projectRepository.deleteById(prj_id);
     }

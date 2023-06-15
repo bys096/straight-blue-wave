@@ -1,25 +1,38 @@
 package com.straight.bluewave.domain.member.service;
 
 import com.straight.bluewave.domain.mapping.entity.FriendMapping;
+import com.straight.bluewave.domain.mapping.entity.ProjectMemberMapping;
+import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
+import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.mapping.repository.SpringDataFriendRepository;
+import com.straight.bluewave.domain.mapping.repository.SpringDataProjectMemberMapping;
+import com.straight.bluewave.domain.mapping.repository.SpringDataScheduleMemberRepository;
+import com.straight.bluewave.domain.mapping.repository.SpringDataTeamMemberRepository;
+import com.straight.bluewave.domain.member.dto.FriendDTO;
 import com.straight.bluewave.domain.member.dto.MemberDTO;
 import com.straight.bluewave.domain.member.dto.MemberResponseDTO;
 import com.straight.bluewave.domain.member.dto.MemberUpdateDTO;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.member.repository.MemberRepository;
+import com.straight.bluewave.domain.team.entity.Team;
+import com.straight.bluewave.domain.team.repository.SpringDataTeamRepository;
 import com.straight.bluewave.global.util.SecurityUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImp implements MemberService{
 
     private final MemberRepository memberRepository;
+
+    private final SpringDataTeamRepository teamRepository;
 
     private final SpringDataFriendRepository friendRepository;
 
@@ -52,7 +65,11 @@ public class MemberServiceImp implements MemberService{
 
     @Transactional
     public void delete() {
+
+        teamRepository.deleteTeamByMemberMemberId(SecurityUtil.getCurrentMemberId());
+
         memberRepository.deleteById(SecurityUtil.getCurrentMemberId());
+
     }
 
 
@@ -84,8 +101,16 @@ public class MemberServiceImp implements MemberService{
         friendRepository.save(fri2);
     }
 
-    public List<FriendMapping> getFriendList(Member member) {
-        return friendRepository.findAllFriend(member.getMemberId());
+    public List<FriendDTO> getFriendList(Member member) {
+        List<FriendMapping> friendMappings = friendRepository.findAllFriend(member.getMemberId());
+
+        List<FriendDTO> friendDTOS = new ArrayList<>();
+        for(FriendMapping friendMapping : friendMappings) {
+            FriendDTO friendDTO = entityToDTO(friendMapping);
+            friendDTOS.add(friendDTO);
+        }
+
+        return friendDTOS;
     }
 
     @Transactional

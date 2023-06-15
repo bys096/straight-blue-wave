@@ -1,6 +1,7 @@
 package com.straight.bluewave.application.controller;
 
 import com.straight.bluewave.domain.mapping.entity.FriendMapping;
+import com.straight.bluewave.domain.member.dto.FriendDTO;
 import com.straight.bluewave.domain.member.dto.MemberDTO;
 import com.straight.bluewave.domain.member.dto.MemberResponseDTO;
 import com.straight.bluewave.domain.member.dto.MemberUpdateDTO;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/member")
@@ -79,11 +81,11 @@ public class MemberController {
     }
 
     @GetMapping("/friendList/{memId}")      //친구 리스트
-    public ResponseEntity<List<FriendMapping>> friends(@PathVariable Long memId) {
+    public ResponseEntity<List<FriendDTO>> friends(@PathVariable Long memId) {
         Member member = new Member();
         member.setMemberId(memId);
-        List<FriendMapping> friend = memberServiceImp.getFriendList(member);
-        return new ResponseEntity<>(friend, HttpStatus.OK);
+        List<FriendDTO> friendDTOS = memberServiceImp.getFriendList(member);
+        return new ResponseEntity<>(friendDTOS, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteFriend")      //친구 삭제
@@ -92,8 +94,8 @@ public class MemberController {
        member1.setMemberId(memId);
        Member member2 = new Member();
        member2.setMemberId(friendId);
-        memberServiceImp.remove(member1, member2);
-        return new ResponseEntity<>("친구삭제 성공", HttpStatus.OK);
+       memberServiceImp.remove(member1, member2);
+       return new ResponseEntity<>("친구삭제 성공", HttpStatus.OK);
     }
 
 

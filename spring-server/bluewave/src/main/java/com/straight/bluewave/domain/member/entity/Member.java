@@ -1,5 +1,6 @@
 package com.straight.bluewave.domain.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.mapping.entity.FriendMapping;
 import com.straight.bluewave.domain.mapping.entity.ProjectMemberMapping;
@@ -10,9 +11,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +25,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@SQLDelete(sql = "UPDATE member SET deleted_at = current_timestamp WHERE mem_id = ?")
+@Where(clause = "deleted_at is null")
 public class Member extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +45,9 @@ public class Member extends BaseEntity {
     @Column(name = "mem_nick")
     private String memberNick;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
@@ -50,19 +59,19 @@ public class Member extends BaseEntity {
         if (dto.getMember_nick() != null) this.memberNick = dto.getMember_nick();
     }
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)     //참조되는 쪽에서 mappedBy
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)     //참조되는 쪽에서 mappedBy
     private List<TeamMemberMapping> teams;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProjectMemberMapping> projects;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<FriendMapping> friends1;
 
-    @OneToMany(mappedBy = "friend", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "friend", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<FriendMapping> friends2;
 
     public void setMemberId(Long memberId) {
@@ -78,7 +87,5 @@ public class Member extends BaseEntity {
                 inverseJoinColumns = @JoinColumn(name = "team_id"))
     private List<Team> teams;
 */
-
-
 
 }
