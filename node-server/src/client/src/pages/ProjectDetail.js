@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/views/Header";
 import Sidebar from "../components/views/Sidebar";
-import { Button, Modal, Form, Table } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Button, Modal, Form, Table, ButtonGroup } from "react-bootstrap";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import axios from "axios";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { boardConnect } from "../actions/board";
 
 const Main = styled.div`
 	height: 100%;
@@ -34,6 +36,7 @@ const BoardList = styled.div`
 	align-items: center;
 	height: 100%;
 	width: 80%;
+	user-select: none;
 `;
 const BoardItem = styled.div`
 	display: flex;
@@ -43,12 +46,14 @@ const BoardItem = styled.div`
 	width: 100%;
 	margin: 1rem;
 	padding: 20px;
+	user-select: none;
 
 	background-color: #aaaaaa;
 `;
 
-const ProjectDetail = (prjId) => {
+const ProjectDetail = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const [showModal, setShowModal] = useState(false);
 	const [boardName, setBoardName] = useState("");
 	const [boardList, setBoardList] = useState([]);
@@ -150,27 +155,27 @@ const ProjectDetail = (prjId) => {
 				<Sidebar />
 
 				<Content>
-					<div>
+					<ButtonGroup>
 						<Button variant="primary" onClick={() => navigate(-1)}>
 							프로젝트 목록
 						</Button>
-					</div>
 
-					<Button variant="primary" onClick={goChattingRoom}>
-						채팅방
-					</Button>
-					<Button variant="primary" onClick={goCalendar}>
-						캘린더
-					</Button>
-					<Button variant="primary" onClick={makeBoard}>
-						게시판만들기
-					</Button>
-					<Button variant="primary" onClick={goWBS}>
-						WBS
-					</Button>
-					<Button variant="primary" onClick={goGPT}>
-						GPT
-					</Button>
+						<Button variant="primary" onClick={goChattingRoom}>
+							채팅방
+						</Button>
+						<Button variant="primary" onClick={goCalendar}>
+							캘린더
+						</Button>
+						<Button variant="primary" onClick={makeBoard}>
+							게시판만들기
+						</Button>
+						<Button variant="primary" onClick={goWBS}>
+							WBS
+						</Button>
+						<Button variant="primary" onClick={goGPT}>
+							GPT
+						</Button>
+					</ButtonGroup>
 					<hr />
 					<Modal show={showModal} onHide={handleModalClose}>
 						<Modal.Header closeButton>
@@ -200,12 +205,14 @@ const ProjectDetail = (prjId) => {
 							<BoardItem
 								key={board.brd_id}
 								onClick={() => {
-									navigate("/post");
+									navigate("/post", { state: { board } });
 									sessionStorage.setItem("boardid", board.brd_id);
+									dispatch(boardConnect(board));
+
 								}}
 							>
 								<h4>{board.brd_name}</h4>
-								<Table hover> 
+								<Table hover>
 									<tr>
 										<th>작성일</th>
 										<th>제목</th>
@@ -213,10 +220,10 @@ const ProjectDetail = (prjId) => {
 									</tr>
 									{posts[board.brd_id]?.map((post) => (
 										<tbody>
-											<tr key={post.post_id}>
+											<tr key={post.createdAt}>
 												<td>{post.createdAt}</td>
 												<td>{post.post_name}</td>
-												<td>{post.mem_id}</td>
+												<td>{post.mem_nick}</td>
 											</tr>
 										</tbody>
 									))}

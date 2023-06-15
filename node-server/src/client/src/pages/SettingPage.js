@@ -3,9 +3,11 @@ import Header from "../components/views/Header";
 import { Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const SettingPage = () => {
   const navigate = useNavigate();
+  const auth = useSelector(state => state.authReducer.user);
   const [showModal, setShowModal] = useState(false);
   const [member_name, setName] = useState("");
   const [member_nick, setNick] = useState("");
@@ -13,10 +15,12 @@ const SettingPage = () => {
   useEffect(() => {
     async function fetchMemberData() {
       console.log("fetch start");
+      console.log(auth);
       await axios
         .get(`http://localhost:8002/api/member/me`, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+            // Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${auth.accessToken}`
           },
           withCredentials: true,
         })
@@ -56,7 +60,8 @@ const SettingPage = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+            // Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${auth.accessToken}`
           },
           withCredentials: true,
         }
@@ -78,7 +83,8 @@ const SettingPage = () => {
       await axios
         .delete(`http://localhost:8002/api/member/delete`, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+            // Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${auth.accessToken}`
           },
           withCredentials: true,
         })

@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/Register&Login.css";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../actions/auth";
+
 
 function LoginPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [member_email, setMemEmail] = useState("");
   const [member_pw, setPassword] = useState("");
 
@@ -15,17 +20,29 @@ function LoginPage() {
         member_email: member_email,
         member_pw: member_pw,
       })
-      .then((res) => {
-        if (res.data.accessToken === undefined) {
+      .then((res1) => {
+        if (res1.data.accessToken === undefined) {
           alert("입력하신 로그인 정보가 일치하지 않습니다.");
         } else {
-          sessionStorage.setItem("accessToken", res.data.accessToken);
-          sessionStorage.setItem("refreshToken", res.data.refreshToken);
+          sessionStorage.setItem("accessToken", res1.data.accessToken);
+          sessionStorage.setItem("refreshToken", res1.data.refreshToken);
           const memberInfo = axios
             .get(`http://localhost:8002/api/member/${member_email}`)
             .then((res) => {
+              const userInfo = {
+                memberId : res.data.member_id,
+                memberNick : res.data.member_nick,
+                memberEmail : res.data.member_email,
+                accessToken : res1.data.accessToken,
+                refreshToken : res1.data.refreshToken
+              }
+              
+              dispatch(loginSuccess(userInfo));
+
               sessionStorage.setItem("memid", res.data.member_id);
+              sessionStorage.setItem("memnick", res.data.member_nick);
               sessionStorage.setItem("email", member_email);
+              
             })
             .catch((err) => {
               console.log(err);
