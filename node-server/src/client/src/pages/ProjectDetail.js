@@ -207,7 +207,7 @@ const ProjectDetail = (prjId) => {
 								}}
 							>
 								<h4>{board.brd_name}</h4>
-								<Table>
+								<Table hover> 
 									<tr>
 										<th>작성일</th>
 										<th>제목</th>

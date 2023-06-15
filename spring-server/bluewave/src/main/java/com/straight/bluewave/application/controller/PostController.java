@@ -36,8 +36,6 @@ public class PostController {
         return postService.modify(post_id, dto);
     }
 
-
-
     @DeleteMapping("/delete/{post_id}")
     public ResponseEntity<Void> deletePost(@PathVariable("post_id") Long post_id) {
         postService.remove(post_id);
@@ -45,12 +43,10 @@ public class PostController {
     }
 
     // board id에 관한 리스트 반환, 조건 검색 추가
-    @GetMapping("/list")
+    @PostMapping("/list")
     public PostResponseDTO<Post> getBoard(@RequestBody PostRequestDTO pageRequestDTO) {
         return postService.getPostListWithCondition(pageRequestDTO);
     }
-
-
 
     @GetMapping("/calender")
     public List<Object[]> getPostColumns() {

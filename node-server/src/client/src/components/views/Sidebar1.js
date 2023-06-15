@@ -15,7 +15,6 @@ function Sidebar(props) {
         )
         .then((res) => {
           setTeams(res.data.dtoList);
-          console.log(res.data.dtoList);
         })
         .catch((err) => {
           console.log(err);
@@ -25,7 +24,7 @@ function Sidebar(props) {
   }, []);
 
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       {teams.map((team, index) => (
         <Link
           to={`/team/${team.teamId}`}
@@ -34,7 +33,11 @@ function Sidebar(props) {
             sessionStorage.setItem("tmid", team.teamId);
           }}
         >
-          <p className="sidebarname" key={index}>
+          <p
+            className="sidebarname"
+            key={index}
+            style={{ margin: "20px 0 20px" }}
+          >
             {team.teamName}
           </p>
         </Link>

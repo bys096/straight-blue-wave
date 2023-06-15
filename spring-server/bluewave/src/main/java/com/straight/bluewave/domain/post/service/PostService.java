@@ -11,6 +11,7 @@ import com.straight.bluewave.domain.team.dto.TeamMemberPageRequestDTO;
 import com.straight.bluewave.domain.team.dto.TeamMemberPageResultDTO;
 import org.springframework.data.domain.Page;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface PostService {
@@ -20,6 +21,7 @@ public interface PostService {
                 .mem_id(dto.getMem_id())
                 .post_content(dto.getPost_content())
                 .post_name(dto.getPost_name())
+                .meeting_date((Date) dto.getMeeting_date())
                 .attendees_id(dto.getAttendees_id())
                 .file_status(dto.isFile_status())
                 .voting_status(dto.isVoting_status())
@@ -33,6 +35,7 @@ public interface PostService {
                 .mem_id(entity.getMem_id())
                 .post_content(entity.getPost_content())
                 .post_name(entity.getPost_name())
+                .meeting_date(entity.getMeeting_date())
                 .attendees_id(entity.getAttendees_id())
                 .file_status(entity.isFile_status())
                 .voting_status(entity.isVoting_status())

@@ -18,26 +18,82 @@ function getFirstDayOfMonth(month, year) {
 	return new Date(year, month - 1, 1).getDay();
 }
 
-const Calendar = ({}) => {
+const Calendar = () => {
 	const [currentDate, setCurrentDate] = useState(new Date());
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [events, setEvents] = useState({});
 	const [selectedDate, setSelectedDate] = useState();
 
 	const [schedules, setSchedules] = useState([]);
-	const [reload, setReload] = useState(false);
+	const [boards, setBoards] = useState([]);
+	const [posts, setPosts] = useState([]);
+
+	const [reload, setReload] = useState(true);
 
 	// useEffect(() => {
 	// 	const savedSchedules = JSON.parse(localStorage.getItem("schedules")) || {};
 	// 	setSchedules(savedSchedules);
 	// }, []);
 
-	// Axios 통신 - DB 통신할때 사용할것.
-	useEffect(() => {
-		fetchSchedules();
-		console.log(reload)
-	}, [reload]);
+	// 보드를 가져오는 함수
+	const fetchBoards = async () => {
+		try {
+			const response = await axios.get(
+				`http://localhost:8002/api/board/list/${sessionStorage.getItem("prjid")}`
+			);
+			setBoards(response.data);
 
+			return response.data; // boards를 반환
+		} catch (error) {
+			console.error("An error occurred while fetching the boards:", error);
+		}
+	};
+
+	// 각 보드에서 포스트를 가져오는 함수
+	const fetchPosts = async (brdid) => {
+		try {
+			const response = await axios.post(`http://localhost:8002/api/post/list`, {
+				page: 1,
+				size: 10,
+				boardId: brdid,
+			});
+			const fetchedPosts = response.data.dtoList;
+
+			fetchedPosts.forEach((post) => {
+				if (post.meeting_date) {
+					let meetingDate = new Date(post.meeting_date);
+
+					const formattedDate = `${meetingDate.getFullYear()}-${String(
+						meetingDate.getMonth() + 1
+					).padStart(2, "0")}-${String(meetingDate.getDate()).padStart(2, "0")}`;
+
+					setPosts((prevPosts) => {
+						const newSchedules = { ...prevPosts };
+
+						if (!newSchedules[formattedDate]) {
+							newSchedules[formattedDate] = [];
+						}
+						if (
+							!newSchedules[formattedDate].find(
+								(schedule) => schedule.post_id === post.post_id
+							)
+						) {
+							newSchedules[formattedDate].push({
+								post_id: post.post_id,
+								post_name: post.post_name,
+								post_meeting_date: post.meeting_date,
+								post_content: post.post_content,
+							});
+						}
+
+						return newSchedules;
+					});
+				}
+			});
+		} catch (error) {
+			console.error("An error occurred while fetching the posts:", error);
+		}
+	};
+	// 스케줄을 가져오는 함수
 	const fetchSchedules = async () => {
 		try {
 			const response = await axios.get(
@@ -83,15 +139,27 @@ const Calendar = ({}) => {
 						});
 					}
 				});
-				localStorage.setItem("schedules", JSON.stringify(newSchedules));
+				// localStorage.setItem("schedules", JSON.stringify(newSchedules));
 				setReload(false);
 				return newSchedules;
 			});
 		} catch (error) {
 			console.error("An error occurred while fetching the schedules:", error);
 		}
-		
 	};
+
+	
+	useEffect(() => {
+		const fetchData = async () => {
+			const fetchedBoards = await fetchBoards();
+			fetchedBoards.forEach((board) => {
+				fetchPosts(board.brd_id);
+			});
+			console.log(posts);
+			fetchSchedules();
+		};
+		fetchData();
+	}, [reload]);
 
 	// const addEvent = (startDate, event) => {
 	// 	// startDate와 endDate 사이의 모든 날짜 가져오기
@@ -255,6 +323,23 @@ const Calendar = ({}) => {
 											<Badge pill>{schedule.schedule_title}</Badge>
 										</div>
 									))}
+
+								{isCurrentMonth &&
+									posts[formattedDate]?.map((post, idx) => (
+										<div
+											className="schedules"
+											key={idx}
+											onClick={(e) => {
+												e.stopPropagation();
+												setSelectedDate(formattedDate);
+												setIsModalOpen(true);
+											}}
+										>
+											<Badge pill bg="danger">
+												{post.post_name}
+											</Badge>
+										</div>
+									))}
 							</div>
 						);
 					})}
@@ -265,6 +350,8 @@ const Calendar = ({}) => {
 					onClose={handleCloseModal}
 					//  onAddEvent={isUpdate}
 					selectedDate={selectedDate}
+					postList={posts}
+					scheduleList={schedules}
 				/>
 			)}
 		</div>

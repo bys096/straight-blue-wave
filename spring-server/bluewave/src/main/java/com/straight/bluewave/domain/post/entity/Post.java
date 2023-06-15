@@ -54,10 +54,9 @@ public class Post extends BaseEntity {
 */
     @Column(name = "post_modify")
     private LocalDateTime post_modify;
-/*
+
     @Column(name = "meeting_date")
     private Date meeting_date;
-*/
 
     @Column(name = "attendees_id")
     private Long attendees_id;

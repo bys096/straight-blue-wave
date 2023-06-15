@@ -4,22 +4,23 @@ import { Accordion, Badge, Button, Form, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const EventModal = ({ onClose, /*onAddEvent*/ selectedDate }) => {
+const EventModal = ({ onClose, /*onAddEvent*/ selectedDate, scheduleList, postList }) => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [startDate, setStartDate] = useState(selectedDate);
 	const [endDate, setEndDate] = useState(selectedDate);
 	const [eventsForSelectedDate, setEventsForSelectedDate] = useState([]);
-
-	const navigate = useNavigate();
+	const [postsForSelectedDate, setPostsForSelectedDate] = useState([]);
 
 	useEffect(() => {
 		if (selectedDate) {
 			const savedEvents = JSON.parse(localStorage.getItem("schedules")) || {};
-			const events = savedEvents[selectedDate] || [];
+			const events = scheduleList[selectedDate] || [];
+			const posts = postList[selectedDate] || [];
 			setEventsForSelectedDate(events);
+			setPostsForSelectedDate(posts);
 		}
-	}, [selectedDate]);
+	}, []);
 
 	const createSchecule = async () => {
 		try {
@@ -38,12 +39,11 @@ const EventModal = ({ onClose, /*onAddEvent*/ selectedDate }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
 		createSchecule();
 		onClose();
 	};
 
-	const handleDeleteSchedule = async (scheduleId) => {
+	const DeleteSchedule = async (scheduleId) => {
 		try {
 			if (scheduleId) {
 				await axios.delete(`http://localhost:8002/api/schedule/delete/${scheduleId}`);
@@ -55,6 +55,10 @@ const EventModal = ({ onClose, /*onAddEvent*/ selectedDate }) => {
 			alert("스케줄 삭제에 실패하였습니다.");
 		}
 	};
+
+	const handleDelete = (scheduleId) => {
+		DeleteSchedule(scheduleId);
+	}
 
 	const handleModifySchedule = () => {};
 
@@ -72,7 +76,14 @@ const EventModal = ({ onClose, /*onAddEvent*/ selectedDate }) => {
 						<p>{schedule.schedule_description}</p>
 						<p>Start Date: {schedule.start_date}</p>
 						<p>End Date: {schedule.end_date}</p>
-						<Button onClick={() => handleDeleteSchedule(schedule.schedule_id)}>삭제</Button>
+						<Button onClick={() => handleDelete(schedule.schedule_id)}>삭제</Button>
+					</div>
+				))}
+				{postsForSelectedDate.map((post, index) => (
+					<div key={index}>
+							<Badge bg="danger"><h5>{post.post_name}</h5></Badge>
+						<p>{post.post_content}</p>
+						<p>회의일자 : {post.post_meeting_date}</p>
 					</div>
 				))}
 				<hr />
