@@ -32,8 +32,8 @@ import java.util.Set;
 @Getter
 @DynamicInsert
 @DynamicUpdate
-@SQLDelete(sql = "UPDATE post SET deleted_at = current_timestamp WHERE post_id = ?")
-@Where(clause = "deleted_at is null")
+//@SQLDelete(sql = "UPDATE post SET deleted_at = current_timestamp WHERE post_id = ?")
+//@Where(clause = "deleted_at is null")
 public class Post extends BaseEntity {
 
     @Id
@@ -71,8 +71,8 @@ public class Post extends BaseEntity {
     @Column(name = "voting_status")
     private boolean voting_status;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    /*@Column(name = "deleted_at")
+    private LocalDateTime deletedAt;*/
 
     @JsonIgnore
     @ManyToOne
@@ -84,7 +84,7 @@ public class Post extends BaseEntity {
 //    private List<Schedule> schedule;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
     public Post(Board board, PostDTO dto) {

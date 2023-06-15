@@ -14,9 +14,6 @@ import java.util.Optional;
 
 public interface SpringDataTeamRepository extends JpaRepository<Team, Long> {
 
-    @Modifying
-    @Query("update Team t set t.deletedAt = current_timestamp WHERE t.member.memberId = :memberId")
-    void deleteTeamByMemberMemberId(@Param("memberId") Long memberId);
 
     @Query("select m.teams from Member m where m.memberId = :memberId")
     List<Team> findTeamsByMemberId(@Param("memberId") Long memberId);

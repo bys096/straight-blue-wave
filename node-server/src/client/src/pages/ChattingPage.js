@@ -3,6 +3,8 @@ import Header from "../components/views/Header";
 import Sidebar from "../components/views/Sidebar";
 import MainPage from "./MainPage";
 
+import Notification from "./notification";
+
 const ChattingPage = () => {
   return (
     <div className="main">
@@ -21,6 +23,7 @@ const ChattingPage = () => {
           <MainPage></MainPage>
         </div>
       </div>
+      <Notification></Notification>
     </div>
   );
 };

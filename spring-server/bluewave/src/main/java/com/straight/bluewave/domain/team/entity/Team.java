@@ -22,8 +22,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@SQLDelete(sql = "UPDATE team SET deleted_at = current_timestamp WHERE team_id = ?")
-@Where(clause = "deleted_at is null")
+//@SQLDelete(sql = "UPDATE team SET deleted_at = current_timestamp WHERE team_id = ?")
+//@Where(clause = "deleted_at is null")
 public class Team extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,18 +36,21 @@ public class Team extends BaseEntity {
     @Column(name = "team_desc")
     private String teamDesc;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    /*@Column(name = "deleted_at")
+    private LocalDateTime deletedAt;*/
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_id")
     @JsonIgnore
     private Member member;
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Project> project;
+
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamMemberMapping> members;
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamProjectMapping> projects;
 
     public void changeTeamName(String teamName){

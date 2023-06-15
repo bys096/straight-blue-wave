@@ -3,14 +3,12 @@ import SocketIO from "socket.io";
 import express from "express";
 import cors from "cors"; // 추가
 
-
-
 const path = require('path');
 const app = express();
 
 app.use(express.static(path.join(__dirname, "/client/build")));
 
- //app.use(cors({
+//app.use(cors({
 // origin: 'http://192.168.0.79:8002'
 // }));
 
@@ -53,6 +51,7 @@ let roomObjArr = [
 const MAXIMUM = 5;
 
 wsServer.on("connection", (socket) => {
+
   let myRoomName = null;
   let myUserId = null;
   // let myNickname = null;
@@ -118,7 +117,8 @@ wsServer.on("connection", (socket) => {
     socket.to(remoteSocketId).emit("ice", ice, socket.id);
   });
 
-  
+
+
 
 
   socket.on("disconnecting", () => {
@@ -136,18 +136,73 @@ wsServer.on("connection", (socket) => {
 
 
 
-  
-  
+
+
   socket.on("sendChat", (chat) => {
     // console.log(`roomName: ${roomName}, msg: ${msg}, sid: ${socket.id}`);
     // console.log(`myroomName: ${myRoomName}, msg: ${msg}`);
-    
+
 
     socket.to(chat.roomName).emit("newMessage", chat);
-    
+
   });
 
 });
 
+
 const handleListen = () => console.log(`Listening on http://localhost:4000`);
 httpServer.listen(4000, handleListen);
+
+
+
+
+
+// notification
+
+wsServer.on('connection', (socket) => {
+  // console.log('notification connected');
+
+socket.on("join_prj", (prjRoom) => {
+  let targetRoomObj = roomObjArr.find((roomObj) => roomObj.roomName === prjRoom);
+
+  if (!targetRoomObj) {
+    targetRoomObj = {
+      roomName: prjRoom,
+      currentNum: 0,
+      users: [],
+    };
+    roomObjArr.push(targetRoomObj);
+  }
+
+  targetRoomObj.users.push({
+    socketId: socket.id,
+  });
+  targetRoomObj.currentNum++;
+
+  socket.join(prjRoom);
+  socket.to(prjRoom).emit("join_accept");
+
+  // console.log(`Socket ${socket.id} joined room: ${prjRoom}`);
+});
+
+
+  socket.on('disconnect', () => {
+    // console.log('notification disconnected');
+    
+    socket.rooms.forEach((room) =>
+      socket.to(room).emit("left", user)
+    );
+  });
+
+
+
+  socket.on("eventData", (eventData) => {
+    // console.log("Received event data:", eventData);
+
+    socket.to(eventData.prjRoom).emit("eventData", eventData);
+  });
+  
+
+});
+
+
