@@ -8,6 +8,7 @@ import Sidebar from "../components/views/Sidebar";
 import Footer from "../components/views/Footer";
 import styled from "styled-components";
 import { Button, Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const Title = styled.h1`
   font-size: 2.5em;
