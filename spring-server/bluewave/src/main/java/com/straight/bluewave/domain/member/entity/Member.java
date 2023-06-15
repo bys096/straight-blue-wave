@@ -7,6 +7,8 @@ import com.straight.bluewave.domain.mapping.entity.ProjectMemberMapping;
 import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.member.dto.MemberUpdateDTO;
+import com.straight.bluewave.domain.project.entity.Project;
+import com.straight.bluewave.domain.team.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,8 +27,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@SQLDelete(sql = "UPDATE member SET deleted_at = current_timestamp WHERE mem_id = ?")
-@Where(clause = "deleted_at is null")
+//@SQLDelete(sql = "UPDATE member SET deleted_at = current_timestamp WHERE mem_id = ?")
+//@Where(clause = "deleted_at is null")
 public class Member extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,8 +47,8 @@ public class Member extends BaseEntity {
     @Column(name = "mem_nick")
     private String memberNick;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    /*@Column(name = "deleted_at")
+    private LocalDateTime deletedAt;*/
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
@@ -59,19 +61,22 @@ public class Member extends BaseEntity {
         if (dto.getMember_nick() != null) this.memberNick = dto.getMember_nick();
     }
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)     //참조되는 쪽에서 mappedBy
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Team> team;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)     //참조되는 쪽에서 mappedBy
     private List<TeamMemberMapping> teams;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectMemberMapping> projects;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FriendMapping> friends1;
 
-    @OneToMany(mappedBy = "friend", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "friend", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FriendMapping> friends2;
 
     public void setMemberId(Long memberId) {

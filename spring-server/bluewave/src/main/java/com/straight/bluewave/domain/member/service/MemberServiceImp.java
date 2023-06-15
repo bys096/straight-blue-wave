@@ -66,8 +66,6 @@ public class MemberServiceImp implements MemberService{
     @Transactional
     public void delete() {
 
-        teamRepository.deleteTeamByMemberMemberId(SecurityUtil.getCurrentMemberId());
-
         memberRepository.deleteById(SecurityUtil.getCurrentMemberId());
 
     }

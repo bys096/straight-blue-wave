@@ -25,10 +25,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("SELECT p FROM Project p WHERE p.team.teamId = :teamId")
     List<Project> findProjectsByTeam(@Param("teamId") Long teamId);
 
-    @Modifying
-    @Query("update Project p set p.deletedAt = current_timestamp WHERE p.team.teamId = :teamId")
-    void deleteProjectByTeamTeamId(@Param("teamId") Long teamId);
-
-
     Optional<Project> findByTeam(Team team);
 }
