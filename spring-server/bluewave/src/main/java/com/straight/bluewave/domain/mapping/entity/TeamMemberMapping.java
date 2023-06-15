@@ -14,7 +14,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
 //@IdClass(TeamMemberId.class)  복합키 방식 -> 매핑 id를 두는 방식으로 변경
 public class TeamMemberMapping extends BaseEntity {
 
