@@ -10,8 +10,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +24,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-
+//@SQLDelete(sql = "UPDATE board SET deleted_at = current_timestamp WHERE brd_id = ?")
+//@Where(clause = "deleted_at is null")
 public class Board{
 
     @Id
@@ -39,7 +42,8 @@ public class Board{
     @JoinColumn(name = "prj_id")
     private Project project;
 
-
+    /*@Column(name = "deleted_at")
+    private LocalDateTime deletedAt;*/
 
     public void changeBrdName(String brdName) {
         this.brdName = brdName;

@@ -15,6 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -30,6 +32,8 @@ import java.util.Set;
 @Getter
 @DynamicInsert
 @DynamicUpdate
+//@SQLDelete(sql = "UPDATE post SET deleted_at = current_timestamp WHERE post_id = ?")
+//@Where(clause = "deleted_at is null")
 public class Post extends BaseEntity {
 
     @Id
@@ -67,6 +71,9 @@ public class Post extends BaseEntity {
     @Column(name = "voting_status")
     private boolean voting_status;
 
+    /*@Column(name = "deleted_at")
+    private LocalDateTime deletedAt;*/
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "brd_id")
@@ -77,7 +84,7 @@ public class Post extends BaseEntity {
 //    private List<Schedule> schedule;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
     public Post(Board board, PostDTO dto) {

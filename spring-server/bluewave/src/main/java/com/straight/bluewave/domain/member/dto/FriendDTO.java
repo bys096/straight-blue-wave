@@ -1,5 +1,6 @@
 package com.straight.bluewave.domain.member.dto;
 
+import com.straight.bluewave.domain.mapping.entity.FriendMapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +23,5 @@ public class FriendDTO {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
 }

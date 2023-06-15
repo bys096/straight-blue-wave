@@ -8,6 +8,7 @@ import com.straight.bluewave.domain.project.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +42,7 @@ public class BoardServiceImp implements BoardService{
     }
 
     @Override
+    @Transactional
     public Long modify(Long brd_id, BoardDTO dto) {
         Optional<Board> result = boardRepository.findById(brd_id);
 
@@ -55,6 +57,7 @@ public class BoardServiceImp implements BoardService{
     }
 
     @Override
+    @Transactional
     public void remove(Long brd_id) {
         boardRepository.deleteById(brd_id);
     }

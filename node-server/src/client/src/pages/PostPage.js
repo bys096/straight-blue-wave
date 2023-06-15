@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/views/Header";
 import Sidebar from "../components/views/Sidebar";
-import { Button, Table, Modal, Pagination } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Button, Table, Modal, Pagination, Form } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { postConnect } from "../actions/post";
 
 import Notification from "./notification";
 
@@ -38,25 +40,30 @@ const PostList = styled.div`
 
 const PostPage = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
 	const [posts, setPosts] = useState([]);
-	const [show, setShow] = useState(false);
-	const [selectedPost, setSelectedPost] = useState({});
+	// const [show, setShow] = useState(false);
+	// const [selectedPost, setSelectedPost] = useState({});
 	const [currentPage, setCurrentPage] = useState(1);
 	const [pageSize, setPageSize] = useState(10);
 	const [pageTotal, setPageTotal] = useState();
 
-	const handleClose = () => setShow(false);
+	const location = useLocation();
+	const board = location.state?.board;
+	console.log(board);
+
 	const handleShow = (post) => {
-		setSelectedPost(post);
-		setShow(true);
+		navigate(`/post/${post.post_id}`, {state: {post, board}})
+		dispatch(postConnect(post));
 	};
 
 	const handlePageSize = (e) => {
 		setPageSize(e.target.value);
 	};
 
-	const fetchPosts = () => {
-		axios
+	const fetchPosts = async () => {
+		await axios
 			.post("http://localhost:8002/api/post/list", {
 				page: currentPage,
 				size: pageSize,
@@ -70,11 +77,13 @@ const PostPage = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+			
 	};
 
 
 	useEffect(() => {
 		fetchPosts();
+
 	}, [currentPage, pageSize]);
 
 	return (
@@ -87,15 +96,15 @@ const PostPage = () => {
 					<Content>
 						<PostList>
 							<div>
-								<h2>게시글 목록</h2>
+								<h2>{board.brd_name}</h2>
 								<Button onClick={() => navigate("/createpost")}>게시글 작성</Button>
-								<Button onClick={() => navigate(-1)}>이전 화면</Button>
+								<Button onClick={() => navigate(-1 ,{replace: true})}>이전 화면</Button>
 							</div>
-							<select onChange={handlePageSize} value={pageSize}>
-								<option value={10}>10</option>
-								<option value={20}>20</option>
-								<option value={50}>50</option>
-							</select>
+							<Form.Select onChange={handlePageSize} aria-label="글갯수">
+								<option value="10">10개</option>
+								<option value="30">30개</option>
+								<option value="50">50개</option>
+							</Form.Select>
 							<Table striped bordered hover>
 								<thead>
 									<tr>
@@ -107,12 +116,12 @@ const PostPage = () => {
 									</tr>
 								</thead>
 								<tbody>
-									{posts.map((post) => (
-										<tr key={post.post_id} onClick={() => handleShow(post)}>
+									{posts.map(post => (
+										<tr key={post.createdAt} onClick={() => handleShow(post)}>
 											<td>{post.post_id}</td>
 											<td>{post.post_name}</td>
 											<td>{post.meeting_date}</td>
-											<td>{post.memId}</td>
+											<td>{post.mem_nick}</td>
 											<td>{new Date(post.createdAt).toLocaleDateString()}</td>
 										</tr>
 									))}
@@ -149,12 +158,6 @@ const PostPage = () => {
 					</Content>
 				</Article>
 			</Main>
-			<Modal show={show} onHide={handleClose}>
-				<Modal.Header closeButton>
-					<Modal.Title>{selectedPost.post_name}</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>{selectedPost.post_content}</Modal.Body>
-			</Modal>
 		</div>
 	);
 
