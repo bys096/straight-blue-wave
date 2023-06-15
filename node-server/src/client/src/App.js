@@ -15,6 +15,7 @@ import ProjectDetail from "./pages/ProjectDetail";
 import ChattingPage from "./pages/ChattingPage";
 import { Navigate } from "react-router-dom";
 import PostPage from "./pages/PostPage";
+import PostDetail from "./pages/PostDetail";
 import CreatePostPage from "./pages/CreatePostPage";
 import Wbs from "./components/Wbs";
 import ProjectList from "./pages/ProjectList";
@@ -51,10 +52,12 @@ function App() {
           Component={ProjectCreate}
         ></Route>
         <Route path="/post" Component={PostPage}></Route>
+        <Route path="/post/:post_id" Component={PostDetail}></Route>
         <Route path="/createpost" Component={CreatePostPage}></Route>
         <Route path="/wbs" Component={Wbs}></Route>
         <Route path="/gpt" Component={GptPage}></Route>
         <Route path="/memlist" Component={MemberList}></Route>
+        <Route path="/post/modify/:post_id" element={<CreatePostPage />} />
 
       </Routes>
     </div>

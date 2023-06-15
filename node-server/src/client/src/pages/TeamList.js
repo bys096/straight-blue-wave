@@ -3,6 +3,8 @@ import axios from "axios";
 import TeamItem from "../components/TeamItem";
 import TeamCreateCard from "../components/TeamCreateCard";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { teamConnect } from "../actions/team";
 
 const Title = styled.h1`
 	font-size: 2.5em;
@@ -16,7 +18,8 @@ const Container = styled.div`
 	margin: 10px;
 	display: flex;
 	flex-direction: column;
-  width : 100%
+	width: 100%;
+	user-select: none;
 `;
 
 const Teams = styled.div`
@@ -44,6 +47,7 @@ const Line = styled.hr`
 
 const TeamList = () => {
 	const [teams, setTeams] = useState([]);
+	const dispatch = useDispatch();
 
 	const fetchTeams = async () => {
 		const response = axios
@@ -52,6 +56,8 @@ const TeamList = () => {
 			)
 			.then((res) => {
 				setTeams(res.data.dtoList);
+				dispatch(teamConnect(teams));
+				
 			})
 			.catch((err) => {
 				console.log(err);
@@ -73,10 +79,9 @@ const TeamList = () => {
 			<Teams>
 				<TeamCreateCard onTeamCreated={onTeamCreated} />
 				{teams.map((team, index) => (
-          <div key={index}>
-            <TeamItem  team={team} />
-          </div>
-					
+					<div key={index}>
+						<TeamItem team={team} />
+					</div>
 				))}
 			</Teams>
 		</Container>

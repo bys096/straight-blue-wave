@@ -141,6 +141,7 @@ const ProjectList = () => {
         )}`
       );
       setProjects(response.data);
+      console.log(projects)
     } catch (error) {
       console.error("Error fetching project:", error);
     }
