@@ -65,6 +65,7 @@ public class TeamServiceImpl implements TeamService{
         Team team = Team.builder()
                 .teamName(dto.getTeamName())
                 .teamDesc(dto.getTeamDesc())
+                .teamPhoto(dto.getTeam_photo())
                 .member(member)
                 .build();
         springDataTeamRepository.save(team);
@@ -104,6 +105,7 @@ public class TeamServiceImpl implements TeamService{
                 .memberName(member.getMemberName())
                 .createdAt(team.getCreatedAt())
                 .updatedAt(team.getUpdatedAt())
+                .team_photo(team.getTeamPhoto())
                 .build();
 
         return teamDTO;
@@ -121,6 +123,7 @@ public class TeamServiceImpl implements TeamService{
 
         team.changeTeamName(dto.getTeamName());
         team.changeTeamDesc(dto.getTeamDesc());
+        team.changeTeamPhoto(dto.getTeam_photo());
     }
 
     @Override

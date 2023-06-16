@@ -19,6 +19,7 @@ public interface TeamService {
                 .memberId(member.getMemberId())
                 .memberName(member.getMemberName())
                 .createdAt(teamMember.getCreatedAt())
+                .team_photo(team.getTeamPhoto())
                 .build();
         return teamDTO;
     }
@@ -32,6 +33,7 @@ public interface TeamService {
                 .teamName(dto.getTeamName())
 //                .teamDesc(dto.getTeamDesc())
                 .member(member)
+                .teamPhoto(dto.getTeam_photo())
                 .build();
 
         return entity;
