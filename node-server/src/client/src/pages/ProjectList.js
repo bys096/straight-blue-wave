@@ -71,6 +71,7 @@ const ProjectList = () => {
           )
           .then(() => {
             alert("회원이 정상적으로 가입되었습니다");
+            fetchMembers();
             setUserData(null);
           });
       })
@@ -101,6 +102,7 @@ const ProjectList = () => {
             )
             .then((res) => {
               alert("회원이 정상적으로 가입되었습니다");
+              fetchMembers();
             })
             .catch((err) => {
               console.log(err);
@@ -175,7 +177,10 @@ const ProjectList = () => {
         )}`
       )
       .then((res) => {
-        setMembers(res.data);
+        const teamMembers = res.data.filter(
+          (member) => member.teamPosition === "팀원"
+        );
+        setMembers(teamMembers);
       })
       .catch((err) => {
         console.log(err);
@@ -261,6 +266,7 @@ const ProjectList = () => {
         )
         .then((res) => {
           alert("팀에서 탈퇴시켰습니다.");
+          fetchMembers();
         })
         .catch((err) => {
           console.log(err);
@@ -403,7 +409,7 @@ const ProjectList = () => {
               {member.teamName} ({member.teamPosition}){" "}
               <Button
                 variant="danger"
-                onClick={() => removeMember(member.teamMemberId)}
+                onClick={() => removeMember(member.memberId)}
               >
                 탈퇴
               </Button>
