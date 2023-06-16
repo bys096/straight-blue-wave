@@ -30,6 +30,7 @@ public class TeamServiceImpl implements TeamService{
     private final MemberRepository memberRepository;
 
     private final SpringDataTeamMemberRepository teamMemberRepository;
+
     private final SpringDataTeamRepository springDataTeamRepository;
 
     private final ProjectRepository projectRepository;
@@ -146,5 +147,12 @@ public class TeamServiceImpl implements TeamService{
     public List<TeamMemberMapping> getTeamMemberList(Team team) {
 
         return teamMemberRepository.findAllByTeam(team.getTeamId());
+    }
+
+
+    @Transactional
+    public void leave(Long memberId, Long teamId) {
+
+        teamMemberRepository.leave(memberId, teamId);
     }
 }
