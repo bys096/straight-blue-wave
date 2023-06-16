@@ -11,6 +11,7 @@ const SignUp = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [member_name, setName] = useState("");
   const [member_nick, setNick] = useState("");
+  const [validEmail, setValidEmail] = useState(false);
 
   const navigate = useNavigate();
 
@@ -24,7 +25,9 @@ const SignUp = () => {
 
   // Coustom Hook 이전
   const onChangeEmail = (e) => {
-    setEmail(e.target.value);
+    const inputValue = e.target.value;
+    setEmail(inputValue);
+    setValidEmail(validateEmail(inputValue));
   };
   const onChangePassword = (e) => {
     setPassword(e.target.value);
@@ -41,6 +44,14 @@ const SignUp = () => {
   };
 
   const addMember = async () => {
+    if (!validEmail) {
+      alert("이메일 형식이 맞지 않습니다.");
+      return;
+    }
+    if (passwordError) {
+      alert("비밀번호가 다릅니다");
+      return;
+    }
     const currentDate = new Date();
     const formattedDateTime = currentDate
       .toISOString()
@@ -80,6 +91,12 @@ const SignUp = () => {
       });
   };
 
+  const validateEmail = (email) => {
+    // 이메일 형식을 확인하는 정규식
+    const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailPattern.test(email);
+  };
+
   return (
     <div className="SignUp">
       <div className="auth-form-container">
@@ -96,6 +113,9 @@ const SignUp = () => {
             required
             onChange={onChangeEmail}
           ></input>
+          {!validEmail && (
+            <p className="error-message">유효한 이메일 형식을 입력해주세요.</p>
+          )}
           <Button
             style={{ backgroundColor: "white", margin: "0 0 10px" }}
             onClick={checkEmail}
