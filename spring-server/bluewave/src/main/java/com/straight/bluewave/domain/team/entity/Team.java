@@ -36,6 +36,9 @@ public class Team extends BaseEntity {
     @Column(name = "team_desc")
     private String teamDesc;
 
+    @Column(name = "team_photo")
+    private String teamPhoto;
+
     /*@Column(name = "deleted_at")
     private LocalDateTime deletedAt;*/
 
@@ -59,6 +62,10 @@ public class Team extends BaseEntity {
 
     public void changeTeamDesc(String teamDesc) {
         this.teamDesc = teamDesc;
+    }
+
+    public void changeTeamPhoto(String teamPhoto){
+        this.teamPhoto = teamPhoto;
     }
 
     public void setTeamId(Long teamId) {
