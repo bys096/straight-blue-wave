@@ -37,6 +37,7 @@ public class PostServiceImp implements PostService{
         Post post = Post.builder()
                 .post_id(dto.getPost_id())
                 .mem_id(dto.getMem_id())
+                .mem_nick(dto.getMem_nick())
                 .post_content(dto.getPost_content())
                 .post_name(dto.getPost_name())
                 .meeting_date(dto.getMeeting_date())
