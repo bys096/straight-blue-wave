@@ -48,6 +48,11 @@ public class NaverInfoResponse implements OAuthInfoResponse {
         return response.name;
     }
 
+    @Override
+    public String getPw() {
+        return "1111";
+    }
+
 
     @Override
     public OAuthProvider getOAuthProvider() {
@@ -60,7 +65,7 @@ public class NaverInfoResponse implements OAuthInfoResponse {
 
         log.info("검증할 id : " + getEmail());
 
-        return new UsernamePasswordAuthenticationToken(getEmail(), "1111");
+        return new UsernamePasswordAuthenticationToken(getEmail(), getPw());
     }
 
 }

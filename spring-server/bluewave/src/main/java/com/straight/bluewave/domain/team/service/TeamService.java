@@ -1,5 +1,6 @@
 package com.straight.bluewave.domain.team.service;
 
+import com.straight.bluewave.domain.team.dto.TeamMemberDTO;
 import com.straight.bluewave.domain.team.dto.TeamMemberPageResultDTO;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.member.entity.Member;
@@ -45,6 +46,17 @@ public interface TeamService {
 //                .teamDesc(team.getTeamDesc())
                 .build();
         return teamDTO;
+    }
+
+    default TeamMemberDTO entityToDTO(TeamMemberMapping entity) {
+        TeamMemberDTO dto = TeamMemberDTO.builder()
+                .teamMemberId(entity.getTeamMemberId())
+                .teamPosition(entity.getTeamPosition())
+                .teamName(entity.getTeamName())
+                .memberId(entity.getMember().getMemberId())
+                .teamId(entity.getTeam().getTeamId())
+                .build();
+        return dto;
     }
 
 

@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -144,9 +145,17 @@ public class TeamServiceImpl implements TeamService{
         teamMemberRepository.save(teamMemberMapping);
     }
 
-    public List<TeamMemberMapping> getTeamMemberList(Team team) {
+    public List<TeamMemberDTO> getTeamMemberList(Team team) {
+        List<TeamMemberMapping> teamMemberMappings = teamMemberRepository.findAllByTeam(team.getTeamId());
 
-        return teamMemberRepository.findAllByTeam(team.getTeamId());
+        List<TeamMemberDTO> teamMemberDTOS = new ArrayList<>();
+        for(TeamMemberMapping teamMemberMapping : teamMemberMappings) {
+            TeamMemberDTO teamMemberDTO = entityToDTO(teamMemberMapping);
+            teamMemberDTOS.add(teamMemberDTO);
+        }
+        return teamMemberDTOS;
+
+       // return teamMemberRepository.findAllByTeam(team.getTeamId());
     }
 
 
