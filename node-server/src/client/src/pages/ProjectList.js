@@ -50,7 +50,9 @@ const Line = styled.hr`
 
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
+  const [members, setMembers] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showMemberModal, setShowMemberModal] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userData, setUserData] = useState(null);
   const [showButton, setShowButton] = useState(false);
@@ -113,6 +115,10 @@ const ProjectList = () => {
     setUserData(null);
   };
 
+  const handleCloseMemberModal = () => {
+    setShowMemberModal(false);
+  };
+
   const handleSearch = async () => {
     try {
       await axios
@@ -159,6 +165,21 @@ const ProjectList = () => {
     } catch (error) {
       console.error("Error fetching project:", error);
     }
+  };
+
+  const fetchMembers = async () => {
+    await axios
+      .get(
+        `http://localhost:8002/api/team/teamMemList/${sessionStorage.getItem(
+          "tmid"
+        )}`
+      )
+      .then((res) => {
+        setMembers(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const whoIsAdmin = async () => {
@@ -212,8 +233,44 @@ const ProjectList = () => {
     }
   };
 
+  const leaveTeam = async () => {
+    if (window.confirm("정말로 탈퇴하시겠습니까?")) {
+      await axios
+        .delete(
+          `http://localhost:8002/api/team/leaveTeam?memberId=${sessionStorage.getItem(
+            "memid"
+          )}&teamId=${sessionStorage.getItem("tmid")}`
+        )
+        .then((res) => {
+          alert("팀에서 탈퇴되었습니다.");
+          navigate("/LoggedIn");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const removeMember = async (id) => {
+    if (window.confirm("정말로 탈퇴시키겠습니까?")) {
+      await axios
+        .delete(
+          `http://localhost:8002/api/team/leaveTeam?memberId=${id}&teamId=${sessionStorage.getItem(
+            "tmid"
+          )}`
+        )
+        .then((res) => {
+          alert("팀에서 탈퇴시켰습니다.");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
+    fetchMembers();
     setShowButton(false);
     whoIsAdmin();
     fetchFriendList();
@@ -246,7 +303,7 @@ const ProjectList = () => {
                   </Button>
                   <Button
                     variant="primary"
-                    onClick={() => console.log(1)}
+                    onClick={() => setShowMemberModal(true)}
                     style={{ width: "150px", height: "50px" }}
                   >
                     회원관리
@@ -263,7 +320,7 @@ const ProjectList = () => {
               {!showButton && (
                 <Button
                   variant="danger"
-                  onClick={() => console.log(1)}
+                  onClick={() => leaveTeam()}
                   style={{ width: "150px", height: "50px" }}
                 >
                   팀 탈퇴
@@ -333,6 +390,25 @@ const ProjectList = () => {
               ))}
             </ul>
           </div>
+        </Modal.Body>
+      </Modal>
+      <Modal show={showMemberModal} onHide={handleCloseMemberModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>회원목록</Modal.Title>
+        </Modal.Header>
+        <Line></Line>
+        <Modal.Body>
+          {members.map((member) => (
+            <div key={member.teamMemberId}>
+              {member.teamName} ({member.teamPosition}){" "}
+              <Button
+                variant="danger"
+                onClick={() => removeMember(member.teamMemberId)}
+              >
+                탈퇴
+              </Button>
+            </div>
+          ))}
         </Modal.Body>
       </Modal>
     </>

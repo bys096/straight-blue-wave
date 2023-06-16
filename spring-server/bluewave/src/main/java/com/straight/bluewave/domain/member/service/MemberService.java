@@ -14,6 +14,7 @@ public interface MemberService {
                 .memberPw(dto.getMember_pw())
                 .memberName(dto.getMember_name())
                 .memberNick(dto.getMember_nick())
+                .profilePhoto(dto.getProfile_photo())
                 .build();
         return entity;
     }
@@ -27,6 +28,7 @@ public interface MemberService {
                 .member_nick(entity.getMemberNick())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .profile_photo(entity.getProfilePhoto())
                 .build();
         return dto;
     }

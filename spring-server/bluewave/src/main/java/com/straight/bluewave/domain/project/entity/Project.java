@@ -37,6 +37,9 @@ public class Project extends BaseEntity {
     @Column(name = "prj_name")
     private String prjName;
 
+    @Column(name = "prj_photo")
+    private String prjPhoto;
+
 /*  공통 엔티티 생성했으므로 주석처리
     @Column(name = "creation_date", updatable = false)
     private Date creationDate;
@@ -77,6 +80,10 @@ public class Project extends BaseEntity {
 
     public void changePrjName(String prjName){
         this.prjName = prjName;
+    }
+
+    public void changePrjPhoto(String prjPhoto){
+        this.prjPhoto = prjPhoto;
     }
 
 
