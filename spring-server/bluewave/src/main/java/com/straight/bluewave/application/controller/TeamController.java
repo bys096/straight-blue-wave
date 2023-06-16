@@ -76,11 +76,11 @@ public class TeamController {
     }
 
     @GetMapping("/teamMemList/{teamId}")     //팀에 속한 팀원 목록 조회
-    public ResponseEntity<List<TeamMemberMapping>> getTeamMemberList(@PathVariable Long teamId) {
+    public ResponseEntity<List<TeamMemberDTO>> getTeamMemberList(@PathVariable Long teamId) {
             Team team = new Team();
             team.setTeamId(teamId);
-            List<TeamMemberMapping> teamMember = teamService.getTeamMemberList(team);
-            return new ResponseEntity<>(teamMember, HttpStatus.OK);
+            List<TeamMemberDTO> teamMemberDTOS = teamService.getTeamMemberList(team);
+            return new ResponseEntity<>(teamMemberDTOS, HttpStatus.OK);
     }
 
     @DeleteMapping("/leaveTeam")     //팀 탈퇴

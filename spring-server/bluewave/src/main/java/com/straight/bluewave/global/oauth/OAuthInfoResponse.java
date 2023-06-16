@@ -15,6 +15,8 @@ public interface OAuthInfoResponse {        //AccessToken으로 요청한 외부
 
     String getNickname();
 
+    String getPw();
+
     OAuthProvider getOAuthProvider();
 
     public UsernamePasswordAuthenticationToken toAuthentication();
