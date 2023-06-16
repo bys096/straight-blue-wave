@@ -12,8 +12,8 @@ const StyledCard = styled(Card)`
   align-items: center;
   text-align: center;
   cursor: pointer;
-  width: 130px; // 원하는 너비 지정
-  height: 180px; // 원하는 높이 지정
+  width: 20vh; // 원하는 너비 지정
+	height: 25vh; // 원하는 높이 지정
   border-radius: 10px; // 카드 모서리 둥글게 처리
   text-decoration : none;
   
@@ -22,6 +22,13 @@ const StyledCard = styled(Card)`
     transition: all 0.2s ease-in-out;
   }
 `;
+
+const Plus = styled(AiOutlinePlusCircle)`
+  width : 100%;
+  height: 100%;
+  padding : 1em;
+`;
+
 
 const ProjectCreateCard = () => {
   const [showModal, setShowModal] = useState(false);
@@ -63,7 +70,7 @@ const ProjectCreateCard = () => {
     <>
       <StyledCard className="project_create" onClick={handleShow}>
         <Card.Body>
-          <AiOutlinePlusCircle size={100} />
+          <Plus />
         </Card.Body>
       </StyledCard>
       <Modal show={showModal} onHide={handleClose}>

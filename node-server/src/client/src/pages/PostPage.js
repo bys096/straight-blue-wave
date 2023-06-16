@@ -8,6 +8,8 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { postConnect } from "../actions/post";
 
+import Notification from "./notification";
+
 const Main = styled.div`
 	height: 100%;
 	width: 100%;
@@ -27,6 +29,7 @@ const Content = styled.div`
 	height: 100%;
 	width: 100%;
 `;
+
 
 const PostList = styled.div`
 	display: flex;
@@ -77,6 +80,7 @@ const PostPage = () => {
 			
 	};
 
+
 	useEffect(() => {
 		fetchPosts();
 
@@ -85,6 +89,7 @@ const PostPage = () => {
 	return (
 		<div>
 			<Main>
+			<Notification></Notification>
 				<Header />
 				<Article>
 					<Sidebar />
@@ -155,6 +160,7 @@ const PostPage = () => {
 			</Main>
 		</div>
 	);
+
 };
 
 export default PostPage;

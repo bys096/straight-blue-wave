@@ -1,114 +1,175 @@
-import React, { useState } from "react";
-import { Card, Button, Modal, Form } from "react-bootstrap";
+import React, { useRef, useState } from "react";
+import { Card, Button, Modal, Form, Image } from "react-bootstrap";
 import styled from "styled-components";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { updateTeamImage } from "../actions/team";
 
 const StyledCard = styled(Card)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  cursor: pointer;
-  width: 130px; // 원하는 너비 지정
-  height: 180px; // 원하는 높이 지정
-  border-radius: 10px; // 카드 모서리 둥글게 처리
-  text-decoration : none;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	cursor: pointer;
+	width: 20vh; // 원하는 너비 지정
+	height: 25vh; // 원하는 높이 지정
+	border-radius: 10px; // 카드 모서리 둥글게 처리
+	text-decoration: none;
 
-  &:hover {
-    transform: scale(1.05);
-    transition: all 0.2s ease-in-out;
-  }
+	&:hover {
+		transform: scale(1.05);
+		transition: all 0.2s ease-in-out;
+	}
 `;
 
-const AddImage = styled.img`
-  width: 50px;
-  height: 50px;
+const ImageContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+`;
+
+const ImageLabel = styled(Form.Label)`
+	margin: 5px 0 20px 0;
+	font-weight: bold;
+	font-size: 13px;
+	color: #0095f6;
+	display: inline-block;
+	cursor: pointer;
+`;
+
+const AddImage = styled(Image)`
+	width: 25vh;
+	height: 25vh;
+	object-fit: fill;
+	margin: 15px;
+`;
+
+const Plus = styled(AiOutlinePlusCircle)`
+  width : 100%;
+  height: 100%;
+  padding : 1em;
 `;
 
 const TeamCreateCard = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [teamName, setTeamName] = useState("");
-  const [teamDesc, setTeamDesc] = useState("");
+	const imgRef = useRef(null);
+	const dispatch = useDispatch();
+	const [imgFile, setImgFile] = useState(
+		"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+	);
 
-  const handleClose = () => {
-    setShowModal(false);
-    setTeamName("");
-    setTeamDesc("");
-  };
+	const [showModal, setShowModal] = useState(false);
+	const [teamName, setTeamName] = useState("");
+	const [teamDesc, setTeamDesc] = useState("");
 
-  const handleShow = () => {
-    setShowModal(true);
-  };
+	// 이미지 업로드 input의 onChange
+	const saveImgFile = (e) => {
+		const file = imgRef.current.files[0];
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onloadend = () => {
+			setImgFile(reader.result);
+		};
+	};
 
-  const handleCreateTeam = async () => {
-    await axios
-      .post(
-        `http://localhost:8002/api/team/joinTeam/${sessionStorage.getItem(
-          "memid"
-        )}`,
-        {
-          teamName: teamName,
-          teamDesc: teamDesc,
-        }
-      )
-      .then((res) => {
-        // Team created successfully
-        alert("팀 생성이 완료되었습니다");
-        handleClose();
-        window.location.reload();
-      })
-      .catch((err) => {
-        alert("팀 생성에 실패하였습니다");
-        console.log(err);
-        // Handle error
-      });
-  };
+	const handleClose = () => {
+		setShowModal(false);
+		setTeamName("");
+		setTeamDesc("");
+		setImgFile(
+			"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+		);
+	};
 
-  return (
-    <>
-      <StyledCard className="team_create" onClick={handleShow}>
-        <Card.Body>
-          <AiOutlinePlusCircle size={100} />
-        </Card.Body>
-      </StyledCard>
-      <Modal show={showModal} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>팀 생성</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group>
-              <Form.Label>팀 이름</Form.Label>
-              <Form.Control
-                type="text"
-                value={teamName}
-                onChange={(e) => setTeamName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>팀 설명</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={teamDesc}
-                onChange={(e) => setTeamDesc(e.target.value)}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            취소
-          </Button>
-          <Button variant="primary" onClick={handleCreateTeam}>
-            생성
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
+	const handleShow = () => {
+		setShowModal(true);
+	};
+
+	const handleCreateTeam = async () => {
+		await axios
+			.post(
+				`http://localhost:8002/api/team/joinTeam/${sessionStorage.getItem(
+					"memid"
+				)}`,
+				{
+					teamName: teamName,
+					teamDesc: teamDesc,
+				}
+			)
+			.then((res) => {
+				// Team created successfully
+				alert("팀 생성이 완료되었습니다");
+				handleClose();
+				window.location.reload();
+			})
+			.catch((err) => {
+				alert("팀 생성에 실패하였습니다");
+				console.log(err);
+				// Handle error
+			});
+	};
+
+	return (
+		<>
+			<StyledCard className="team_create" onClick={handleShow}>
+				<Card.Body>
+					<Plus />
+				</Card.Body>
+			</StyledCard>
+			<Modal show={showModal} onHide={handleClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>팀 생성</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form>
+						<Form.Group>
+							<ImageContainer>
+								<AddImage src={imgFile} roundedCircle />
+								<Form.Control
+									style={{ display: "none" }}
+									id="teamImage"
+									type="file"
+									accept="image/*"
+									onChange={saveImgFile}
+									ref={imgRef}
+								/>
+							</ImageContainer>
+							<ImageLabel htmlFor="teamImage">이미지 삽입</ImageLabel>
+						</Form.Group>
+						<Form.Group>
+							<Form.Label>팀 이름</Form.Label>
+							<Form.Control
+								type="text"
+								value={teamName}
+								onChange={(e) => setTeamName(e.target.value)}
+                required
+							/>
+						</Form.Group>
+						<Form.Group>
+							<Form.Label>팀 설명</Form.Label>
+							<Form.Control
+								as="textarea"
+								rows={3}
+								value={teamDesc}
+								onChange={(e) => setTeamDesc(e.target.value)}
+                required
+							/>
+						</Form.Group>
+					</Form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						취소
+					</Button>
+					<Button variant="primary" onClick={handleCreateTeam}>
+						생성
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	);
 };
 
 export default TeamCreateCard;

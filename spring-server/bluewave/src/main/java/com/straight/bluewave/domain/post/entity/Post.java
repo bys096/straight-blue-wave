@@ -45,6 +45,9 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "mem_id")
     private Long mem_id;
 
+    @JoinColumn(name = "mem_nick")
+    private String mem_nick;
+
     @Column(name = "post_content")
     private String post_content;
 
@@ -94,6 +97,7 @@ public class Post extends BaseEntity {
         this.mem_id = dto.getMem_id();
         this.post_content = dto.getPost_content();
         this.post_name = dto.getPost_name();
+        this.meeting_date = dto.getMeeting_date();
         this.attendees_id = dto.getAttendees_id();
     }
 

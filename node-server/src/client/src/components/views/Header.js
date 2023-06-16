@@ -6,6 +6,7 @@ import {
 	Offcanvas,
 	Button,
 	OverlayTrigger,
+	Accordion,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { AiOutlineBell } from "react-icons/ai";
@@ -97,7 +98,7 @@ function Header() {
 									to="/"
 									style={{ textDecoration: "none" }}
 									onClick={() => {
-										dispatch(logout())
+										dispatch(logout());
 										sessionStorage.clear();
 									}}
 								>
@@ -119,153 +120,158 @@ function Header() {
 					<Offcanvas.Title>도움말</Offcanvas.Title>
 				</Offcanvas.Header>
 				<Offcanvas.Body>
-					{helpContent === "guide" && (
-						<>
-							<p>
-								블루웨이브에선 여러분들의 회의를 돕기 위한 회의 가이드라인을 제공합니다.
-								회의 진행을 하다 막히신다면 저희 가이드라인을 참조해보시길 바랍니다.
-							</p>
-							<p>아래에서 원하는 섹션을 선택하세요:</p>
-							<ul>
-								<li>
-									<Button
-										variant="primary"
-										onClick={() => handleShowHelp("idea-generation")}
-									>
-										아이디어 창출 기법
-									</Button>
-								</li>
-								<li>
-									<Button
-										variant="primary"
-										onClick={() => handleShowHelp("meeting-process")}
-									>
-										회의 진행 방식
-									</Button>
-								</li>
-								<li>
-									<Button
-										className="primary"
-										onClick={() => handleShowHelp("meeting-mindset")}
-									>
-										회의 진행 마음가짐
-									</Button>
-								</li>
-							</ul>
-						</>
-					)}
-					{helpContent === "idea-generation" && (
-						<>
-							<h4>아이디어 창출 기법</h4>
-							<ul>
-								<li onClick={() => handleShowHelp("brainstorming")}>브레인스토밍</li>
-								<li onClick={() => handleShowHelp("brainwriting")}>브레인라이팅</li>
-								<li onClick={() => handleShowHelp("kjmapping")}>KJ법</li>
-								<li onClick={() => handleShowHelp("mindmap")}>마인드맵</li>
-								<li onClick={() => handleShowHelp("synectics")}>시네틱스</li>
-								<li onClick={() => handleShowHelp("scamper")}>스캠퍼</li>
-								<li onClick={() => handleShowHelp("sixthinkinghats")}>여섯색깔모자</li>
-							</ul>
-							<Button variant="primary" onClick={handleGoBack}>
-								뒤로 가기
-							</Button>
-						</>
-					)}
-					{helpContent === "meeting-process" && (
-						<>
-							<Meetingprocess></Meetingprocess>
-							<Button variant="primary" onClick={handleGoBack}>
-								뒤로 가기
-							</Button>
-						</>
-					)}
-					{helpContent === "meeting-mindset" && (
-						<>
-							<Meetingmindset></Meetingmindset>
-							<Button variant="primary" onClick={handleGoBack}>
-								뒤로 가기
-							</Button>
-						</>
-					)}
-					{helpContent === "brainstorming" && (
-						<>
-							<Brainstorming></Brainstorming>
-							<Button
-								variant="primary"
-								onClick={() => handleShowHelp("idea-generation")}
-							>
-								뒤로 가기
-							</Button>
-						</>
-					)}
-					{helpContent === "brainwriting" && (
-						<>
-							<Brainwriting></Brainwriting>
-							<Button
-								variant="primary"
-								onClick={() => handleShowHelp("idea-generation")}
-							>
-								뒤로 가기
-							</Button>
-						</>
-					)}
-					{helpContent === "kjmapping" && (
-						<>
-							<KJmapping></KJmapping>
-							<Button
-								variant="primary"
-								onClick={() => handleShowHelp("idea-generation")}
-							>
-								뒤로 가기
-							</Button>
-						</>
-					)}
-					{helpContent === "mindmap" && (
-						<>
-							<Mindmap></Mindmap>
-							<Button
-								variant="primary"
-								onClick={() => handleShowHelp("idea-generation")}
-							>
-								뒤로 가기
-							</Button>
-						</>
-					)}
-					{helpContent === "scamper" && (
-						<>
-							<SCAMPER></SCAMPER>
-							<Button
-								variant="primary"
-								onClick={() => handleShowHelp("idea-generation")}
-							>
-								뒤로 가기
-							</Button>
-						</>
-					)}
-					{helpContent === "sixthinkinghats" && (
-						<>
-							<Sixthinkinghats></Sixthinkinghats>
-							<Button
-								variant="primary"
-								onClick={() => handleShowHelp("idea-generation")}
-							>
-								뒤로 가기
-							</Button>
-						</>
-					)}
-					{helpContent === "synectics" && (
-						<>
-							<Synectics></Synectics>
-							<Button
-								variant="primary"
-								onClick={() => handleShowHelp("idea-generation")}
-							>
-								뒤로 가기
-							</Button>
-						</>
-					)}
+					<Accordion>
+						{helpContent === "guide" && (
+							<>
+								<p>
+									블루웨이브에선 여러분들의 회의를 돕기 위한 회의 가이드라인을
+									제공합니다. 회의 진행을 하다 막히신다면 저희 가이드라인을 참조해보시길
+									바랍니다.
+								</p>
+								<p>아래에서 원하는 섹션을 선택하세요:</p>
+
+								<ul>
+									<li>
+										<Button
+											variant="primary"
+											onClick={() => handleShowHelp("idea-generation")}
+										>
+											아이디어 창출 기법
+										</Button>
+									</li>
+									<li>
+										<Button
+											variant="primary"
+											onClick={() => handleShowHelp("meeting-process")}
+										>
+											회의 진행 방식
+										</Button>
+									</li>
+									<li>
+										<Button
+											className="primary"
+											onClick={() => handleShowHelp("meeting-mindset")}
+										>
+											회의 진행 마음가짐
+										</Button>
+									</li>
+								</ul>
+							</>
+						)}
+						{helpContent === "idea-generation" && (
+							<>
+								<h4>아이디어 창출 기법</h4>
+								<ul>
+									<li onClick={() => handleShowHelp("brainstorming")}>브레인스토밍</li>
+									<li onClick={() => handleShowHelp("brainwriting")}>브레인라이팅</li>
+									<li onClick={() => handleShowHelp("kjmapping")}>KJ법</li>
+									<li onClick={() => handleShowHelp("mindmap")}>마인드맵</li>
+									<li onClick={() => handleShowHelp("synectics")}>시네틱스</li>
+									<li onClick={() => handleShowHelp("scamper")}>스캠퍼</li>
+									<li onClick={() => handleShowHelp("sixthinkinghats")}>여섯색깔모자</li>
+								</ul>
+								<Button variant="primary" onClick={handleGoBack}>
+									뒤로 가기
+								</Button>
+							</>
+						)}
+						{helpContent === "meeting-process" && (
+							<>
+								<Meetingprocess></Meetingprocess>
+								<Button variant="primary" onClick={handleGoBack}>
+									뒤로 가기
+								</Button>
+							</>
+						)}
+						{helpContent === "meeting-mindset" && (
+							<>
+								<Meetingmindset></Meetingmindset>
+								<Button variant="primary" onClick={handleGoBack}>
+									뒤로 가기
+								</Button>
+							</>
+						)}
+						{helpContent === "brainstorming" && (
+							<>
+								<Brainstorming></Brainstorming>
+								<Button
+									variant="primary"
+									onClick={() => handleShowHelp("idea-generation")}
+								>
+									뒤로 가기
+								</Button>
+							</>
+						)}
+						{helpContent === "brainwriting" && (
+							<>
+								<Brainwriting></Brainwriting>
+								<Button
+									variant="primary"
+									onClick={() => handleShowHelp("idea-generation")}
+								>
+									뒤로 가기
+								</Button>
+							</>
+						)}
+						{helpContent === "kjmapping" && (
+							<>
+								<KJmapping></KJmapping>
+								<Button
+									variant="primary"
+									onClick={() => handleShowHelp("idea-generation")}
+								>
+									뒤로 가기
+								</Button>
+							</>
+						)}
+						{helpContent === "mindmap" && (
+							<>
+								<Mindmap></Mindmap>
+								<Button
+									variant="primary"
+									onClick={() => handleShowHelp("idea-generation")}
+								>
+									뒤로 가기
+								</Button>
+							</>
+						)}
+						{helpContent === "scamper" && (
+							<>
+								<SCAMPER></SCAMPER>
+								<Button
+									variant="primary"
+									onClick={() => handleShowHelp("idea-generation")}
+								>
+									뒤로 가기
+								</Button>
+							</>
+						)}
+						{helpContent === "sixthinkinghats" && (
+							<>
+								<Sixthinkinghats></Sixthinkinghats>
+								<Button
+									variant="primary"
+									onClick={() => handleShowHelp("idea-generation")}
+								>
+									뒤로 가기
+								</Button>
+							</>
+						)}
+						{helpContent === "synectics" && (
+							<>
+								<Synectics></Synectics>
+								<Button
+									variant="primary"
+									onClick={() => handleShowHelp("idea-generation")}
+								>
+									뒤로 가기
+								</Button>
+							</>
+						)}
+					</Accordion>
 				</Offcanvas.Body>
 			</Offcanvas>
+
 			{showNotify && <PopOver ref={ref} target={target} show={showNotify} />}
 		</>
 	);

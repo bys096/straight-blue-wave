@@ -6,6 +6,9 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import Notification from "./notification";
+import io from "socket.io-client";
+
 const Main = styled.div`
 	height: 100%;
 	width: 100%;
@@ -32,6 +35,7 @@ const CreateForm = styled.div`
 	width: 100%;
 	height: 100%;
 `;
+
 
 const CreatePostPage = () => {
 	const navigate = useNavigate();
@@ -71,16 +75,30 @@ const CreatePostPage = () => {
 		}));
 	};
 
+	const socket = io();
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
 		try {
+
 			const modifiedPost = {
 				...post,
 				mem_id: sessionStorage.getItem("memid"),
 				mem_nick: sessionStorage.getItem("memnick"),
 				brd_id: sessionStorage.getItem("boardid"),
 			};
+
+			const eventData = {
+				prjRoom: sessionStorage.getItem('prjroom'), 
+				prjName: sessionStorage.getItem('prjname'),
+				post_name: post.post_name,
+				post_content: post.post_content,
+				meeting_date: post.meeting_date,
+				mem_id: post.mem_id
+			};
+
+			socket.emit("eventData", eventData);
 			if (isModify) {
 				await axios.put(
 					`http://localhost:8002/api/post/modify/${posts.post_id}`,
@@ -103,6 +121,7 @@ const CreatePostPage = () => {
 
 	return (
 		<Main>
+			<Notification></Notification>
 			<Header />
 			<Article>
 				<Sidebar />

@@ -55,7 +55,6 @@ const ProjectList = () => {
   const [userData, setUserData] = useState(null);
   const [showButton, setShowButton] = useState(false);
   const [friendList, setFriendList] = useState([]);
-
   const navigate = useNavigate();
 
   const addUser = async (email) => {
@@ -70,6 +69,7 @@ const ProjectList = () => {
           )
           .then(() => {
             alert("회원이 정상적으로 가입되었습니다");
+            setUserData(null);
           });
       })
       .catch((err) => {
@@ -79,16 +79,31 @@ const ProjectList = () => {
 
   const addUserFriend = async (id) => {
     await axios
-      .post(
-        `http://localhost:8002/api/team/inviteTeam?memberId=${id}&teamId=${sessionStorage.getItem(
-          "tmid"
-        )}`
-      )
-      .then((res) => {
-        alert("회원이 정상적으로 가입되었습니다");
+      .post(`http://localhost:8002/api/team/member/list`, {
+        pageNumber: 1,
+        pageSize: 100,
+        teamId: sessionStorage.getItem("tmid"),
       })
-      .catch((err) => {
-        console.log(err);
+      .then((res) => {
+        const findMember = res.data.dtoList.some(
+          (item) => item.memberId === id
+        );
+        if (findMember) {
+          alert("이미 가입되어있는 회원입니다.");
+        } else {
+          axios
+            .post(
+              `http://localhost:8002/api/team/inviteTeam?memberId=${id}&teamId=${sessionStorage.getItem(
+                "tmid"
+              )}`
+            )
+            .then((res) => {
+              alert("회원이 정상적으로 가입되었습니다");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       });
   };
 
@@ -141,7 +156,6 @@ const ProjectList = () => {
         )}`
       );
       setProjects(response.data);
-      console.log(projects)
     } catch (error) {
       console.error("Error fetching project:", error);
     }
@@ -180,6 +194,24 @@ const ProjectList = () => {
     }
   };
 
+  const deleteTeam = async () => {
+    if (window.confirm("정말로 삭제하시겠습니까?")) {
+      await axios
+        .delete(
+          `http://localhost:8002/api/team/deleteTeam/${sessionStorage.getItem(
+            "tmid"
+          )}`
+        )
+        .then((res) => {
+          alert("팀이 삭제되었습니다.");
+          navigate("/LoggedIn");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
     setShowButton(false);
@@ -201,15 +233,40 @@ const ProjectList = () => {
             <Container>
               <Title>프로젝트 목록</Title>
               {showButton && (
+                <>
+                  <Button
+                    variant="primary"
+                    onClick={() => setShowModal(true)}
+                    style={{
+                      width: "150px",
+                      height: "50px",
+                    }}
+                  >
+                    회원 추가
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => console.log(1)}
+                    style={{ width: "150px", height: "50px" }}
+                  >
+                    회원관리
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => deleteTeam()}
+                    style={{ width: "150px", height: "50px" }}
+                  >
+                    팀 삭제
+                  </Button>
+                </>
+              )}
+              {!showButton && (
                 <Button
-                  variant="primary"
-                  onClick={() => setShowModal(true)}
-                  style={{
-                    width: "150px",
-                    height: "50px",
-                  }}
+                  variant="danger"
+                  onClick={() => console.log(1)}
+                  style={{ width: "150px", height: "50px" }}
                 >
-                  회원 추가
+                  팀 탈퇴
                 </Button>
               )}
               <Button
@@ -224,7 +281,9 @@ const ProjectList = () => {
               </Button>
               <Line />
               <Projects>
-                <ProjectCreateCard onProjectCreated={onProjectCreated} />
+                {showButton && (
+                  <ProjectCreateCard onProjectCreated={onProjectCreated} />
+                )}
                 {projects.map((project, index) => (
                   <div key={index}>
                     <ProjectItem project={project} prjId={project.prjId} />
@@ -266,7 +325,7 @@ const ProjectList = () => {
                   {friend.friendName}{" "}
                   <Button
                     variant="primary"
-                    onClick={() => addUser(friend.frId)}
+                    onClick={() => addUserFriend(friend.friendId)}
                   >
                     회원추가
                   </Button>
