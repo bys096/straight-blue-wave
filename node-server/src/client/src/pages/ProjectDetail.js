@@ -138,7 +138,6 @@ const ProjectDetail = () => {
       )
       .then((response) => {
         setBoardList(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -157,7 +156,6 @@ const ProjectDetail = () => {
           ...prevPosts,
           [boardId]: res.data.dtoList,
         }));
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -193,10 +191,9 @@ const ProjectDetail = () => {
       });
   };
 
-
   return (
     <Main>
-    <Notification></Notification>
+      <Notification></Notification>
       <Header />
       <Article>
         <Sidebar />
