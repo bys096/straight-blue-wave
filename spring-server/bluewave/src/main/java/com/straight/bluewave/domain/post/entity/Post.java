@@ -8,6 +8,7 @@ import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
 import com.straight.bluewave.domain.post.dto.PostDTO;
+import com.straight.bluewave.domain.reply.entity.Reply;
 import com.straight.bluewave.domain.schedule.entity.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -86,6 +87,10 @@ public class Post extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
+
+    // 게시글 삭제시 댓글 삭제
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> reply;
 
     public Post(Board board, PostDTO dto) {
     }
