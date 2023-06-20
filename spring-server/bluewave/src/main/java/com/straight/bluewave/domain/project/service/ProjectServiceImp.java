@@ -1,5 +1,7 @@
 package com.straight.bluewave.domain.project.service;
 
+import com.straight.bluewave.domain.board.entity.Board;
+import com.straight.bluewave.domain.board.repository.BoardRepository;
 import com.straight.bluewave.domain.mapping.entity.TeamProjectMapping;
 import com.straight.bluewave.domain.project.dto.ProjectDTO;
 import com.straight.bluewave.domain.project.entity.Project;
@@ -18,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProjectServiceImp implements ProjectService{
     private final ProjectRepository projectRepository;
+    private final BoardRepository boardRepository;
 
     public Project createProject(ProjectDTO dto){
         Project project = Project.builder()
@@ -31,6 +34,22 @@ public class ProjectServiceImp implements ProjectService{
         project.setTeam(team);
 
         projectRepository.save(project);
+
+
+        // 공지사항 게시판 자동생성
+        Board noticeBoard = Board.builder()
+                .brdName("공지사항")
+                .project(project)
+                .build();
+        boardRepository.save(noticeBoard);
+
+        // 회의록 게시판 자동생성
+        Board meetingMinutesBoard = Board.builder()
+                .brdName("회의록")
+                .project(project)
+                .build();
+        boardRepository.save(meetingMinutesBoard);
+
         return project;
     }
 
