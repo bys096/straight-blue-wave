@@ -18,6 +18,8 @@ public class TeamMemberDTO {
 
     private String teamPosition;
 
+    private String teamName;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

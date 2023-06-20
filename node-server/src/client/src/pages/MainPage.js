@@ -7,6 +7,7 @@ import $ from "jquery";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 function MainPage(props) {
   const socket = io();
@@ -28,6 +29,18 @@ function MainPage(props) {
   const chatLogsRef = useRef(null);
   const chatInputRef = useRef(null);
   const navigate = useNavigate();
+
+
+  // stt
+  const [interimTranscript, setInterimTranscript] = useState('');
+  const [finalTranscript, setFinalTranscript] = useState('');
+  const [result, setResult] = useState('결과가 없습니다.');
+
+    
+
+
+
+  
   let myStream;
   let muted = false;
   let cameraOff = false;
@@ -39,6 +52,49 @@ function MainPage(props) {
   useEffect(() => {
     setUserId(sessionStorage.getItem("user_id"));
     setChatHidden(true);
+    console.log('nic, prj check');
+    console.log(sessionStorage.getItem('memnick'));
+    console.log(sessionStorage.getItem('prjid'));
+
+    // stt
+    // stt code
+    const recognition = new window.webkitSpeechRecognition();
+    console.log('logged in page');
+    recognition.interimResults = true;
+    recognition.lang = 'ko';
+    recognition.continuous = true;
+    recognition.autoRestart = true;
+    // let final = '';
+    recognition.onresult = event => {
+      let interim = '';
+      let final = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          final += event.results[i][0].transcript;
+        } else {
+          interim += event.results[i][0].transcript;
+        }
+      }
+      
+      setInterimTranscript(interim);
+      setFinalTranscript(final);
+      setResult(`중간값: ${interim}<br/>결과값: ${final}<br/>최종: ${final}`);
+      
+      const context = {
+        // userNick: 'nick1',
+        userNick: sessionStorage.getItem('memnick'),
+        roomName: sessionStorage.getItem('prjid'),
+        text: final
+      }
+      socket.emit('speak', context);
+    };
+    
+    recognition.start();
+
+
+
+
+
 
     $("#chat-circle").click(function () {
       $("#chat-circle").toggle("scale");
@@ -50,6 +106,16 @@ function MainPage(props) {
       $(".chat-box").toggle("scale");
     });
   }, []);
+
+  // gpt
+  
+  const handleMessageSubmit = async () => {
+    console.log('summarize in client: ', sessionStorage.getItem('prjid'));
+    socket.emit("summarize", sessionStorage.getItem('prjid'));
+    // 사용자 입력과 대화 기록을 API 요청의 본문에 포함합니다.
+  }
+
+
 
   async function getCameras() {
     try {
@@ -146,6 +212,7 @@ function MainPage(props) {
     }
     socket.emit("join_room", roomForm.value, userId);
     setRoomName(roomForm.value);
+    console.log('방입장: ', roomName);
     // console.log(`입장, 방이름: ${roomName}`);
     roomForm.value = "";
     // console.log(`입장, 방이름?: ${roomName}`);
@@ -362,6 +429,8 @@ function MainPage(props) {
     socket.disconnect();
   }
 
+  
+
   return (
     <Container>
       <h1>영상통화</h1>
@@ -377,6 +446,13 @@ function MainPage(props) {
               <button onClick={handleWelcomeSubmit}>Enter room</button>
             </form>
           </div>
+
+
+      <br /><br />
+      한국어 음성 처리 테스트<br /><br />
+      <div dangerouslySetInnerHTML={{ __html: result }}></div>
+<button onClick={handleMessageSubmit}>전송</button>
+
           <div
             id="call"
             ref={callRef}
@@ -459,3 +535,5 @@ function MainPage(props) {
 }
 
 export default MainPage;
+
+

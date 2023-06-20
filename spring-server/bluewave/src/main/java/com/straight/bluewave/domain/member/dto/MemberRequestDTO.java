@@ -24,12 +24,15 @@ public class MemberRequestDTO {
 
     private String member_nick;
 
+    private String profile_photo;
+
     public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
                 .memberEmail(member_email)
                 .memberPw(passwordEncoder.encode(member_pw))
                 .memberName(member_name)
                 .memberNick(member_nick)
+                .profilePhoto(profile_photo)
                 .authority(Authority.ROLE_USER)
                 .oAuthProvider(OAuthProvider.BLUEWAVE)
                 .build();

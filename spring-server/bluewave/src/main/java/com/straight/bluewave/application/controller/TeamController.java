@@ -30,7 +30,7 @@ public class TeamController {
 
 
     // 팀 회원 목록 조회(조건 가능) -> 라우팅 수정
-    @GetMapping("/member/list")
+    @PostMapping("/member/list")
     public TeamMemberPageResultDTO getTeamMemberList(@RequestBody TeamMemberPageRequestDTO pageRequestDTO) {
         TeamMemberPageResultDTO dto = teamService.getList(pageRequestDTO);
         return dto;
@@ -76,11 +76,17 @@ public class TeamController {
     }
 
     @GetMapping("/teamMemList/{teamId}")     //팀에 속한 팀원 목록 조회
-    public ResponseEntity<List<TeamMemberMapping>> getTeamMemberList(@PathVariable Long teamId) {
+    public ResponseEntity<List<TeamMemberDTO>> getTeamMemberList(@PathVariable Long teamId) {
             Team team = new Team();
             team.setTeamId(teamId);
-            List<TeamMemberMapping> teamMember = teamService.getTeamMemberList(team);
-            return new ResponseEntity<>(teamMember, HttpStatus.OK);
+            List<TeamMemberDTO> teamMemberDTOS = teamService.getTeamMemberList(team);
+            return new ResponseEntity<>(teamMemberDTOS, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/leaveTeam")     //팀 탈퇴
+    public ResponseEntity<String> leave(@RequestParam Long memberId, @RequestParam Long teamId) {
+        teamService.leave(memberId, teamId);
+        return new ResponseEntity<>("팀 탈퇴 성공", HttpStatus.OK);
     }
 
 }

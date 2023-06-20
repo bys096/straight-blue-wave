@@ -1,7 +1,9 @@
+
 import http from "http";
 import SocketIO from "socket.io";
 import express from "express";
 import cors from "cors"; // 추가
+import axios from 'axios';
 
 const path = require('path');
 const app = express();
@@ -50,13 +52,26 @@ let roomObjArr = [
 ];
 const MAXIMUM = 5;
 
+let roomContext = {};
+// const roomContext = { 1: "apple", 2: "banana", 3: "orange" };
+let ncnt = 0;
+
+
+
 wsServer.on("connection", (socket) => {
+  
 
   let myRoomName = null;
   let myUserId = null;
   // let myNickname = null;
 
   socket.on("join_room", (roomName, userId) => {
+    ncnt++;
+    console.log("참가자수: " + ncnt);
+  // for (let key in obj) {
+    // console.log('key: ', key);
+    
+  // }
     myRoomName = roomName;
     myUserId = userId;
     const joinUser = {
@@ -124,6 +139,8 @@ wsServer.on("connection", (socket) => {
   socket.on("disconnecting", () => {
     // console.log("disconnecting socket id from server: " + socket.id);
     // console.log("disconect id? " + myUserId);
+    // console.log('disconnect');
+    // console.log(roomContext);
     const user = {
       sid: socket.id,
       msg: `나감`,
@@ -133,21 +150,81 @@ wsServer.on("connection", (socket) => {
       socket.to(room).emit("left", user)
     );
   });
-
-
-
+  
 
 
   socket.on("sendChat", (chat) => {
     // console.log(`roomName: ${roomName}, msg: ${msg}, sid: ${socket.id}`);
     // console.log(`myroomName: ${myRoomName}, msg: ${msg}`);
-
-
     socket.to(chat.roomName).emit("newMessage", chat);
 
   });
 
+  socket.on("speak", (context) => {
+    const keys = Object.keys(roomContext);
+    if(keys.includes(context.roomName)) {
+      if(context.roomName == '' || context.text == '')
+        return;
+      console.log("Key found:", context.roomName);
+      roomContext[context.roomName].push(`누가(참석자): ${context.userNick}: 대화 내용: ${context.text}`);
+      console.log('------------');
+      console.log(roomContext);
+    }
+    else {
+      roomContext = { [context.roomName] : [context.text] };
+      // roomContext = { ...roomContext, ...additionalInfo };
+      console.log('not key found');
+      // console.log(roomContext);
+      
+      console.log("---------------------------");
+      console.log(roomContext);
+    }
+  });
+  socket.on("summarize", (prjid) => {
+    console.log('summarize: ', prjid);
+    const combinedString = roomContext[prjid].join("\n");
+    console.log('combiend', combinedString);
+    const data = {
+      model: "gpt-3.5-turbo",
+      temperature: 0.2,
+      n: 1,
+      messages: [
+        {'role': 'user', 'content': combinedString},
+        {'role': 'assistant', 'content': '대화를 요약, 오타 수정을 해서 한국어로된 회의록으로 작성해줘. 회의록 내용으로는 일시, 참석자, 안건, 내용 요약, 결론, 회의록 작성자의 양식으로 작성해줘.\n 문맥에 맞지 않는 표현은 잘못 입려된 단어이니, 문맥에 맞는 단어로 대체해줘.'}
+      ],
+    };
+    summarize(data);
+
+    
+
+  });  
+
+
 });
+async function summarize(data) {
+  try {
+    //   // ChatGPT API 호출
+      // console.log('check data');
+      // console.log(data);
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer secret",
+          },
+        }
+      );
+      const answer = response.data.choices[0].message.content;
+      console.log(answer);
+      // console.log(response.data);
+      // setMessages([...messages, { role: "assistant", content: answer }]);
+    } catch (error) {
+      console.error("API 요청 중 오류가 발생했습니다:", error);
+    }
+}
+
 
 
 const handleListen = () => console.log(`Listening on http://localhost:4000`);
@@ -187,8 +264,6 @@ socket.on("join_prj", (prjRoom) => {
 
 
   socket.on('disconnect', () => {
-    // console.log('notification disconnected');
-    
     socket.rooms.forEach((room) =>
       socket.to(room).emit("left", user)
     );
@@ -204,5 +279,3 @@ socket.on("join_prj", (prjRoom) => {
   
 
 });
-
-

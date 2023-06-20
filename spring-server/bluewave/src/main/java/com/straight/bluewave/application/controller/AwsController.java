@@ -14,7 +14,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/aws")
+@RequestMapping("/api/aws")
 public class AwsController {
 
     private final S3Service awsService;

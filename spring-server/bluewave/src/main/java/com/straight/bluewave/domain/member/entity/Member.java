@@ -47,6 +47,9 @@ public class Member extends BaseEntity {
     @Column(name = "mem_nick")
     private String memberNick;
 
+    @Column(name = "profile_photo")
+    private String profilePhoto;
+
     /*@Column(name = "deleted_at")
     private LocalDateTime deletedAt;*/
 
@@ -59,6 +62,7 @@ public class Member extends BaseEntity {
     public void updateMember(MemberUpdateDTO dto) {
         if(dto.getMember_name() != null) this.memberName = dto.getMember_name();
         if (dto.getMember_nick() != null) this.memberNick = dto.getMember_nick();
+        if (dto.getProfile_photo() != null) this.profilePhoto = dto.getProfile_photo();
     }
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)

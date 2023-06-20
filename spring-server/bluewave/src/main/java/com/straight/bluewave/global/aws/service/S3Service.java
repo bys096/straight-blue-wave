@@ -53,8 +53,8 @@ public class S3Service {
     private GeneratePresignedUrlRequest getGeneratePreSignedUrlRequest(String bucket, String fileName) {
         GeneratePresignedUrlRequest generatePresignedUrlRequest =
                 new GeneratePresignedUrlRequest(bucket, fileName)
-                        .withMethod(HttpMethod.PUT)
-                        .withExpiration(getPreSignedUrlExpiration());
+                        .withMethod(HttpMethod.PUT);
+//                        .withExpiration(getPreSignedUrlExpiration());
         generatePresignedUrlRequest.addRequestParameter(
                 Headers.S3_CANNED_ACL,
                 CannedAccessControlList.PublicRead.toString());

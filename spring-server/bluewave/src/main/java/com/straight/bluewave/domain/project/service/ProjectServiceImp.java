@@ -23,6 +23,7 @@ public class ProjectServiceImp implements ProjectService{
         Project project = Project.builder()
                 .prjName(dto.getPrj_name())
                 .prjRoom(UUID.randomUUID())
+                .prjPhoto(dto.getPrj_photo())
                 .build();
 
         Team team = new Team();
@@ -48,6 +49,7 @@ public class ProjectServiceImp implements ProjectService{
         if (result.isPresent()) {
             project = result.get();
             project.changePrjName(dto.getPrj_name());
+            project.changePrjPhoto(dto.getPrj_photo());
 
             projectRepository.save(project);
         }

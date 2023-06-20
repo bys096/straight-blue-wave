@@ -21,4 +21,6 @@ public class TeamDTO {
     private String memberName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    private String team_photo;
 }

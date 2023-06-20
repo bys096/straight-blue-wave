@@ -70,9 +70,9 @@ const TeamCreateCard = () => {
 
 	// 이미지 업로드 input의 onChange
 	const saveImgFile = async () => {
-		// const file = imgRef.current.files[0];
 		const file = imgRef.current.files[0];
 		setSelectedFile(file);
+		setImgFile(file);
 		const maxSize = 5 * 1024 * 1024;
 		const fileSize = file.size;
 
@@ -83,45 +83,26 @@ const TeamCreateCard = () => {
 
 		const filename = file.name;
 		const filetype = file.type;
+
 		try {
-			const res = await axios.get("/api/aws/s3/url", {
+			const res = await axios.get("http://localhost:8002/api/aws/s3/url", {
 				params: { filename, filetype },
-				// headers: this.$store.getters.headers
 			});
+
 			setEncodedFileName(res.data.encodedFileName);
 			setPresignedUrl(res.data.preSignedUrl);
 
-			console.log("presignedUrl: " + presignedUrl);
-			console.log("endcodedFileName: " + encodedFileName);
+			console.log("presignedUrl: " + res.data.preSignedUrl);
+			console.log("encodedFileName: " + res.data.encodedFileName);
 		} catch (err) {
 			console.log(err);
 		}
 
 		const reader = new FileReader();
-		reader.readAsDataURL(imgFile);
+		reader.readAsDataURL(file);
 		reader.onloadend = () => {
 			setImgFile(reader.result);
-			uploadImage();
 		};
-	};
-
-	const uploadImage = async () => {
-		if (!selectedFile || !presignedUrl) return;
-		await axios
-			.put(presignedUrl, selectedFile)
-			.then((res) => {
-				setImgFile(presignedUrl + encodedFileName);
-				console.log(res);
-			})
-			.catch((err) => {
-				if (err.response.status === 419) {
-					this.$store.dispatch("handleTokenExpired");
-				} else console.error("s3 upload error:", err);
-			});
-	};
-
-	const shorten = (text) => {
-		return text.length > 15 ? text.substr(0, 15) + "…" : text;
 	};
 
 	const handleClose = () => {
@@ -138,6 +119,28 @@ const TeamCreateCard = () => {
 	};
 
 	const handleCreateTeam = async () => {
+		console.log(presignedUrl);
+		let imageUrl = "";
+		if (!selectedFile || !presignedUrl) {
+			imageUrl =
+				"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+		}
+
+		await axios
+			.put(presignedUrl, selectedFile)
+			.then((res) => {
+				console.log(res);
+				imageUrl = presignedUrl.split("?")[0];
+			})
+			.catch((err) => {
+				if (err.response.status === 419) {
+					this.$store.dispatch("handleTokenExpired");
+				} else console.error("s3 upload error:", err);
+			});
+
+		
+		console.log(imageUrl);
+
 		await axios
 			.post(
 				`http://localhost:8002/api/team/joinTeam/${sessionStorage.getItem(
@@ -146,7 +149,7 @@ const TeamCreateCard = () => {
 				{
 					teamName: teamName,
 					teamDesc: teamDesc,
-					team_photo: imgFile,
+					team_photo: imageUrl,
 				}
 			)
 			.then((res) => {

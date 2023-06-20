@@ -65,7 +65,7 @@ public class OAuthLoginService {
         } else {
             Member member = Member.builder()
                     .memberEmail(oAuthInfoResponse.getEmail())
-                    .memberPw(passwordEncoder.encode("1111"))
+                    .memberPw(passwordEncoder.encode(oAuthInfoResponse.getPw()))
                     .memberName(oAuthInfoResponse.getName())
                     .memberNick(oAuthInfoResponse.getNickname())
                     .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
