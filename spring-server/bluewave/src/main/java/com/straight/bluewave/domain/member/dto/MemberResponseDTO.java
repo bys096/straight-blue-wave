@@ -19,6 +19,8 @@ public class MemberResponseDTO {
 
     private String member_nick;
 
+    private String profile_photo;
+
     public static MemberResponseDTO of(Member member) {
 
         return MemberResponseDTO.builder()
@@ -26,6 +28,7 @@ public class MemberResponseDTO {
                 .member_id(member.getMemberId())
                 .member_name(member.getMemberName())
                 .member_nick(member.getMemberNick())
+                .profile_photo(member.getProfilePhoto())
                 .build();
 
         //return new MemberResponseDTO(member.getMemberEmail());

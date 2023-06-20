@@ -3,6 +3,7 @@ package com.straight.bluewave.domain.schedule.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
+import com.straight.bluewave.domain.notification.entity.Notification;
 import com.straight.bluewave.domain.post.entity.Post;
 import com.straight.bluewave.domain.project.entity.Project;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -60,6 +62,9 @@ public class Schedule extends BaseEntity {
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
+
     public void changeChTitle(String scheduleTitle){
         this.scheduleTitle = scheduleTitle;
     }
@@ -82,6 +87,10 @@ public class Schedule extends BaseEntity {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public void setScheduleId(Long scheduleId){
+        this.scheduleId = scheduleId;
     }
 
 //    public void setPost(Post post) {

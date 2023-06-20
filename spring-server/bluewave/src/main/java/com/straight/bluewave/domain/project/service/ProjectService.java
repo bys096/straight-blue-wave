@@ -8,6 +8,7 @@ public interface ProjectService {
         Project entity = Project.builder()
                 .prjId(dto.getPrj_id())
                 .prjName(dto.getPrj_name())
+                .prjPhoto(dto.getPrj_photo())
                 .build();
         return entity;
     }
@@ -16,6 +17,7 @@ public interface ProjectService {
         ProjectDTO dto = ProjectDTO.builder()
                 .prj_id(entity.getPrjId())
                 .prj_name(entity.getPrjName())
+                .prj_photo(entity.getPrjPhoto())
                 .build();
         return dto;
     }

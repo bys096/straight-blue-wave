@@ -16,4 +16,6 @@ public class MemberUpdateDTO {
     private String member_name;
 
     private String member_nick;
+
+    private String profile_photo;
 }

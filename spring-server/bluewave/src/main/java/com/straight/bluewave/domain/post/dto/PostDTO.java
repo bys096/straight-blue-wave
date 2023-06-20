@@ -19,6 +19,8 @@ public class PostDTO {
 
     private Long mem_id;
 
+    private String mem_nick;
+
     private Long brd_id;
 
     private String post_content;

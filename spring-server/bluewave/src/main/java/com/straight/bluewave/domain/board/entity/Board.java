@@ -2,6 +2,7 @@ package com.straight.bluewave.domain.board.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.straight.bluewave.domain.board.dto.BoardDTO;
 import com.straight.bluewave.domain.post.entity.Post;
@@ -40,6 +41,7 @@ public class Board{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prj_id")
+    @JsonIgnore
     private Project project;
 
     /*@Column(name = "deleted_at")

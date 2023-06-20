@@ -39,7 +39,6 @@ public class MemberController {
         return ResponseEntity.ok(memberServiceImp.findMemberInfoByEmail(email));
     }
 
-
     @GetMapping("/me")         //인증된 사용자의 회원정보 조회
     public ResponseEntity<MemberResponseDTO> findMemberInfoById() {
         return ResponseEntity.ok(memberServiceImp.findMemberInfoById(SecurityUtil.getCurrentMemberId()));

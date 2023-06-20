@@ -50,12 +50,13 @@ const Line = styled.hr`
 
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
+  const [members, setMembers] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showMemberModal, setShowMemberModal] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userData, setUserData] = useState(null);
   const [showButton, setShowButton] = useState(false);
   const [friendList, setFriendList] = useState([]);
-
   const navigate = useNavigate();
 
   const addUser = async (email) => {
@@ -70,6 +71,8 @@ const ProjectList = () => {
           )
           .then(() => {
             alert("회원이 정상적으로 가입되었습니다");
+            fetchMembers();
+            setUserData(null);
           });
       })
       .catch((err) => {
@@ -79,16 +82,32 @@ const ProjectList = () => {
 
   const addUserFriend = async (id) => {
     await axios
-      .post(
-        `http://localhost:8002/api/team/inviteTeam?memberId=${id}&teamId=${sessionStorage.getItem(
-          "tmid"
-        )}`
-      )
-      .then((res) => {
-        alert("회원이 정상적으로 가입되었습니다");
+      .post(`http://localhost:8002/api/team/member/list`, {
+        pageNumber: 1,
+        pageSize: 100,
+        teamId: sessionStorage.getItem("tmid"),
       })
-      .catch((err) => {
-        console.log(err);
+      .then((res) => {
+        const findMember = res.data.dtoList.some(
+          (item) => item.memberId === id
+        );
+        if (findMember) {
+          alert("이미 가입되어있는 회원입니다.");
+        } else {
+          axios
+            .post(
+              `http://localhost:8002/api/team/inviteTeam?memberId=${id}&teamId=${sessionStorage.getItem(
+                "tmid"
+              )}`
+            )
+            .then((res) => {
+              alert("회원이 정상적으로 가입되었습니다");
+              fetchMembers();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       });
   };
 
@@ -96,6 +115,10 @@ const ProjectList = () => {
     setShowModal(false);
     setUserEmail("");
     setUserData(null);
+  };
+
+  const handleCloseMemberModal = () => {
+    setShowMemberModal(false);
   };
 
   const handleSearch = async () => {
@@ -141,10 +164,27 @@ const ProjectList = () => {
         )}`
       );
       setProjects(response.data);
-      console.log(projects)
     } catch (error) {
       console.error("Error fetching project:", error);
     }
+  };
+
+  const fetchMembers = async () => {
+    await axios
+      .get(
+        `http://localhost:8002/api/team/teamMemList/${sessionStorage.getItem(
+          "tmid"
+        )}`
+      )
+      .then((res) => {
+        const teamMembers = res.data.filter(
+          (member) => member.teamPosition === "팀원"
+        );
+        setMembers(teamMembers);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const whoIsAdmin = async () => {
@@ -180,8 +220,63 @@ const ProjectList = () => {
     }
   };
 
+  const deleteTeam = async () => {
+    if (window.confirm("정말로 삭제하시겠습니까?")) {
+      await axios
+        .delete(
+          `http://localhost:8002/api/team/deleteTeam/${sessionStorage.getItem(
+            "tmid"
+          )}`
+        )
+        .then((res) => {
+          alert("팀이 삭제되었습니다.");
+          navigate("/LoggedIn");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const leaveTeam = async () => {
+    if (window.confirm("정말로 탈퇴하시겠습니까?")) {
+      await axios
+        .delete(
+          `http://localhost:8002/api/team/leaveTeam?memberId=${sessionStorage.getItem(
+            "memid"
+          )}&teamId=${sessionStorage.getItem("tmid")}`
+        )
+        .then((res) => {
+          alert("팀에서 탈퇴되었습니다.");
+          navigate("/LoggedIn");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const removeMember = async (id) => {
+    if (window.confirm("정말로 탈퇴시키겠습니까?")) {
+      await axios
+        .delete(
+          `http://localhost:8002/api/team/leaveTeam?memberId=${id}&teamId=${sessionStorage.getItem(
+            "tmid"
+          )}`
+        )
+        .then((res) => {
+          alert("팀에서 탈퇴시켰습니다.");
+          fetchMembers();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
+    fetchMembers();
     setShowButton(false);
     whoIsAdmin();
     fetchFriendList();
@@ -201,15 +296,40 @@ const ProjectList = () => {
             <Container>
               <Title>프로젝트 목록</Title>
               {showButton && (
+                <>
+                  <Button
+                    variant="primary"
+                    onClick={() => setShowModal(true)}
+                    style={{
+                      width: "150px",
+                      height: "50px",
+                    }}
+                  >
+                    회원 추가
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => setShowMemberModal(true)}
+                    style={{ width: "150px", height: "50px" }}
+                  >
+                    회원관리
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => deleteTeam()}
+                    style={{ width: "150px", height: "50px" }}
+                  >
+                    팀 삭제
+                  </Button>
+                </>
+              )}
+              {!showButton && (
                 <Button
-                  variant="primary"
-                  onClick={() => setShowModal(true)}
-                  style={{
-                    width: "150px",
-                    height: "50px",
-                  }}
+                  variant="danger"
+                  onClick={() => leaveTeam()}
+                  style={{ width: "150px", height: "50px" }}
                 >
-                  회원 추가
+                  팀 탈퇴
                 </Button>
               )}
               <Button
@@ -224,7 +344,9 @@ const ProjectList = () => {
               </Button>
               <Line />
               <Projects>
-                <ProjectCreateCard onProjectCreated={onProjectCreated} />
+                {showButton && (
+                  <ProjectCreateCard onProjectCreated={onProjectCreated} />
+                )}
                 {projects.map((project, index) => (
                   <div key={index}>
                     <ProjectItem project={project} prjId={project.prjId} />
@@ -266,7 +388,7 @@ const ProjectList = () => {
                   {friend.friendName}{" "}
                   <Button
                     variant="primary"
-                    onClick={() => addUser(friend.frId)}
+                    onClick={() => addUserFriend(friend.friendId)}
                   >
                     회원추가
                   </Button>
@@ -274,6 +396,25 @@ const ProjectList = () => {
               ))}
             </ul>
           </div>
+        </Modal.Body>
+      </Modal>
+      <Modal show={showMemberModal} onHide={handleCloseMemberModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>회원목록</Modal.Title>
+        </Modal.Header>
+        <Line></Line>
+        <Modal.Body>
+          {members.map((member) => (
+            <div key={member.teamMemberId}>
+              {member.teamName} ({member.teamPosition}){" "}
+              <Button
+                variant="danger"
+                onClick={() => removeMember(member.memberId)}
+              >
+                탈퇴
+              </Button>
+            </div>
+          ))}
         </Modal.Body>
       </Modal>
     </>

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
+import com.straight.bluewave.domain.notification.entity.Notification;
 import com.straight.bluewave.domain.post.dto.PostDTO;
 import com.straight.bluewave.domain.reply.entity.Reply;
 import com.straight.bluewave.domain.schedule.entity.Schedule;
@@ -45,6 +46,9 @@ public class Post extends BaseEntity {
 
     @JoinColumn(name = "mem_id")
     private Long mem_id;
+
+    @JoinColumn(name = "mem_nick")
+    private String mem_nick;
 
     @Column(name = "post_content")
     private String post_content;
@@ -92,6 +96,9 @@ public class Post extends BaseEntity {
     // 게시글 삭제시 댓글 삭제
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies;
+    
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
 
     public Post(Board board, PostDTO dto) {
     }
@@ -100,6 +107,7 @@ public class Post extends BaseEntity {
         this.mem_id = dto.getMem_id();
         this.post_content = dto.getPost_content();
         this.post_name = dto.getPost_name();
+        this.meeting_date = dto.getMeeting_date();
         this.attendees_id = dto.getAttendees_id();
     }
 

@@ -19,8 +19,11 @@ function Sidebar() {
         )
         .then((res) => {
           const data = res.data;
-          const names = data.map((item) => item.friendName);
-          setFriends(names);
+          const friendsData = data.map((item) => ({
+            name: item.friendName,
+            id: item.friendId,
+          }));
+          setFriends(friendsData);
         })
         .catch((err) => {
           console.log(err);
@@ -43,8 +46,26 @@ function Sidebar() {
         const response = await axios
           .get(`http://localhost:8002/api/member/${userEmail}`)
           .then((res) => {
-            setUserData({ email: res.data.member_email });
-            setFriendId(res.data.member_id);
+            const resEmail = res.data.member_email;
+            const resId = res.data.member_id;
+            axios
+              .get(
+                `http://localhost:8002/api/member/friendList/${sessionStorage.getItem(
+                  "memid"
+                )}`
+              )
+              .then((res) => {
+                const isFriend = res.data.some(
+                  (item) => item.friendId === resId
+                );
+                if (isFriend) {
+                  alert("이미 친구 관계입니다.");
+                  setUserData(null);
+                } else {
+                  setUserData({ email: resEmail });
+                  setFriendId(resId);
+                }
+              });
           })
           .catch((err) => {
             alert("검색에 실패했습니다.");
@@ -72,6 +93,23 @@ function Sidebar() {
         console.log(err);
       });
     setFriendId(null);
+    setUserData(null);
+  };
+
+  const deleteFriend = async (id) => {
+    await axios
+      .delete(
+        `http://localhost:8002/api/member/deleteFriend?memId=${sessionStorage.getItem(
+          "memid"
+        )}&friendId=${id}`
+      )
+      .then((res) => {
+        alert("삭제되었습니다.");
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -80,9 +118,14 @@ function Sidebar() {
         유저 검색
       </Button>
       {friends.map((friend, index) => (
-        <p key={index} style={{ margin: "20px 0 20px" }}>
-          {friend}
-        </p>
+        <>
+          <p key={index} style={{ margin: "20px 0 20px" }}>
+            {friend.name}{" "}
+            <Button variant="danger" onClick={() => deleteFriend(friend.id)}>
+              삭제
+            </Button>
+          </p>
+        </>
       ))}
 
       <Modal show={showModal} onHide={handleCloseModal}>

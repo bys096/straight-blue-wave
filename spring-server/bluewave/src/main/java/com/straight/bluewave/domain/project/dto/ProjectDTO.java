@@ -29,4 +29,6 @@ public class ProjectDTO {
 
     //socket.io Room
     private UUID prjRoom;
+
+    private String prj_photo;
 }
