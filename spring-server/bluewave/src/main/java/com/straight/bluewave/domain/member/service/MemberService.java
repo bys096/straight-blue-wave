@@ -36,7 +36,7 @@ public interface MemberService {
     default FriendDTO entityToDTO(FriendMapping entity) {
         FriendDTO dto = FriendDTO.builder()
                 .frId(entity.getFrId())
-                .friendName(entity.getFriendName())
+                .friendName(entity.getFriend().getMemberName())
                 .friendId(entity.getFriend().getMemberId())
                 .build();
         return dto;

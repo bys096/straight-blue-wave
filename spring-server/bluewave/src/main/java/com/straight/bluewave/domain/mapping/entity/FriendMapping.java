@@ -31,7 +31,7 @@ public class FriendMapping extends BaseEntity {
     @JsonIgnore
     private Member friend;
 
-    @Column(name = "fr_name")       //친구 이름
-    private String friendName;
+    /*@Column(name = "fr_name")       //친구 이름
+    private String friendName;*/
 
 }

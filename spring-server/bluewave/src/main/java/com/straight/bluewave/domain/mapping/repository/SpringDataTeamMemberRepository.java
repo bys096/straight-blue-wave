@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface SpringDataTeamMemberRepository extends JpaRepository<TeamMemberMapping, Long> {
     @Query("select t from TeamMemberMapping t where t.team.teamId = :teamId")
-    List<TeamMemberMapping> findAllByTeam(@Param("teamId") Long teamId);
+    List<TeamMemberMapping> findAllByTeam(@Param("teamId")Long teamId);
 
     @Query("delete from TeamMemberMapping t where t.member.memberId = :memberId and t.team.teamId = :teamId")
     @Modifying

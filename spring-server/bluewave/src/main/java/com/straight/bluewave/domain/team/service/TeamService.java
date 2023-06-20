@@ -54,7 +54,7 @@ public interface TeamService {
         TeamMemberDTO dto = TeamMemberDTO.builder()
                 .teamMemberId(entity.getTeamMemberId())
                 .teamPosition(entity.getTeamPosition())
-                .teamName(entity.getTeamName())
+                .teamName(entity.getMember().getMemberName())
                 .memberId(entity.getMember().getMemberId())
                 .teamId(entity.getTeam().getTeamId())
                 .build();
