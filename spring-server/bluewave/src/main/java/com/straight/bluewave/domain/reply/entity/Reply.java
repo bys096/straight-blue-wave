@@ -38,15 +38,17 @@ public class Reply extends BaseEntity {
     // 아래 칼럼은 FK
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="mem_id")
+    @JoinColumn(name="mem_id", foreignKey = @ForeignKey(name = "fk_reply_member"), nullable = false)
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="post_id")
+    // CascadeType.ALL = 모든 상황에서의 영속성 관리
+    // 게시글 삭제시
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="post_id", foreignKey = @ForeignKey(name = "fk_reply_post"), nullable = false)
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="parent_reply_id")
+    @JoinColumn(name="parent_reply_id", foreignKey = @ForeignKey(name = "fk_reply_parentReplyId"))
     private Reply parentReplyId;
 
 

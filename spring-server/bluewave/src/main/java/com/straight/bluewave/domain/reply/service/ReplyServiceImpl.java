@@ -40,7 +40,7 @@ public class ReplyServiceImpl implements ReplyService {
         reply.setPost(post);
 
         Member member = new Member();
-        member.setMemberId(replyDTO.getReply_id());
+        member.setMemberId(replyDTO.getMem_id());
         reply.setMember(member);
 
 
