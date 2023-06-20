@@ -26,6 +26,17 @@ const StyledCard = styled(Card)`
 	}
 `;
 
+const ImageContainer = styled(Card.Header)`
+	object-fit: fill;
+	width: 100%;
+	height: 100%;
+`;
+
+const StyledImage = styled(Image)`
+	width: 100em;
+	height: 10em;
+`;
+
 const TeamItem = ({ team = [] }) => {
 	const dispatch = useDispatch();
 
@@ -40,9 +51,9 @@ const TeamItem = ({ team = [] }) => {
 				}}
 			>
 				<StyledCard>
-					<Card.Header>
-					<Image src="https://placehold.co/600x400" thumbnail />
-					</Card.Header>
+					<ImageContainer>
+						<StyledImage src={team.team_photo} thumbnail />
+					</ImageContainer>
 					<Card.Body>
 						<Card.Title>{team.teamName}</Card.Title>
 						<Card.Text>{team.teamDesc}</Card.Text>

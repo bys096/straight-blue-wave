@@ -48,25 +48,56 @@ const AddImage = styled(Image)`
 `;
 
 const Plus = styled(AiOutlinePlusCircle)`
-  width : 100%;
-  height: 100%;
-  padding : 1em;
+	width: 100%;
+	height: 100%;
+	padding: 1em;
 `;
 
 const TeamCreateCard = () => {
 	const imgRef = useRef(null);
 	const dispatch = useDispatch();
+
 	const [imgFile, setImgFile] = useState(
 		"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
 	);
-
 	const [showModal, setShowModal] = useState(false);
 	const [teamName, setTeamName] = useState("");
 	const [teamDesc, setTeamDesc] = useState("");
+	const [presignedUrl, setPresignedUrl] = useState("");
+	const [encodedFileName, setEncodedFileName] = useState("");
+
+	const [selectedFile, setSelectedFile] = useState(null);
 
 	// 이미지 업로드 input의 onChange
-	const saveImgFile = (e) => {
+	const saveImgFile = async () => {
 		const file = imgRef.current.files[0];
+		setSelectedFile(file);
+		setImgFile(file);
+		const maxSize = 5 * 1024 * 1024;
+		const fileSize = file.size;
+
+		if (fileSize > maxSize) {
+			alert("5MB 이상의 사진은 업로드하실 수 없습니다.");
+			return;
+		}
+
+		const filename = file.name;
+		const filetype = file.type;
+
+		try {
+			const res = await axios.get("http://localhost:8002/api/aws/s3/url", {
+				params: { filename, filetype },
+			});
+
+			setEncodedFileName(res.data.encodedFileName);
+			setPresignedUrl(res.data.preSignedUrl);
+
+			console.log("presignedUrl: " + res.data.preSignedUrl);
+			console.log("encodedFileName: " + res.data.encodedFileName);
+		} catch (err) {
+			console.log(err);
+		}
+
 		const reader = new FileReader();
 		reader.readAsDataURL(file);
 		reader.onloadend = () => {
@@ -88,6 +119,28 @@ const TeamCreateCard = () => {
 	};
 
 	const handleCreateTeam = async () => {
+		console.log(presignedUrl);
+		let imageUrl = "";
+		if (!selectedFile || !presignedUrl) {
+			imageUrl =
+				"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+		}
+
+		await axios
+			.put(presignedUrl, selectedFile)
+			.then((res) => {
+				console.log(res);
+				imageUrl = presignedUrl.split("?")[0];
+			})
+			.catch((err) => {
+				if (err.response.status === 419) {
+					this.$store.dispatch("handleTokenExpired");
+				} else console.error("s3 upload error:", err);
+			});
+
+		
+		console.log(imageUrl);
+
 		await axios
 			.post(
 				`http://localhost:8002/api/team/joinTeam/${sessionStorage.getItem(
@@ -96,6 +149,7 @@ const TeamCreateCard = () => {
 				{
 					teamName: teamName,
 					teamDesc: teamDesc,
+					team_photo: imageUrl,
 				}
 			)
 			.then((res) => {
@@ -144,7 +198,7 @@ const TeamCreateCard = () => {
 								type="text"
 								value={teamName}
 								onChange={(e) => setTeamName(e.target.value)}
-                required
+								required
 							/>
 						</Form.Group>
 						<Form.Group>
@@ -154,7 +208,7 @@ const TeamCreateCard = () => {
 								rows={3}
 								value={teamDesc}
 								onChange={(e) => setTeamDesc(e.target.value)}
-                required
+								required
 							/>
 						</Form.Group>
 					</Form>
