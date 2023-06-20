@@ -34,7 +34,7 @@ public class NotificationServiceImp implements NotificationService{
         Notification notification = dtoToEntity(dto);
 
         Post post = new Post();
-        post.setPostId(dto.getPost_id());
+//        post.setPostId(dto.getPost_id());
         notification.setPost(post);
 
         Schedule schedule = new Schedule();

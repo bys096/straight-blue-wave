@@ -9,6 +9,7 @@ import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
 import com.straight.bluewave.domain.notification.entity.Notification;
 import com.straight.bluewave.domain.post.dto.PostDTO;
+import com.straight.bluewave.domain.reply.entity.Reply;
 import com.straight.bluewave.domain.schedule.entity.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -69,11 +70,12 @@ public class Post extends BaseEntity {
     @Column(name = "attendees_id")
     private Long attendees_id;
 
+
     @Column(name = "file_status")
     private boolean file_status;
 
-    @Column(name = "voting_status")
-    private boolean voting_status;
+//    @Column(name = "voting_status")
+//    private boolean voting_status;
 
     /*@Column(name = "deleted_at")
     private LocalDateTime deletedAt;*/
@@ -91,6 +93,10 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
+    // 게시글 삭제시 댓글 삭제
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> replies;
+    
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
 
@@ -109,8 +115,6 @@ public class Post extends BaseEntity {
         this.board = board;
     }
 
-    public void setPostId(Long post_id){
-        this.post_id = post_id;
-    }
+
 
 }
