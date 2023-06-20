@@ -40,9 +40,15 @@ public class Reply extends BaseEntity {
     @JoinColumn(name="post_id")
     private Post post;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="reply_id")
-    private List<Reply> parentReply;
+
+
+    @OneToMany(mappedBy = "parentReply", fetch = FetchType.LAZY)
+    private List<Reply> childReplies;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_reply_id")
+    private Reply parentReply;
+
 
 
 
