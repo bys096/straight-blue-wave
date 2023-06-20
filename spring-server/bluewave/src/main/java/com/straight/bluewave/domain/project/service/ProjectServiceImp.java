@@ -38,7 +38,6 @@ public class ProjectServiceImp implements ProjectService{
 
         // 공지사항 게시판 자동생성
         Board noticeBoard = Board.builder()
-                .brdId(1L)
                 .brdName("공지사항")
                 .project(project)
                 .build();
@@ -46,7 +45,6 @@ public class ProjectServiceImp implements ProjectService{
 
         // 회의록 게시판 자동생성
         Board meetingMinutesBoard = Board.builder()
-                .brdId(2L)
                 .brdName("회의록")
                 .project(project)
                 .build();
