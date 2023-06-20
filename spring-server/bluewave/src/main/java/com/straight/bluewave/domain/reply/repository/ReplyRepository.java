@@ -11,14 +11,5 @@ import java.util.List;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
-//    @Modifying
-//    @Query("DELETE FROM Reply r WHERE r.post_id = :post_id")
-//    void deleteByBoardId(@Param("post_id") Long post_id);
 
-
-//    @Query("SELECT r FROM Reply r WHERE r.memberId = :memId")
-//    List<Reply> findAllByMemId(Long memId);
-
-//    @Query("SELECT r FROM Reply r WHERE r.post_id = :post_id")
-//    List<Reply> findAllByPostId(@Param("post_id") Long post_id);
 }

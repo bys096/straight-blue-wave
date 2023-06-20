@@ -82,11 +82,12 @@ public class Member extends BaseEntity {
     private List<FriendMapping> friends2;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Reply> replies = new ArrayList<>();
+    private List<Reply> replies;
 
     public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
+
 
 /*
     - 중간 엔티티 없이, 매핑 테이블을 생성하는 코드

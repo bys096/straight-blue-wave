@@ -5,6 +5,8 @@ import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.member.repository.MemberRepository;
 import com.straight.bluewave.domain.post.entity.Post;
 import com.straight.bluewave.domain.post.repository.PostRepository;
+import com.straight.bluewave.domain.post.repository.SpringDataPostRepository;
+import com.straight.bluewave.domain.reply.dto.ReplyCreateDTO;
 import com.straight.bluewave.domain.reply.dto.ReplyDTO;
 import com.straight.bluewave.domain.reply.entity.Reply;
 import com.straight.bluewave.domain.reply.repository.ReplyRepository;
@@ -17,35 +19,20 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
     private final MemberRepository memberRepository;
-    private final PostRepository postRepository;
+    private final SpringDataPostRepository postRepository;
 
-    @Autowired
-    public ReplyServiceImpl(ReplyRepository replyRepository, MemberRepository memberRepository, PostRepository postRepository) {
-        this.replyRepository = replyRepository;
-        this.memberRepository = memberRepository;
-        this.postRepository = postRepository;
-    }
+
     @Override
-    public Reply createReply(ReplyDTO replyDTO) {
-        replyDTO.setReply_modify(false);
-
-        Reply reply = dtoToEntity(replyDTO);
-
-        Post post = new Post();
-        post.setPostId(replyDTO.getPost_id());
-        reply.setPost(post);
-
-        Member member = new Member();
-        member.setMemberId(replyDTO.getMem_id());
-        reply.setMember(member);
-
-
-        Reply savedReply = replyRepository.save(reply);
-        return savedReply;
+    public void createReply(ReplyCreateDTO replyDTO) {
+        Post post = postRepository.findById(replyDTO.getPost_id()).get();
+        Member member = memberRepository.findById((replyDTO.getMem_id())).get();
+        Reply reply = dtoToEntity(replyDTO, post, member);
+        replyRepository.save(dtoToEntity(replyDTO, post, member));
     }
 
     @Override

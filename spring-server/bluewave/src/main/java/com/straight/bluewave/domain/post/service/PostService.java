@@ -23,8 +23,8 @@ public interface PostService {
                 .post_name(dto.getPost_name())
                 .meeting_date((Date) dto.getMeeting_date())
                 .attendees_id(dto.getAttendees_id())
-                .file_status(dto.isFile_status())
-                .voting_status(dto.isVoting_status())
+//                .file_status(dto.isFile_status())
+//                .voting_status(dto.isVoting_status())
                 .build();
         return entity;
     }
@@ -38,7 +38,7 @@ public interface PostService {
                 .meeting_date(entity.getMeeting_date())
                 .attendees_id(entity.getAttendees_id())
                 .file_status(entity.isFile_status())
-                .voting_status(entity.isVoting_status())
+//                .voting_status(entity.isVoting_status())
                 .build();
         return dto;
     }

@@ -2,6 +2,8 @@ package com.straight.bluewave.domain.reply.service;
 
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.post.dto.PostDTO;
+import com.straight.bluewave.domain.post.entity.Post;
+import com.straight.bluewave.domain.reply.dto.ReplyCreateDTO;
 import com.straight.bluewave.domain.reply.dto.ReplyDTO;
 import com.straight.bluewave.domain.reply.entity.Reply;
 
@@ -10,11 +12,19 @@ import java.util.stream.Collectors;
 
 public interface ReplyService {
 
+    default Reply dtoToEntity(ReplyCreateDTO dto, Post post, Member member) {
+        return  Reply.builder()
+                .post(post)
+                .member(member)
+                .replyContent(dto.getReply_content())
+                .build();
+    }
+
     default Reply dtoToEntity(ReplyDTO dto) {
         Reply entity = Reply.builder()
                 .replyId(dto.getReply_id())
                 .replyContent(dto.getReply_content())
-                .replyModify(dto.isReply_modify())
+
 
                 .build();
         return entity;
@@ -25,7 +35,7 @@ public interface ReplyService {
                 .reply_id(entity.getReplyId())
                 .reply_content(entity.getReplyContent())
                 .reply_createAt(entity.getCreatedAt())
-                .reply_modify(entity.isReplyModify())
+//                .reply_modify(entity.isReplyModify())
                 .reply_updateAt(entity.getUpdatedAt())
 //                .member_mem_id(entity.getMember().getMemberId())
 //                .post_id(entity.getPost().getPost_id())
@@ -40,13 +50,9 @@ public interface ReplyService {
                 .collect(Collectors.toList());
     }
 
-    Reply createReply(ReplyDTO replyDTO);
+    void createReply(ReplyCreateDTO replyDTO);
 
     ReplyDTO getReply(Long replyId);
-
-//    List<ReplyDTO> getReplyByMember(Long memId);
-
-//    List<ReplyDTO> getReplyByPost(Long post_id);
 
     ReplyDTO modify(Long replyId, ReplyDTO replyDTO);
 

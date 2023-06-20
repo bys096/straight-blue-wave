@@ -1,12 +1,14 @@
 package com.straight.bluewave.application.controller;
 
 
+import com.straight.bluewave.domain.reply.dto.ReplyCreateDTO;
 import com.straight.bluewave.domain.reply.dto.ReplyDTO;
 import com.straight.bluewave.domain.reply.entity.Reply;
 import com.straight.bluewave.domain.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +20,13 @@ import java.util.List;
 @Log4j2
 public class ReplyController {
 
-    @Autowired
-    private ReplyService replyService;
+    private final ReplyService replyService;
 
     @PostMapping("/create")
-    public Reply createReply(@RequestBody ReplyDTO replyDTO) {
-        return replyService.createReply(replyDTO);
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createReply(@RequestBody ReplyCreateDTO replyDTO) {
+        log.info("replyDTO {}", replyDTO.toString());
+        replyService.createReply(replyDTO);
     }
 
 
