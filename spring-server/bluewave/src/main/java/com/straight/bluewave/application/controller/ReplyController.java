@@ -26,23 +26,35 @@ public class ReplyController {
         return replyService.createReply(replyDTO);
     }
 
+
+    // 댓글 1개 조회
     @GetMapping("/read/reply/{replyId}")
-    public ReplyDTO getReply(@PathVariable Long id) {
-        return replyService.getReply(id);
+    public ReplyDTO getReply(@PathVariable Long replyId) {
+        return replyService.getReply(replyId);
     }
 
     // 자기가 쓴 댓글 모아서 보기
+//    @GetMapping("/read/member/{member_id}")
+//    public List<ReplyDTO> getReplyByMember(@PathVariable Long mem_id) {
+//        return replyService.getReplyByMember(mem_id);
+//    }
+
+    // 게시글의 전체 댓글 조회
+//    @GetMapping("/read/post/{post_id}")
+//    public List<ReplyDTO> getReplyByPost(@PathVariable Long post_id) {
+//        return replyService.getReplyByPost(post_id);
+//    }
+
 
 
     @PutMapping("/modify/{replyId}")
-    public ReplyDTO modifyReply(@PathVariable long replyId, @RequestBody ReplyDTO dto) {
-        return replyService.modify(id, replyDTO);
+    public ReplyDTO modifyReply(@PathVariable Long replyId, @RequestBody ReplyDTO replyDTO) {
+        return replyService.modify(replyId, replyDTO);
     }
 
     @DeleteMapping("/delete/{replyId}")
-    public ResponseEntity<Boolean> deleteReply(@PathVariable long replyId) {
+    public void deleteReply(@PathVariable Long replyId) {
         replyService.remove(replyId);
-        return ResponseEntity.ok(true);
     }
 
 

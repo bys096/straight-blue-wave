@@ -37,24 +37,24 @@ public class Reply extends BaseEntity {
 
     // 아래 칼럼은 FK
 
-    @JoinColumn(name ="mem_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Long memberId;
-
-    @JoinColumn(name ="post_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Long post_id;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="mem_id")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="parent_id")
-    private Long parentReply;
+    @JoinColumn(name="post_id")
+    private Post post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="parent_reply_id")
+    private Reply parentReplyId;
 
 
 
 //     Casecade.ALL = 부모 댓글 삭제시 자식 댓글 함께 삭제
     @Builder.Default
-    @OneToMany(mappedBy = "parent_reply", orphanRemoval = true)
-    private List<Reply> childComments = new ArrayList<>();
+    @OneToMany(mappedBy = "parentReplyId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> childReply = new ArrayList<>();
 
 
     /*
@@ -63,12 +63,22 @@ public class Reply extends BaseEntity {
     2. 수정 여부 확인용 -> true(수정됨)/false(수정되지 않음)
     3. 수정 날짜 (BaseEntity에서 자동으로 됨)
      */
-    public void update(ReplyDTO dto) {
+    public void updateContent(ReplyDTO dto) {
         this.replyContent = dto.getReply_content();
 //        this.replyModify = true;
     }
 
     public void changeModify(boolean truly) {
         this.replyModify = truly; // 수정시 true로 변경
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+        post.getReplies().add(this);
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.getReplies().add(this);
     }
 }

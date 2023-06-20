@@ -1,29 +1,21 @@
 package com.straight.bluewave.domain.reply.service;
 
+import com.straight.bluewave.domain.member.entity.Member;
+import com.straight.bluewave.domain.post.dto.PostDTO;
 import com.straight.bluewave.domain.reply.dto.ReplyDTO;
 import com.straight.bluewave.domain.reply.entity.Reply;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public interface ReplyService {
 
-    Reply createReply(ReplyDTO dto);
-
-    public ReplyDTO read();
-
-    Long register(ReplyDTO replyDTO);
-    List<ReplyDTO> getList(Long board_id);
-    void modify(Long replyId,ReplyDTO dto);
-
-    void remove(long replyId);
     default Reply dtoToEntity(ReplyDTO dto) {
         Reply entity = Reply.builder()
                 .replyId(dto.getReply_id())
                 .replyContent(dto.getReply_content())
-                .replyModify(dto.isReply_modify()) // boolean 타입의 getter
-                .memberId(dto.getMem_id()) // 작성자
-                .post_id(dto.getPost_id()) // 게시글
-                .parentReply(dto.getParent_reply()) // 부모 댓글
+                .replyModify(dto.isReply_modify())
+
                 .build();
         return entity;
     }
@@ -32,16 +24,31 @@ public interface ReplyService {
         ReplyDTO dto = ReplyDTO.builder()
                 .reply_id(entity.getReplyId())
                 .reply_content(entity.getReplyContent())
-                .reply_modify(entity.isReplyModify())
                 .reply_createAt(entity.getCreatedAt())
+                .reply_modify(entity.isReplyModify())
                 .reply_updateAt(entity.getUpdatedAt())
-                .mem_id(entity.getMemberId())
-                .post_id(entity.getPost_id())
-                .parent_reply(entity.getParentReply())
+//                .member_mem_id(entity.getMember().getMemberId())
+//                .post_id(entity.getPost().getPost_id())
+//                .parent_reply(entity.getParentReply() != null ? entity.getParentReply().getReplyId() : null)
                 .build();
         return dto;
     }
 
+    default List<ReplyDTO> convertToDTOList(List<Reply> replies) {
+        return replies.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+    }
 
-    ReplyDTO getReply(Long id);
+    Reply createReply(ReplyDTO replyDTO);
+
+    ReplyDTO getReply(Long replyId);
+
+//    List<ReplyDTO> getReplyByMember(Long memId);
+
+//    List<ReplyDTO> getReplyByPost(Long post_id);
+
+    ReplyDTO modify(Long replyId, ReplyDTO replyDTO);
+
+    void remove(Long replyId);
 }

@@ -8,6 +8,7 @@ import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.member.dto.MemberUpdateDTO;
 import com.straight.bluewave.domain.project.entity.Project;
+import com.straight.bluewave.domain.reply.entity.Reply;
 import com.straight.bluewave.domain.team.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -78,6 +80,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "friend", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FriendMapping> friends2;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> replies = new ArrayList<>();
 
     public void setMemberId(Long memberId) {
         this.memberId = memberId;

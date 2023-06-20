@@ -1,18 +1,18 @@
 package com.straight.bluewave.domain.reply.dto;
 
-
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Builder
-@NoArgsConstructor
+@Getter
+@RequiredArgsConstructor
 @AllArgsConstructor
-@Data
-public class ReplyDTO {
+public class ReplyCreateDTO {
+    @NotNull
     // Id
     private Long reply_id;
 
@@ -27,7 +27,6 @@ public class ReplyDTO {
 
     // 수정날짜
     private LocalDateTime reply_updateAt;
-
 
     private Long mem_id;
 
