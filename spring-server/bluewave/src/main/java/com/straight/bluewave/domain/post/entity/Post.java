@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
+import com.straight.bluewave.domain.notification.entity.Notification;
 import com.straight.bluewave.domain.post.dto.PostDTO;
 import com.straight.bluewave.domain.schedule.entity.Schedule;
 import lombok.AllArgsConstructor;
@@ -89,6 +90,9 @@ public class Post extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
 
     public Post(Board board, PostDTO dto) {
     }
