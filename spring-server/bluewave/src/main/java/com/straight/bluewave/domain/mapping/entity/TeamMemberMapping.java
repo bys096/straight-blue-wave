@@ -34,7 +34,7 @@ public class TeamMemberMapping extends BaseEntity {
     @Column(name = "tm_position")       //ex)매니저, 팀장
     private String teamPosition;
 
-    @Column(name = "tm_name")       //팀원 이름
-    private String teamName;
+    /*@Column(name = "tm_name")       //팀원 이름
+    private String teamName;*/
 
 }

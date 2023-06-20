@@ -74,7 +74,6 @@ public class TeamServiceImpl implements TeamService{
         TeamMemberMapping teamMemberMapping = TeamMemberMapping.builder()
                 .member(member)
                 .team(team)
-                .teamName(member.getMemberName())
                 .teamPosition("팀장")
                 .build();
         teamMemberRepository.save(teamMemberMapping);
@@ -142,7 +141,6 @@ public class TeamServiceImpl implements TeamService{
         TeamMemberMapping teamMemberMapping = TeamMemberMapping.builder()
                 .member(member)
                 .team(team)
-                .teamName(member.getMemberName())
                 .teamPosition("팀원")
                 .build();
         teamMemberRepository.save(teamMemberMapping);

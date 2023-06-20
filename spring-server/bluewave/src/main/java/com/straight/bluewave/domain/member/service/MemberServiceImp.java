@@ -36,6 +36,8 @@ public class MemberServiceImp implements MemberService{
 
     private final SpringDataFriendRepository friendRepository;
 
+    private final SpringDataTeamMemberRepository teamMemberRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -60,7 +62,6 @@ public class MemberServiceImp implements MemberService{
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
 
         member.updateMember(dto);
-
     }
 
     @Transactional
@@ -86,7 +87,6 @@ public class MemberServiceImp implements MemberService{
         FriendMapping fri1 = FriendMapping.builder()
                 .member(member1)
                 .friend(member2)
-                .friendName(member2.getMemberName())
                 .build();
 
        friendRepository.save(fri1);
@@ -94,7 +94,6 @@ public class MemberServiceImp implements MemberService{
         FriendMapping fri2 = FriendMapping.builder()
                 .member(member2)
                 .friend(member1)
-                .friendName(member1.getMemberName())
               .build();
         friendRepository.save(fri2);
     }
