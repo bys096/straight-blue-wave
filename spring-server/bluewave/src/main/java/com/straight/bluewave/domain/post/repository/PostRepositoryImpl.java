@@ -16,12 +16,14 @@ import com.straight.bluewave.domain.team.entity.QTeam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -73,5 +75,6 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
 
 //        return new PageImpl<Object[]>(
 //                result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
+
     }
 }
