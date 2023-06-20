@@ -16,6 +16,7 @@ public interface SpringDataFriendRepository extends JpaRepository<FriendMapping,
     @Query("select f from FriendMapping f where f.member.memberId = :memId")
     List<FriendMapping> findAllFriend(@Param("memId")Long memId);
 
+
     @Modifying
     @Query("delete from FriendMapping f where f.member.memberId = :memId and f.friend.memberId = :friendId")
     void removeMemId(@Param("memId")Long memId, @Param("friendId")Long friendId);
