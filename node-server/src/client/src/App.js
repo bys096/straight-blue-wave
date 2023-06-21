@@ -22,10 +22,9 @@ import ProjectList from "./pages/ProjectList";
 import GptPage from "./pages/GptPage";
 import MemberList from "./pages/MemberList";
 
-
 function App() {
   return (
-    <div className="App">
+    <div className="App" style={{ backgroundColor: "white" }}>
       <Routes>
         <Route path="/*" element={<Navigate to="/"></Navigate>}></Route>
         <Route path="/" exact={true} Component={DefaultPage} />
@@ -58,7 +57,6 @@ function App() {
         <Route path="/gpt" Component={GptPage}></Route>
         <Route path="/memlist" Component={MemberList}></Route>
         <Route path="/post/modify/:post_id" element={<CreatePostPage />} />
-
       </Routes>
     </div>
   );
