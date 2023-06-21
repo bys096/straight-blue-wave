@@ -67,8 +67,8 @@ public class Post extends BaseEntity {
     private Long attendees_id;
 
 
-    @Column(name = "file_status")
-    private boolean file_status;
+//    @Column(name = "file_status")
+//    private boolean file_status;
 
 //    @Column(name = "voting_status")
 //    private boolean voting_status;
@@ -96,9 +96,6 @@ public class Post extends BaseEntity {
     // 게시글 삭제시 댓글 삭제
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies;
-    
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Notification> notifications;
 
     public Post(Board board, PostDTO dto) {
     }
@@ -118,6 +115,8 @@ public class Post extends BaseEntity {
         this.member = member;
     }
 
-
+    public void setPostId(Long postId){
+        this.post_id = postId;
+    }
 
 }

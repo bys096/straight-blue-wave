@@ -11,7 +11,7 @@ import java.util.List;
 
 @Transactional
 public interface SpringDataPostRepository extends JpaRepository<Post, Long> {
-    @Query("SELECT p.post_id, p.post_name, p.file_status FROM Post p")
+    @Query("SELECT p.post_id, p.post_name FROM Post p")
     List<Object[]> findPostColumns();
 
     @Query("SELECT r.post.post_id FROM Reply r WHERE r.replyId = :replyId")
