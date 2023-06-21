@@ -23,9 +23,12 @@ public class NotificationController {
     private final SpringDataMemberNotificationRepository mnRepository;
 
     @PostMapping("/storage/{memberId}")
-    public Notification storageNotification(@RequestBody NotificationDTO dto, @PathVariable Long memberId) {
-        Notification notification = notificationServiceImp.storageNotification(dto, memberId);
-        return notification;
+    @ResponseStatus(HttpStatus.CREATED)
+    public void storageNotification(@RequestBody NotificationDTO dto, @PathVariable Long memberId) {
+
+        log.info("-----post id: {}, shce id: {}", dto.getPost_id(), dto.getSchedule_id());
+        notificationServiceImp.storageNotification(dto, memberId);
+//        return notification;
     }
 
     @DeleteMapping("/delete/{notification_id}")

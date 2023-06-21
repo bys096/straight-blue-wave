@@ -36,7 +36,7 @@ public interface PostService {
                 .post_name(entity.getPost_name())
                 .meeting_date(entity.getMeeting_date())
                 .attendees_id(entity.getAttendees_id())
-                .file_status(entity.isFile_status())
+//                .file_status(entity.isFile_status())
 //                .voting_status(entity.isVoting_status())
                 .build();
         return dto;

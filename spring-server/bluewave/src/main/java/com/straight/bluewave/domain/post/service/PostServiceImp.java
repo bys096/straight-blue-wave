@@ -42,7 +42,7 @@ public class PostServiceImp implements PostService{
                 .post_name(dto.getPost_name())
                 .meeting_date(dto.getMeeting_date())
                 .attendees_id(dto.getAttendees_id())
-                .file_status(dto.isFile_status())
+//                .file_status(dto.isFile_status())
 //                .voting_status(dto.isVoting_status())
                 .build();
 
