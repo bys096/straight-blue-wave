@@ -4,6 +4,7 @@ import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.domain.board.repository.BoardRepository;
 import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
 import com.straight.bluewave.domain.member.entity.Member;
+import com.straight.bluewave.domain.member.repository.MemberRepository;
 import com.straight.bluewave.domain.post.dto.PostDTO;
 import com.straight.bluewave.domain.post.dto.PostRequestDTO;
 import com.straight.bluewave.domain.post.dto.PostResponseDTO;
@@ -31,13 +32,12 @@ public class PostServiceImp implements PostService{
     private final SpringDataPostRepository springDataPostRepository;
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
 
     public Post createPost(PostDTO dto){
 
         Post post = Post.builder()
                 .post_id(dto.getPost_id())
-                .mem_id(dto.getMem_id())
-                .mem_nick(dto.getMem_nick())
                 .post_content(dto.getPost_content())
                 .post_name(dto.getPost_name())
                 .meeting_date(dto.getMeeting_date())
@@ -49,6 +49,14 @@ public class PostServiceImp implements PostService{
         Board board = new Board();
         board.setBrdId(dto.getBrd_id());
         post.setBoard(board);
+
+        Member member = new Member();
+        member.setMemberId(dto.getMem_id());
+        post.setMember(member);
+
+//        Board board = boardRepository.findById(dto.getBrd_id()).get();
+//        Member member = memberRepository.findById(dto.getMem_id()).get();
+//        Post post = dtoToEntity(dto, board, member);
 
         springDataPostRepository.save(post);
         return post;
