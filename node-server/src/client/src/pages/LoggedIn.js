@@ -11,7 +11,7 @@ function LoggedIn() {
     <div className="main">
       <Header />
       <div className="article">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <div className="section">
           <TeamList />
         </div>
