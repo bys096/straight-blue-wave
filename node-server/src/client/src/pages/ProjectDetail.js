@@ -138,6 +138,12 @@ const ProjectDetail = () => {
       )
       .then((response) => {
         setBoardList(response.data);
+        const brdIdList = response.data.map((item) => item.brd_id);
+        if (brdIdList.length >= 2) {
+          const secondBrdId = brdIdList[1];
+          // 회의록 게시판 id를 세션에 저장
+          sessionStorage.setItem("minutesid", secondBrdId);
+        }
       })
       .catch((error) => {
         console.error(error);

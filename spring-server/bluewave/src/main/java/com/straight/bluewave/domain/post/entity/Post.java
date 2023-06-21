@@ -50,7 +50,7 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "mem_nick")
     private String mem_nick;
 
-    @Column(name = "post_content")
+    @Column(name = "post_content", length = 10000)
     private String post_content;
 
     @Column(name = "post_name")
