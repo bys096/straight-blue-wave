@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.straight.bluewave.application.entity.BaseEntity;
 import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
+import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.notification.entity.Notification;
 import com.straight.bluewave.domain.post.dto.PostDTO;
 import com.straight.bluewave.domain.reply.entity.Reply;
@@ -44,11 +45,6 @@ public class Post extends BaseEntity {
 
 //    private Long stage_id; 임시 제외
 
-    @JoinColumn(name = "mem_id")
-    private Long mem_id;
-
-    @JoinColumn(name = "mem_nick")
-    private String mem_nick;
 
     @Column(name = "post_content", length = 10000)
     private String post_content;
@@ -80,6 +76,10 @@ public class Post extends BaseEntity {
     /*@Column(name = "deleted_at")
     private LocalDateTime deletedAt;*/
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mem_id")
+    private Member member;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "brd_id")
@@ -104,7 +104,6 @@ public class Post extends BaseEntity {
     }
 
     public void changePost(PostDTO dto){
-        this.mem_id = dto.getMem_id();
         this.post_content = dto.getPost_content();
         this.post_name = dto.getPost_name();
         this.meeting_date = dto.getMeeting_date();
@@ -113,6 +112,10 @@ public class Post extends BaseEntity {
 
     public void setBoard(Board board){
         this.board = board;
+    }
+
+    public void setMember(Member member){
+        this.member = member;
     }
 
 
