@@ -1,12 +1,15 @@
 package com.straight.bluewave.domain.reply.dto;
 
 
+import com.straight.bluewave.domain.reply.entity.Reply;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -14,24 +17,31 @@ import java.time.LocalDateTime;
 @Data
 public class ReplyDTO {
     // Id
-    private Long reply_id;
+    private Long replyId;
 
     // 댓글 내용
-    private String reply_content;
+    private String replyContent;
 
     // 생성날짜
-    private LocalDateTime reply_createAt;
-
-    // 수정여부 확인용
-    private boolean reply_modify;
+    private LocalDateTime replyCreateAt;
 
     // 수정날짜
-    private LocalDateTime reply_updateAt;
+    private LocalDateTime replyUpdateAt;
 
+    private Long memId;
 
-    private Long mem_id;
+    private String writer;
 
-    private Long post_id;
+    private List<ReplyDTO> children = new ArrayList<>();
 
-    private Long parent_reply_id;
+    public ReplyDTO(Long replyId, String replyContent, Long memId, String writer) {
+        this.replyId = replyId;
+        this.replyContent = replyContent;
+        this.memId = memId;
+        this.writer = writer;
+    }
+
+    public static ReplyDTO convertReplyDTO(Reply reply) {
+        return new ReplyDTO(reply.getReplyId(), reply.getReplyContent(), reply.getMember().getMemberId(), reply.getMember().getMemberName());
+    }
 }
