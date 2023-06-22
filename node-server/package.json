@@ -14,6 +14,7 @@
     "nodemon": "^2.0.12"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.0",
     "@socket.io/admin-ui": "^0.2.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -22,6 +23,11 @@
     "localtunnel": "^2.0.1",
     "path": "^0.12.7",
     "pug": "^3.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.9.0",
+    "react-slick": "^0.29.0",
+    "slick-carousel": "^1.8.1",
     "socket.io": "^4.6.2",
     "ws": "^7.5.3"
   }

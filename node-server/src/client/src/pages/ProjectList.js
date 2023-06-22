@@ -7,8 +7,25 @@ import Header from "../components/views/Header";
 import Sidebar from "../components/views/Sidebar";
 import Footer from "../components/views/Footer";
 import styled from "styled-components";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Image, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+const TeamTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  padding: 1rem;
+  margin: 1rem;
+`;
+
+const TeamImage = styled(Image)`
+  width: 25vh;
+  height: 20vh;
+  object-fit: fill;
+`;
 
 const Title = styled.h1`
   font-size: 2.5em;
@@ -43,22 +60,27 @@ const Line = styled.hr`
     rgba(0, 0, 0, 0.75),
     rgba(0, 0, 0, 0)
   );
-  height: 1px;
+  height: 3px;
   width: 100%;
   margin: 0.5em 0;
 `;
 
+const Buttons = styled.div`
+  display: flex;
+`;
+
 const ProjectList = () => {
-  const [projects, setProjects] = useState([]);
   const [members, setMembers] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [showMemberModal, setShowMemberModal] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userData, setUserData] = useState(null);
   const [showButton, setShowButton] = useState(false);
   const [friendList, setFriendList] = useState([]);
+  const [showMemberModal, setShowMemberModal] = useState(false);
   const navigate = useNavigate();
-
+  const Team = useSelector((state) => state.teamReducer.team);
+  console.log(Team.teamName);
   const addUser = async (email) => {
     await axios
       .get(`http://localhost:8002/api/member/${email}`)
@@ -78,6 +100,10 @@ const ProjectList = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleCloseMemberModal = () => {
+    setShowMemberModal(false);
   };
 
   const addUserFriend = async (id) => {
@@ -115,10 +141,6 @@ const ProjectList = () => {
     setShowModal(false);
     setUserEmail("");
     setUserData(null);
-  };
-
-  const handleCloseMemberModal = () => {
-    setShowMemberModal(false);
   };
 
   const handleSearch = async () => {
@@ -166,6 +188,24 @@ const ProjectList = () => {
       setProjects(response.data);
     } catch (error) {
       console.error("Error fetching project:", error);
+    }
+  };
+
+  const removeMember = async (id) => {
+    if (window.confirm("정말로 탈퇴시키겠습니까?")) {
+      await axios
+        .delete(
+          `http://localhost:8002/api/team/leaveTeam?memberId=${id}&teamId=${sessionStorage.getItem(
+            "tmid"
+          )}`
+        )
+        .then((res) => {
+          alert("팀에서 탈퇴시켰습니다.");
+          fetchMembers();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -238,42 +278,6 @@ const ProjectList = () => {
     }
   };
 
-  const leaveTeam = async () => {
-    if (window.confirm("정말로 탈퇴하시겠습니까?")) {
-      await axios
-        .delete(
-          `http://localhost:8002/api/team/leaveTeam?memberId=${sessionStorage.getItem(
-            "memid"
-          )}&teamId=${sessionStorage.getItem("tmid")}`
-        )
-        .then((res) => {
-          alert("팀에서 탈퇴되었습니다.");
-          navigate("/LoggedIn");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
-  const removeMember = async (id) => {
-    if (window.confirm("정말로 탈퇴시키겠습니까?")) {
-      await axios
-        .delete(
-          `http://localhost:8002/api/team/leaveTeam?memberId=${id}&teamId=${sessionStorage.getItem(
-            "tmid"
-          )}`
-        )
-        .then((res) => {
-          alert("팀에서 탈퇴시켰습니다.");
-          fetchMembers();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
   useEffect(() => {
     fetchProjects();
     fetchMembers();
@@ -294,9 +298,14 @@ const ProjectList = () => {
           <Sidebar />
           <div className="section">
             <Container>
+              <TeamTitle>
+                <TeamImage src={Team.team_photo} roundedCircle />
+              </TeamTitle>
+              <Title>{Team.teamName}</Title>
+
               <Title>프로젝트 목록</Title>
               {showButton && (
-                <>
+                <Buttons>
                   <Button
                     variant="primary"
                     onClick={() => setShowModal(true)}
@@ -321,27 +330,29 @@ const ProjectList = () => {
                   >
                     팀 삭제
                   </Button>
-                </>
+                </Buttons>
               )}
-              {!showButton && (
+              <Buttons>
+                {!showButton && (
+                  <Button
+                    variant="danger"
+                    onClick={() => console.log(1)}
+                    style={{ width: "150px", height: "50px" }}
+                  >
+                    팀 탈퇴
+                  </Button>
+                )}
                 <Button
-                  variant="danger"
-                  onClick={() => leaveTeam()}
-                  style={{ width: "150px", height: "50px" }}
+                  variant="primary"
+                  onClick={() => navigate("/memlist")}
+                  style={{
+                    width: "150px",
+                    height: "50px",
+                  }}
                 >
-                  팀 탈퇴
+                  회원 목록 조회
                 </Button>
-              )}
-              <Button
-                variant="primary"
-                onClick={() => navigate("/memlist")}
-                style={{
-                  width: "150px",
-                  height: "50px",
-                }}
-              >
-                회원 목록 조회
-              </Button>
+              </Buttons>
               <Line />
               <Projects>
                 {showButton && (

@@ -9,9 +9,9 @@ import com.straight.bluewave.domain.notification.dto.NotificationDTO;
 import com.straight.bluewave.domain.notification.entity.Notification;
 import com.straight.bluewave.domain.notification.repository.NotificationReposiroty;
 import com.straight.bluewave.domain.post.entity.Post;
-import com.straight.bluewave.domain.post.repository.PostRepository;
-import com.straight.bluewave.domain.post.service.PostServiceImp;
+import com.straight.bluewave.domain.post.repository.SpringDataPostRepository;
 import com.straight.bluewave.domain.schedule.entity.Schedule;
+import com.straight.bluewave.domain.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,20 +28,23 @@ public class NotificationServiceImp implements NotificationService{
     private final NotificationReposiroty notificationReposiroty;
     private final SpringDataMemberNotificationRepository mnRepository;
     private final MemberRepository memberRepository;
+    private final SpringDataPostRepository postRepository;
+    private final ScheduleRepository scheduleRepository;
 
 
-    public Notification storageNotification(NotificationDTO dto, Long memberId) {
-        Notification notification = dtoToEntity(dto);
+    public void storageNotification(NotificationDTO dto, Long memberId) {
 
-        Post post = new Post();
-//        post.setPostId(dto.getPost_id());
-        notification.setPost(post);
+        Notification notification;
+        if(dto.getPost_id() != null) {
+            Post post = postRepository.findById(dto.getPost_id()).get();
+            notification =  notificationReposiroty.save(dtoToEntity(dto, post));
+        } else {
+            Schedule schedule = scheduleRepository.findById(dto.getSchedule_id()).get();
+            notification = notificationReposiroty.save(dtoToEntity(dto, schedule));
+        }
 
-        Schedule schedule = new Schedule();
-        schedule.setScheduleId(dto.getSchedule_id());
-        notification.setSchedule(schedule);
 
-        notificationReposiroty.save(notification);
+
 
         Member member = memberRepository.findById(memberId).get();
         MemberNotificationMapping mnMapping = MemberNotificationMapping.builder()
@@ -52,7 +55,7 @@ public class NotificationServiceImp implements NotificationService{
 
         mnRepository.save(mnMapping);
 
-        return notification;
+//        return notification;
     }
 
     @Override
