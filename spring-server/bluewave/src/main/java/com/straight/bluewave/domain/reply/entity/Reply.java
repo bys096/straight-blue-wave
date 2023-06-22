@@ -29,31 +29,32 @@ public class Reply extends BaseEntity {
     private String replyContent;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_id")
     private Member member;
 
-    // CascadeType.ALL = 모든 상황에서의 영속성 관리
-    // 게시글 삭제시
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="post_id")
     private Post post;
 
 
-
-    @OneToMany(mappedBy = "parentReply", fetch = FetchType.LAZY)
-    private List<Reply> childReplies;
+    @Builder.Default
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> children = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_reply_id")
-    private Reply parentReply;
+    @JoinColumn(name = "parent_id")
+    private Reply parent;
 
-
-
-
-//     Casecade.ALL = 부모 댓글 삭제시 자식 댓글 함께 삭제
-//    @Builder.Default
+    public static Reply createReply(String replyContent, Post post, Member member, Reply parent) {
+        Reply reply = new Reply();
+        reply.replyContent = replyContent;
+        reply.member = member;
+        reply.post = post;
+        reply.parent = parent;
+        return reply;
+    }
 
     /*
     수정 가능 목록
@@ -62,7 +63,7 @@ public class Reply extends BaseEntity {
     3. 수정 날짜 (BaseEntity에서 자동으로 됨)
      */
     public void updateContent(ReplyDTO dto) {
-        this.replyContent = dto.getReply_content();
+        this.replyContent = dto.getReplyContent();
 //        this.replyModify = true;
     }
 

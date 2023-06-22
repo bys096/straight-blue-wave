@@ -10,12 +10,14 @@ import com.straight.bluewave.domain.reply.dto.ReplyCreateDTO;
 import com.straight.bluewave.domain.reply.dto.ReplyDTO;
 import com.straight.bluewave.domain.reply.entity.Reply;
 import com.straight.bluewave.domain.reply.repository.ReplyRepository;
+import com.straight.bluewave.domain.reply.repository.SpringDataReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,21 +25,45 @@ import java.util.stream.Collectors;
 public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
+
+    private final SpringDataReplyRepository springDataReplyRepository;
     private final MemberRepository memberRepository;
     private final SpringDataPostRepository postRepository;
 
+    @Override
+    public List<ReplyDTO> findReliesByPostId(Long postId) {
+        postRepository.findById(postId).orElseThrow(() -> new RuntimeException("게시판 아이디를 찾을 수 없습니다."));
+        return convertNestedStructure(replyRepository.findReplyByPostId(postId));
+    }
+
+    private List<ReplyDTO> convertNestedStructure(List<Reply> replies) {
+        List<ReplyDTO> result = new ArrayList<>();
+        Map<Long, ReplyDTO> map = new HashMap<>();
+        replies.stream().forEach(r -> {
+            ReplyDTO dto = ReplyDTO.convertReplyDTO(r);
+            map.put(dto.getReplyId(), dto);
+            if(r.getParent() != null) map.get(r.getParent().getReplyId()).getChildren().add(dto);
+            else result.add(dto);
+        });
+
+        return result;
+    }
+
 
     @Override
-    public void createReply(ReplyCreateDTO replyDTO) {
-        Post post = postRepository.findById(replyDTO.getPost_id()).get();
-        Member member = memberRepository.findById((replyDTO.getMem_id())).get();
-        Reply reply = dtoToEntity(replyDTO, post, member);
-        replyRepository.save(dtoToEntity(replyDTO, post, member));
+    public ReplyDTO createReply(ReplyCreateDTO replyDTO) {
+        Reply reply = springDataReplyRepository.save(
+                Reply.createReply(replyDTO.getReplyContent(),
+                        postRepository.findById(replyDTO.getPostId()).orElseThrow(() -> new RuntimeException("게시판 아이디를 찾을 수 없습니다.")),
+                        memberRepository.findById(replyDTO.getMemId()).orElseThrow(() -> new RuntimeException("회원 아이디를 찾을 수 없습니다.")),
+                        replyDTO.getParentId() != null ? springDataReplyRepository.findById(replyDTO.getParentId()).get() : null)
+        );
+        return ReplyDTO.convertReplyDTO(reply);
     }
 
     @Override
     public ReplyDTO getReply(Long replyId) {
-        Reply reply = replyRepository.findById(replyId)
+        Reply reply = springDataReplyRepository.findById(replyId)
                 .orElseThrow(() -> new RuntimeException("ID를 통한 댓글 조회 불가: " + replyId));
         return entityToDto(reply);
     }
@@ -56,23 +82,22 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public ReplyDTO modify(Long replyId, ReplyDTO replyDTO) {
-        replyDTO.setReply_modify(true);
 
-        Reply reply = replyRepository.findById(replyId)
+        Reply reply = springDataReplyRepository.findById(replyId)
                 .orElseThrow(() -> new RuntimeException("ID를 통한 댓글 조회 불가: " + replyId));
 
         reply.updateContent(replyDTO);
 
-        Reply savedReply = replyRepository.save(reply);
+        Reply savedReply = springDataReplyRepository.save(reply);
 
         return entityToDto(savedReply);
     }
 
     @Override
     public void remove(Long replyId) {
-        Reply reply = replyRepository.findById(replyId)
+        Reply reply = springDataReplyRepository.findById(replyId)
                 .orElseThrow(() -> new RuntimeException("ID를 통한 댓글 조회 불가: " + replyId));
 
-        replyRepository.delete(reply);
+        springDataReplyRepository.delete(reply);
     }
 }

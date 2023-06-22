@@ -16,45 +16,40 @@ public interface ReplyService {
         return  Reply.builder()
                 .post(post)
                 .member(member)
-                .replyContent(dto.getReply_content())
+                .replyContent(dto.getReplyContent())
                 .build();
     }
 
     default Reply dtoToEntity(ReplyDTO dto) {
         Reply entity = Reply.builder()
-                .replyId(dto.getReply_id())
-                .replyContent(dto.getReply_content())
-
-
+                .replyContent(dto.getReplyContent())
                 .build();
         return entity;
     }
 
     default ReplyDTO entityToDto(Reply entity) {
         ReplyDTO dto = ReplyDTO.builder()
-                .reply_id(entity.getReplyId())
-                .reply_content(entity.getReplyContent())
-                .reply_createAt(entity.getCreatedAt())
-//                .reply_modify(entity.isReplyModify())
-                .reply_updateAt(entity.getUpdatedAt())
-//                .member_mem_id(entity.getMember().getMemberId())
-//                .post_id(entity.getPost().getPost_id())
-//                .parent_reply(entity.getParentReply() != null ? entity.getParentReply().getReplyId() : null)
+                .replyId(entity.getReplyId())
+                .replyContent(entity.getReplyContent())
+                .replyCreateAt(entity.getCreatedAt())
+                .replyUpdateAt(entity.getUpdatedAt())
                 .build();
         return dto;
     }
 
-    default List<ReplyDTO> convertToDTOList(List<Reply> replies) {
+    /*default List<ReplyDTO> convertToDTOList(List<Reply> replies) {
         return replies.stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
-    }
+    }*/
 
-    void createReply(ReplyCreateDTO replyDTO);
+    ReplyDTO createReply(ReplyCreateDTO replyDTO);
 
     ReplyDTO getReply(Long replyId);
 
     ReplyDTO modify(Long replyId, ReplyDTO replyDTO);
+
+    List<ReplyDTO> findReliesByPostId(Long postId);
 
     void remove(Long replyId);
 }

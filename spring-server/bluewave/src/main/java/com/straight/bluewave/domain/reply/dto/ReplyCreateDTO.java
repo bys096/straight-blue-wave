@@ -12,11 +12,13 @@ import java.time.LocalDateTime;
 public class ReplyCreateDTO {
 
     // 댓글 내용
-    private String reply_content;
+    private String replyContent;
 
-    private Long mem_id;
+    private Long memId;
 
-    private Long post_id;
+    private Long postId;
+
+    private Long parentId;
 
 //    private Long parent_reply_id;
 }
