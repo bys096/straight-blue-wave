@@ -13,8 +13,8 @@ const StyledCard = styled(Card)`
 	align-items: center;
 	text-align: center;
 	cursor: pointer;
-	width: 20vh; // 원하는 너비 지정
-	height: 25vh; // 원하는 높이 지정
+	width: 10rem; // 원하는 너비 지정
+	height: 12rem; // 원하는 높이 지정
 	border-radius: 10px; // 카드 모서리 둥글게 처리
 	text-decoration: none;
 
@@ -138,7 +138,6 @@ const TeamCreateCard = () => {
 				} else console.error("s3 upload error:", err);
 			});
 
-		
 		console.log(imageUrl);
 
 		await axios

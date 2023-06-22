@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Card, Button, Modal, Form, Image} from "react-bootstrap";
+import { Card, Button, Modal, Form, Image } from "react-bootstrap";
 import styled from "styled-components";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import axios from "axios";
@@ -12,8 +12,8 @@ const StyledCard = styled(Card)`
 	align-items: center;
 	text-align: center;
 	cursor: pointer;
-	width: 20vh; // 원하는 너비 지정
-	height: 25vh; // 원하는 높이 지정
+	width: 10rem; // 원하는 너비 지정
+	height: 12rem; // 원하는 높이 지정
 	border-radius: 10px; // 카드 모서리 둥글게 처리
 	text-decoration: none;
 
@@ -116,7 +116,7 @@ const ProjectCreateCard = () => {
 	};
 
 	const handleCreateProject = async () => {
-    console.log(presignedUrl);
+		console.log(presignedUrl);
 		let imageUrl = "";
 		if (!selectedFile || !presignedUrl) {
 			imageUrl =
@@ -145,7 +145,7 @@ const ProjectCreateCard = () => {
 			.post("http://localhost:8002/api/project/create", {
 				prj_name: prjName,
 				team_id: sessionStorage.getItem("tmid"),
-        prj_photo: imageUrl
+				prj_photo: imageUrl,
 			})
 			.then((res) => {
 				alert("프로젝트 생성이 완료되었습니다");
