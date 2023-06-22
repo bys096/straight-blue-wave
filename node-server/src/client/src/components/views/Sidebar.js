@@ -8,12 +8,6 @@ import Sidebar3 from "./Sidebar3";
 import "./Sidebar.css";
 import { useSelector } from "react-redux";
 
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { Avatar, CardActionArea, Stack } from "@mui/material";
-
 const hstyle = {
 	color: "black",
 	backgroundColor: "blue",
@@ -61,19 +55,7 @@ const Sidebar = () => {
 							<img src="../assets/images/logos/dark-logo.svg" width="180" alt="" />
 						</a>
 					</div> */}
-{/* 
-					<Card sx={{ maxWidth: 345 }}>
-						<CardActionArea>
-							<CardContent>
-								<Typography variant="h5" component="div" noWrap>
-									<Stack direction="row" spacing={5}>
-										<Avatar src={member.memberPhoto} sx={{ width: 40, height: 40 }} />
-										{member.memberNick}
-									</Stack>
-								</Typography>
-							</CardContent>
-						</CardActionArea>
-					</Card> */}
+
 
 					<nav class="sidebar-nav" data-simplebar="true">
 						<ul id="sidebarnav">
