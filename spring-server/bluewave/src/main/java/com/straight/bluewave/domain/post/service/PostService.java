@@ -2,6 +2,7 @@ package com.straight.bluewave.domain.post.service;
 
 
 import com.straight.bluewave.domain.board.entity.Board;
+import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.post.dto.PostDTO;
 import com.straight.bluewave.domain.post.dto.PostRequestDTO;
 import com.straight.bluewave.domain.post.dto.PostResponseDTO;
@@ -18,8 +19,6 @@ public interface PostService {
     default Post dtoToEntity(PostDTO dto) {
         Post entity = Post.builder()
                 .post_id(dto.getPost_id())
-                .mem_id(dto.getMem_id())
-                .mem_nick(dto.getMem_nick())
                 .post_content(dto.getPost_content())
                 .post_name(dto.getPost_name())
                 .meeting_date(dto.getMeeting_date())
@@ -33,16 +32,26 @@ public interface PostService {
     default PostDTO entityToDto(Post entity) {
         PostDTO dto = PostDTO.builder()
                 .post_id(entity.getPost_id())
-                .mem_id(entity.getMem_id())
-                .mem_nick(entity.getMem_nick())
                 .post_content(entity.getPost_content())
                 .post_name(entity.getPost_name())
                 .meeting_date(entity.getMeeting_date())
                 .attendees_id(entity.getAttendees_id())
-                .file_status(entity.isFile_status())
+//                .file_status(entity.isFile_status())
 //                .voting_status(entity.isVoting_status())
                 .build();
         return dto;
+    }
+
+    default Post dtoToEntity(PostDTO dto, Board board, Member member){
+        return Post.builder()
+                .post_id(dto.getPost_id())
+                .post_content(dto.getPost_content())
+                .post_name(dto.getPost_name())
+                .meeting_date(dto.getMeeting_date())
+                .attendees_id(dto.getAttendees_id())
+                .board(board)
+                .member(member)
+                .build();
     }
 
 

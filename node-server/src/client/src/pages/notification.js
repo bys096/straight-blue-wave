@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import io from "socket.io-client";
+import axios from "axios";
 
 const socket = io();
 
@@ -36,12 +37,27 @@ function Notification() {
     });
 
     // 알림 이벤트 수신
-    socket.on("eventData", (eventData) => {
+    socket.on("eventData", (eventData, tmid) => {
       console.log("Received event data:", eventData);
       setEventData(eventData);
       const { prjName, post_name, post_content } = eventData;
-      const notificationMessage = `${prjName}프로젝트에 새로운 글이 등록되었습니다.\n프로젝트: ${prjName}\n제목: ${post_name}\n내용: ${post_content}`;
+      const notificationMessage = `${prjName}프로젝트에 새로운 글이 등록되었습니다.\n제목: ${post_name}\n내용: ${post_content}`;
       console.log(notificationMessage);
+      const sendNotification = async () => {
+        await axios
+          .post(`http://localhost:8002/api/team/teamMemList/${tmid}`)
+          .then(async (res) => {
+            const members = res.data;
+            for (const member of members) {
+              await axios.post(
+                `http://localhost:8002/api/notification/storage/${member.memberId}`,
+                {
+                  // 추후 추가 예정
+                }
+              );
+            }
+          });
+      };
       alert(notificationMessage);
     });
 
