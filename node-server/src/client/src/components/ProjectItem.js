@@ -12,8 +12,8 @@ const StyledCard = styled(Card)`
 	align-items: center;
 	text-align: center;
 	cursor: pointer;
-	width: 20vh; // 원하는 너비 지정
-	height: 25vh; // 원하는 높이 지정
+	width: 10rem; // 원하는 너비 지정
+	height: 12rem; // 원하는 높이 지정
 	border-radius: 10px; // 카드 모서리 둥글게 처리
 	text-decoration: none;
 	user-select: none;
@@ -24,15 +24,32 @@ const StyledCard = styled(Card)`
 	}
 `;
 
-const ImageContainer = styled(Card.Header)`
+const StyledCardBody = styled(Card.Body)`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around; // 가로 중앙 정렬
+	align-items: center; // 세로 중앙 정렬
+	height: 50%; // 부모 요소의 높이에 맞춤
+	font-size: 2rem;
+
+`;
+
+const StyledCardTitle = styled(Card.Title)`
+	&> div {
+		font-size: 1rem;
+	}
+`;
+
+const ImageContainer = styled.div`
 	object-fit: fill;
-	width: 100%;
-	height: 100%;
+	width: 90%;
+	height: 50%;
+	padding: 5px;
 `;
 
 const StyledImage = styled(Image)`
-	width: 100em;
-	height: 10em;
+	width: 100%;
+	height: 100%;
 `;
 
 const ProjectItem = ({ project = [] }) => {
@@ -53,9 +70,9 @@ const ProjectItem = ({ project = [] }) => {
 					<ImageContainer>
 						<StyledImage src={project.prjPhoto} thumbnail />
 					</ImageContainer>
-					<Card.Body>
-						<Card.Title>{project.prjName}</Card.Title>
-					</Card.Body>
+					<StyledCardBody>
+						<StyledCardTitle>{project.prjName}</StyledCardTitle>
+					</StyledCardBody>
 				</StyledCard>
 			</Link>
 		</>
