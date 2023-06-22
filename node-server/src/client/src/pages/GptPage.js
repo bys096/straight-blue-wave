@@ -27,7 +27,7 @@ const GptPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer api_key",
+            Authorization: "Bearer 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",
           },
         }
       );

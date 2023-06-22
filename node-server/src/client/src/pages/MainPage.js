@@ -7,7 +7,18 @@ import $ from "jquery";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
+
+import "../assets/css/styles.min.css"
+import styled from 'styled-components'
+
 import axios from "axios";
+
+
+const BoxCommon = styled.div`
+    width : ${props=> (props.isBig? 200:100)}px;    // (1)
+    height : 50px;
+    background-color:#aaaaaa;
+`;
 
 function MainPage(props) {
   const socket = io();
@@ -107,7 +118,12 @@ function MainPage(props) {
     const memnick = sessionStorage.getItem("memnick");
     socket.emit("summarize", prjid, minutesid);
     // 사용자 입력과 대화 기록을 API 요청의 본문에 포함합니다.
+    // await axios.get()
   };
+  socket.on('hi', () => {
+    console.log('이벤트 수신');
+  });
+
 
   async function getCameras() {
     try {
@@ -520,8 +536,72 @@ function MainPage(props) {
           </div>
         </div>
       </div>
+
+
+
+      <div class="container-fluid">
+        <div class="container-fluid">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title fw-semibold mb-4">대화 내용</h5>
+              <div class="card">
+                <div class="card-body">
+                  <form>
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Email address</label>
+                      
+                      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label">Password</label>
+                      
+                    </div>
+                    <div class="mb-3 form-check">
+                      
+                      <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title fw-semibold mb-4">요약 내용</h5>
+              <div class="card">
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">안건</label>
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">참석자</label>
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">시간</label>
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">내용</label>
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">결론</label>
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">작성자</label>
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </Container>
   );
 }
 
 export default MainPage;
+

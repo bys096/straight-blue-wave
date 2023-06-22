@@ -192,7 +192,7 @@ async function summarize(data, minutesid) {
         headers: {
           "Content-Type": "application/json",
           Authorization:
-            "Bearer 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",
+            "Bearer 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",
         },
       }
     );
