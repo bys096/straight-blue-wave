@@ -36,6 +36,17 @@ function MainPage(props) {
   const [chatHidden, setChatHidden] = useState(true);
   const [roomName, setRoomName] = useState("");
   const [userId, setUserId] = useState("");
+
+  let [transText, setTransText] = useState("");
+  let [summarizeResult, setSummarizeResult] = useState(null);
+  let [date, setDate] = useState("");
+  let [attendees, setAttendees] = useState("");
+  let [summary, setSummary] = useState("");
+  let [conclusion, setConclusion] = useState("");
+  let [speaker, setSpeaker] = useState("");
+  let [content, setContent] = useState("");
+  let [writer, setWriter] = useState("");
+
   const senderRef = useRef(null);
   const chatLogsRef = useRef(null);
   const chatInputRef = useRef(null);
@@ -83,7 +94,8 @@ function MainPage(props) {
 
       setInterimTranscript(interim);
       setFinalTranscript(final);
-      setResult(`중간값: ${interim}<br/>결과값: ${final}<br/>최종: ${final}`);
+      setResult(`중간값: ${interim}<br/>결과값: ${final}`);
+      setTransText(final);
 
       const context = {
         // userNick: 'nick1',
@@ -109,7 +121,9 @@ function MainPage(props) {
 
   // gpt
 
-  const handleMessageSubmit = async () => {
+  const handleMessageSubmit = async (event) => {
+    event.preventDefault();
+
     console.log("summarize in client: ", sessionStorage.getItem("prjid"));
     const prjid = sessionStorage.getItem("prjid");
 
@@ -120,8 +134,22 @@ function MainPage(props) {
     // 사용자 입력과 대화 기록을 API 요청의 본문에 포함합니다.
     // await axios.get()
   };
-  socket.on('hi', () => {
-    console.log('이벤트 수신');
+
+
+  socket.on('summarizeResult', (acceptData) => {
+    setSummarizeResult(acceptData);
+    setAttendees(acceptData.attendees);
+    setDate(acceptData.date);
+    setSummary(acceptData.setSummary);
+    setConclusion(acceptData.conclusion);
+    setWriter(acceptData.writer);
+    console.log('accpeted Data: ');
+    console.log(acceptData);
+    console.log('summarizeResult');
+    console.log(summarizeResult);
+    // console.log('attendees: ', summarizeResult.attendees[0]);
+    // setC
+
   });
 
 
@@ -436,6 +464,10 @@ function MainPage(props) {
     setChatHidden(true);
     socket.disconnect();
   }
+  socket.on('hii', (text) => {
+    console.log('socket id로부터 수신');
+    console.log(text);
+  });
 
   return (
     <Container>
@@ -452,19 +484,13 @@ function MainPage(props) {
               <button onClick={handleWelcomeSubmit}>Enter room</button>
             </form>
           </div>
-          <br />
-          <br />
-          한국어 음성 처리 테스트
-          <br />
-          <br />
-          <div dangerouslySetInnerHTML={{ __html: result }}></div>
-          <button onClick={handleMessageSubmit}>전송</button>
+          
           <div
             id="call"
             ref={callRef}
             style={{ display: hidden ? "none" : "block" }}
           >
-            <div id="myStream" ref={myStreamRef}>
+            <div id="myStream" ref={myStreamRef} class="rounded mx-auto d-block">
               <video
                 id="myFace"
                 ref={myFaceRef}
@@ -473,7 +499,7 @@ function MainPage(props) {
                 width="400"
                 height="400"
               ></video>
-              <button id="mute" ref={muteRef} onClick={handleMuteClick}>
+              {/* <button id="mute" ref={muteRef} onClick={handleMuteClick}>
                 Mute
               </button>
               <button id="camera" ref={cameraRef} onClick={handleCameraClick}>
@@ -483,7 +509,7 @@ function MainPage(props) {
                 id="cameras"
                 ref={camerasRef}
                 onChange={handleCameraChange}
-              ></select>
+              ></select> */}
               <video
                 id="peerFace"
                 ref={peerFaceRef}
@@ -494,7 +520,7 @@ function MainPage(props) {
               ></video>
             </div>
 
-            <button onClick={leaveRoom}>Leave</button>
+            <button class="btn btn-primary" onClick={leaveRoom}>Leave</button>
           </div>
         </div>
       </div>
@@ -548,19 +574,17 @@ function MainPage(props) {
                 <div class="card-body">
                   <form>
                     <div class="mb-3">
-                      <label for="exampleInputEmail1" class="form-label">Email address</label>
+                      {/* <label for="exampleInputEmail1" class="form-label">중간값</label> */}
+                      <div dangerouslySetInnerHTML={{ __html: result }}></div>
                       
-                      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                      <div id="emailHelp" class="form-text" value={transText}></div>
                     </div>
                     <div class="mb-3">
-                      <label for="exampleInputPassword1" class="form-label">Password</label>
-                      
+                      {/* <label for="exampleInputPassword1" class="form-label">결과값</label> */}
+                      {/* <div id="emailHelp" class="form-text" value={transText}></div> */}
                     </div>
-                    <div class="mb-3 form-check">
-                      
-                      <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button class="btn btn-primary" onClick={handleMessageSubmit}>SUBMIT</button>
+                    
                   </form>
                 </div>
               </div>
@@ -570,28 +594,43 @@ function MainPage(props) {
               <div class="card">
                 <div class="card-body">
                   <div class="mb-3">
+                    {/* <div>{summarizeResult}</div> */}
                     <label for="exampleInputEmail1" class="form-label">안건</label>
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    { summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.date}</div> }
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">참석자</label>
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    {/* {summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.attendees}</div> } */}
+                    {summarizeResult && Array.isArray(summarizeResult.attendees) && summarizeResult.attendees.map((attendee, index) => (
+                      <div key={index} id="emailHelp" className="form-text">{attendee}</div>
+))}
+
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">시간</label>
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    {summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.date}</div>}
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">내용</label>
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    {summarizeResult && <div id="emailHelp" class="form-text">
+                      {/* <span>{ summarizeResult.contents.speaker } : { summarizeResult.contents.content }</span> */}
+                      {/* {summarizeResult && summarizeResult.contents.map((content, index) => (
+                      <div key={index} id="emailHelp" className="form-text">{content}</div>
+                    ))} */}
+                    </div>}
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">요약</label>
+                    {summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.summary}</div>}
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">결론</label>
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    {summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.conclusion}</div>}
                   </div>
+                  
                   <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">작성자</label>
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    {summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.writer}</div>}
                   </div>
                 </div>
               </div>
