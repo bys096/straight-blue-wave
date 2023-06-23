@@ -159,7 +159,8 @@ wsServer.on("connection", (socket) => {
       console.log(roomContext);
     }
   });
-  socket.on("summarize", (prjid, minutesid) => {
+  socket.on("summarize", async (prjid, minutesid) => {
+    
     console.log("summarize: ", prjid);
     console.log(minutesid);
     const combinedString = roomContext[prjid].join("\n");
@@ -173,18 +174,22 @@ wsServer.on("connection", (socket) => {
         {
           role: "assistant",
           content:
-            "대화를 요약, 오타 수정을 해서 한국어로된 회의록으로 작성해줘. 회의록 내용으로는 일시, 참석자, 안건, 내용 요약, 결론, 회의록 작성자의 양식으로 작성해줘.\n 문맥에 맞지 않는 표현은 잘못 입려된 단어이니, 문맥에 맞는 단어로 대체해줘.",
+            "대화를 요약, 오타 수정을 해서 한국어로된 회의록으로 작성해줘. 회의록 내용으로는 일시\n, 참석자\n, 안건\n, 내용: (누가):(대화내용)\n, 내용 요약\n, 결론\n, 회의록 작성자의 양식으로 작성해줘.\n 대화 내용 중 문맥에 맞지 않는 표현은, 문맥에 맞는 표현으로 대체하고 오타도 고쳐줘.\n 반환 형태는 json format으로 일시, 참석자, 안건, 내용 , 내용 요약, 결론을 date, attendees, agenda, contents , summary, conclusion, writer를 key값으로 내용을 반환해줘(contents의 value 값은 String 배열형태로 저장해줘)",
         },
       ],
     };
-    summarize(data, minutesid);
+    const result = await summarize(data, minutesid);
+    console.log('summarize result');
+    console.log(result);
+    socket.to(prjid).emit('summarizeResult', result);
+
+    roomContext[prjid] = [];
+    
   });
 });
 async function summarize(data, minutesid) {
   try {
-    //   // ChatGPT API 호출
-    // console.log('check data');
-    // console.log(data);
+    
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       data,
@@ -192,21 +197,24 @@ async function summarize(data, minutesid) {
         headers: {
           "Content-Type": "application/json",
           Authorization:
-            "Bearer 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",
+            "Bearer secret API",
         },
       }
     );
+    console.log('response');
+    // console.log(response);
     const answer = response.data.choices[0].message.content;
-    console.log(answer);
-    axios.post(`http://localhost:8002/api/post/create`, {
-      brd_id: minutesid,
-      file_status: false,
-      post_content: answer,
-      post_name: "회의록 자동 생성",
-      mem_nick: "AI 어시스턴트",
-    });
+    // console.log(answer);
+    // axios.post(`http://localhost:8002/api/post/create`, {
+    //   brd_id: minutesid,
+    //   file_status: false,
+    //   post_content: answer,
+    //   post_name: "회의록 자동 생성",
+    //   mem_nick: "AI 어시스턴트",
+    // });
     // console.log(response.data);
     // setMessages([...messages, { role: "assistant", content: answer }]);
+    return answer;
   } catch (error) {
     console.error("API 요청 중 오류가 발생했습니다:", error);
   }
