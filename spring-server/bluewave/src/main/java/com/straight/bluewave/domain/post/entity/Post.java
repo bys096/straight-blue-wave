@@ -82,7 +82,6 @@ public class Post extends BaseEntity {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_id")
-    @JsonIgnore
     private Member member;
 
     @JsonIgnore
