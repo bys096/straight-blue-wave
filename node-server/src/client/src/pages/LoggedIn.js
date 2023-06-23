@@ -7,14 +7,11 @@ import "./LoggedIn.css";
 import VideoCall from "../pages/MainPage";
 import TeamList from "./TeamList";
 function LoggedIn() {
-
 	return (
 		<div className="main">
 			<Header />
-
 			<div className="article">
-				<Sidebar />
-
+			<Sidebar />
 				<div className="section">
 					<TeamList />
 				</div>
