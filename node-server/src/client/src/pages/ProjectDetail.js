@@ -50,7 +50,7 @@ const BoardItem = styled.div`
   padding: 20px;
   user-select: none;
 
-  background-color: #aaaaaa;
+  // background-color: #aaaaaa;
 `;
 
 const ProjectDetail = () => {
@@ -255,9 +255,12 @@ const ProjectDetail = () => {
           <br />
 
           <BoardList>
+          <div class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp" data-wow-delay="0.1s">
             <h2>최근 이슈</h2>
+            </div>
             {boardList.map((board) => (
-              <BoardItem
+              <BoardItem className="card card-title fw-semibold mb-4 table-responsive text-dark
+              "
                 key={board.brd_id}
                 onClick={() => {
                   navigate("/post", { state: { board } });
