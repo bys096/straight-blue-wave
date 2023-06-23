@@ -255,11 +255,15 @@ const ProjectDetail = () => {
           <br />
 
           <BoardList>
-          <div class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp" data-wow-delay="0.1s">
-            <h2>최근 이슈</h2>
+            <div
+              class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp"
+              data-wow-delay="0.1s"
+            >
+              <h2>최근 이슈</h2>
             </div>
             {boardList.map((board) => (
-              <BoardItem className="card card-title fw-semibold mb-4 table-responsive text-dark
+              <BoardItem
+                className="card card-title fw-semibold mb-4 table-responsive text-dark
               "
                 key={board.brd_id}
                 onClick={() => {
@@ -277,10 +281,12 @@ const ProjectDetail = () => {
                   </tr>
                   {posts[board.brd_id]?.map((post) => (
                     <tbody>
-                      <tr key={post.createdAt}>
-                        <td>{post.createdAt}</td>
+                      <tr key={post.postid}>
+                        <td>
+                          {new Date(post.post_createAt).toLocaleDateString()}
+                        </td>
                         <td>{post.post_name}</td>
-                        <td>{sessionStorage.getItem("memnick")}</td>
+                        <td>{post.mem_name}</td>
                       </tr>
                     </tbody>
                   ))}

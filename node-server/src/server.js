@@ -159,8 +159,7 @@ wsServer.on("connection", (socket) => {
       console.log(roomContext);
     }
   });
-  socket.on("summarize", async (prjid, minutesid) => {
-    
+  socket.on("summarize", async (prjid, minutesid, memid) => {
     console.log("summarize: ", prjid);
     console.log(minutesid);
     const combinedString = roomContext[prjid].join("\n");
@@ -178,18 +177,16 @@ wsServer.on("connection", (socket) => {
         },
       ],
     };
-    const result = await summarize(data, minutesid);
-    console.log('summarize result');
+    const result = await summarize(data, minutesid, memid);
+    console.log("summarize result");
     console.log(result);
-    socket.to(prjid).emit('summarizeResult', result);
+    socket.to(prjid).emit("summarizeResult", result);
 
     roomContext[prjid] = [];
-    
   });
 });
-async function summarize(data, minutesid) {
+async function summarize(data, minutesid, memid) {
   try {
-    
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       data,
@@ -197,22 +194,25 @@ async function summarize(data, minutesid) {
         headers: {
           "Content-Type": "application/json",
           Authorization:
-            "Bearer secret API",
+            "Bearer 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",
         },
       }
     );
-    console.log('response');
+    console.log("response");
     // console.log(response);
     const answer = response.data.choices[0].message.content;
-    // console.log(answer);
-    // axios.post(`http://localhost:8002/api/post/create`, {
-    //   brd_id: minutesid,
-    //   file_status: false,
-    //   post_content: answer,
-    //   post_name: "회의록 자동 생성",
-    //   mem_nick: "AI 어시스턴트",
-    // });
-    // console.log(response.data);
+    console.log(answer);
+    console.log(minutesid);
+    console.log(memid);
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleString();
+    axios.post(`http://localhost:8002/api/post/create`, {
+      brd_id: minutesid,
+      post_content: answer,
+      post_name: `${formattedDate}, AI 회의록 자동 생성`,
+      mem_id: memid,
+    });
+    console.log(response.data);
     // setMessages([...messages, { role: "assistant", content: answer }]);
     return answer;
   } catch (error) {
