@@ -6,14 +6,12 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.straight.bluewave.domain.board.entity.Board;
-import com.straight.bluewave.domain.board.entity.QBoard;
-import com.straight.bluewave.domain.mapping.entity.QTeamMemberMapping;
-import com.straight.bluewave.domain.member.entity.Member;
+
 import com.straight.bluewave.domain.member.entity.QMember;
 import com.straight.bluewave.domain.post.dto.PostRequestDTO;
 import com.straight.bluewave.domain.post.entity.Post;
+
 import com.straight.bluewave.domain.post.entity.QPost;
-import com.straight.bluewave.domain.team.entity.QTeam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
