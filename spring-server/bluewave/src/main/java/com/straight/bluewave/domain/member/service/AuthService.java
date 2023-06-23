@@ -100,4 +100,8 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
 
     }
+
+    public boolean checkEmailDuplicate(String member_email) {
+        return memberRepository.existsByMemberEmail(member_email);
+    }
 }
