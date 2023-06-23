@@ -104,11 +104,11 @@ const PostDetail = () => {
 
 	const [comments, setComments] = useState([]);
 
-	const [replies, setReplies] = useState([]);
+	const [replies, setReplies] = useState();
 
 	useEffect(() => {
 		fetchReply();
-	}, [comments]);
+	}, []);
 
 	const handlePostDelete = async () => {
 		if (post.mem_id === auth.memberId || post.mem_nick === "AI 어시스턴트") {
@@ -143,6 +143,8 @@ const PostDetail = () => {
 			.get(`http://localhost:8002/api/reply/replies/${post.post_id}`)
 			.then((res) => {
 				setComments(res.data);
+				setReplies(res.data.children);
+				console.log(replies);
 				console.log(res.data);
 			})
 			.catch((err) => {
@@ -186,6 +188,7 @@ const PostDetail = () => {
 					// 	JSON.stringify([...comments, newComment])
 					// );
 				}
+        await fetchReply();
 
 				event.target.value = "";
 			}
@@ -217,35 +220,33 @@ const PostDetail = () => {
 						<PostContent.Footer>
 							<CommentSection>
 								{comments.map((comment) => (
-									<Comments key={comment.id}>
+									<Comments key={comment.replyId}>
 										<CommentItem
-											onClick={() => setActiveCommentId(comment.id)}
+											onClick={() => setActiveCommentId(comment.replyId)}
 											style={
-												activeCommentId === comment.id
+												activeCommentId === comment.replyId
 													? { backgroundColor: "lightgray" }
 													: {}
 											}
 										>
-											<div>{comment.member}</div>
-											<div>{comment.text}</div>
-											<div>{new Date(comment.createdAt).toLocaleDateString()}</div>
+											<strong>{comment.writer}</strong>
+											<div>{comment.replyContent}</div>
+											<div>{comment.replyCreateAt}</div>
 										</CommentItem>
 										{/* Render replies */}
 										<Replies>
-											{replies
-												.filter((reply) => reply.parentId === comment.id)
-												.map((reply) => (
-													<ReplySection key={reply.id}>
-														<div style={{ display: "flex", alignItems: "center" }}>
-															<BsArrowReturnRight style={{ marginLeft: "20px" }} />
-															<div style={{ marginLeft: "10px" }}>
-																<ReplyHeader>{post.mem_nick}</ReplyHeader>
-																<div>{reply.text}</div>
-																<div>{new Date(reply.createdAt).toLocaleDateString()}</div>
-															</div>
+											{comment.children.map((reply) => (
+												<ReplySection key={reply.replyId}>
+													<div style={{ display: "flex", alignItems: "center" }}>
+														<BsArrowReturnRight style={{ marginLeft: "20px" }} />
+														<div style={{ marginLeft: "10px" }}>
+															<ReplyHeader>{reply.writer}</ReplyHeader>
+															<div>{reply.replyContent}</div>
+															<div>{new Date(reply.replyCreatedAt).toLocaleDateString()}</div>
 														</div>
-													</ReplySection>
-												))}
+													</div>
+												</ReplySection>
+											))}
 										</Replies>
 									</Comments>
 								))}
