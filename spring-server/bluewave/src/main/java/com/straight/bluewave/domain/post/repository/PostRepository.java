@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface PostRepository {
 
 
-    Page<Post> searchPostPage(PostRequestDTO pageRequestDTO, Pageable pageable);
+    Page<Object[]> searchPostPage(PostRequestDTO pageRequestDTO, Pageable pageable);
 
 }

@@ -4,6 +4,7 @@ package com.straight.bluewave.domain.post.service;
 import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.domain.member.entity.Member;
 import com.straight.bluewave.domain.post.dto.PostDTO;
+import com.straight.bluewave.domain.post.dto.PostListResponse;
 import com.straight.bluewave.domain.post.dto.PostRequestDTO;
 import com.straight.bluewave.domain.post.dto.PostResponseDTO;
 import com.straight.bluewave.domain.post.entity.Post;
@@ -16,6 +17,20 @@ import java.sql.Date;
 import java.util.List;
 
 public interface PostService {
+
+    default PostDTO entityToDto(Post post, Member member) {
+        return PostDTO.builder()
+                .brd_id(post.getBoard().getBrdId())
+                .mem_id(member.getMemberId())
+                .mem_name(member.getMemberName())
+                .post_name(post.getPost_name())
+                .post_content(post.getPost_content())
+                .post_createAt(post.getCreatedAt())
+                .post_id(post.getPost_id())
+                .meeting_date(post.getMeeting_date())
+                .build();
+    }
+
     default Post dtoToEntity(PostDTO dto) {
         Post entity = Post.builder()
                 .post_id(dto.getPost_id())
@@ -62,5 +77,5 @@ public interface PostService {
 
     void remove(Long post_id);
 
-    PostResponseDTO<Post> getPostListWithCondition(PostRequestDTO pageRequestDTO);
+    PostResponseDTO<PostDTO, Object[]> getPostListWithCondition(PostRequestDTO pageRequestDTO);
 }

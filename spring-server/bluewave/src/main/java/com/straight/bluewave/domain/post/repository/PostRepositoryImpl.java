@@ -5,6 +5,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
+import com.straight.bluewave.domain.board.entity.Board;
 import com.straight.bluewave.domain.board.entity.QBoard;
 import com.straight.bluewave.domain.mapping.entity.QTeamMemberMapping;
 import com.straight.bluewave.domain.member.entity.Member;
@@ -33,11 +34,17 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
     }
 
     @Override
-    public Page<Post> searchPostPage(PostRequestDTO pageRequestDTO, Pageable pageable) {
+    public Page<Object[]> searchPostPage(PostRequestDTO pageRequestDTO, Pageable pageable) {
 
         QPost post = QPost.post;
+        QMember member = QMember.member;
         JPQLQuery<Post> jpqlQuery = from(post)
-                .where(post.board.brdId.eq(pageRequestDTO.getBoardId()));
+                .innerJoin(member)
+                .on(member.eq(post.member))
+                .where(post.board.brdId.eq(pageRequestDTO.getBoardId()))
+                ;
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(post, member);
+
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         if (pageRequestDTO.getKeyword() != null) {
@@ -52,26 +59,26 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
         switch (order) {
             case "dateAsc":
                 dateOrderSpecifier = post.createdAt.asc();
-                jpqlQuery.orderBy(dateOrderSpecifier);
+                tuple.orderBy(dateOrderSpecifier);
                 break;
             case "dateDesc":
                 dateOrderSpecifier = post.createdAt.desc();
-                jpqlQuery.orderBy(dateOrderSpecifier);
+                tuple.orderBy(dateOrderSpecifier);
                 break;
             default:
                 dateOrderSpecifier = post.updatedAt.desc();
-                jpqlQuery.orderBy(dateOrderSpecifier);
+                tuple.orderBy(dateOrderSpecifier);
                 break;
         }
 
-        jpqlQuery.where(booleanBuilder);
-        jpqlQuery.offset(pageable.getOffset());
-        jpqlQuery.limit(pageable.getPageSize());
+        tuple.where(booleanBuilder);
+        tuple.offset(pageable.getOffset());
+        tuple.limit(pageable.getPageSize());
 
-        List<Post> result = jpqlQuery.fetch();
-        Long count = jpqlQuery.fetchCount();
+        List<Tuple> result = tuple.fetch();
+        Long count = tuple.fetchCount();
 
-        return new PageImpl<Post>(result, pageable, count);
+        return new PageImpl<>(result.stream().map(p -> p.toArray()).collect(Collectors.toList()), pageable, count);
 
 //        return new PageImpl<Object[]>(
 //                result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
