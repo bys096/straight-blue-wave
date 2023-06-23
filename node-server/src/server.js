@@ -193,8 +193,7 @@ async function summarize(data, minutesid, memid) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "Bearer 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",
+          Authorization: "Bearer apikey",
         },
       }
     );
