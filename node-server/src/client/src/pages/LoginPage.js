@@ -33,6 +33,7 @@ function LoginPage() {
                 memberId : res.data.member_id,
                 memberNick : res.data.member_nick,
                 memberEmail : res.data.member_email,
+                memberPhoto : res.data.profile_photo,
                 accessToken : res1.data.accessToken,
                 refreshToken : res1.data.refreshToken
               }

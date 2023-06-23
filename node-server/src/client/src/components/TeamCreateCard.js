@@ -6,23 +6,25 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { updateTeamImage } from "../actions/team";
 
-const StyledCard = styled(Card)`
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-	cursor: pointer;
-	width: 20vh; // 원하는 너비 지정
-	height: 25vh; // 원하는 높이 지정
-	border-radius: 10px; // 카드 모서리 둥글게 처리
-	text-decoration: none;
+import { PiPlusThin } from 'react-icons/pi';
 
-	&:hover {
-		transform: scale(1.05);
-		transition: all 0.2s ease-in-out;
-	}
-`;
+// const StyledCard = styled(Card)`
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: center;
+// 	align-items: center;
+// 	text-align: center;
+// 	cursor: pointer;
+// 	width: 10rem; // 원하는 너비 지정
+// 	height: 12rem; // 원하는 높이 지정
+// 	border-radius: 10px; // 카드 모서리 둥글게 처리
+// 	text-decoration: none;
+
+// 	&:hover {
+// 		transform: scale(1.05);
+// 		transition: all 0.2s ease-in-out;
+// 	}
+// `;
 
 const ImageContainer = styled.div`
 	display: flex;
@@ -47,7 +49,7 @@ const AddImage = styled(Image)`
 	margin: 15px;
 `;
 
-const Plus = styled(AiOutlinePlusCircle)`
+const Plus = styled(PiPlusThin)`
 	width: 100%;
 	height: 100%;
 	padding: 1em;
@@ -138,7 +140,6 @@ const TeamCreateCard = () => {
 				} else console.error("s3 upload error:", err);
 			});
 
-		
 		console.log(imageUrl);
 
 		await axios
@@ -167,11 +168,12 @@ const TeamCreateCard = () => {
 
 	return (
 		<>
-			<StyledCard className="team_create" onClick={handleShow}>
+			<div class="card cardPuls hover" onClick={handleShow} >
 				<Card.Body>
 					<Plus />
 				</Card.Body>
-			</StyledCard>
+			</div>
+
 			<Modal show={showModal} onHide={handleClose}>
 				<Modal.Header closeButton>
 					<Modal.Title>팀 생성</Modal.Title>

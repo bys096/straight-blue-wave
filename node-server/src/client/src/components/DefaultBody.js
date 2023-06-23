@@ -110,24 +110,6 @@ const DefaultBody = () => {
       {/* About end  */}
 
 
-      {/* Newsletter Start */}
-      <div className="container-xxl bg-primary newsletter my-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div className="container px-lg-5">
-          <div className="row align-items-center" style={{ height: "250px" }}>
-            <div className="col-12 col-md-6">
-              <h3 className="text-white">우리 팀원들을 소개합니다.</h3>
-              <small className="text-white">우리 프로젝트를 빛나게한 재능 있는 사람들</small>
-            </div>
-            <div className="col-md-6 text-center mb-n5 d-none d-md-block">
-              <img src={newsletter} alt="newsletter" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Newsletter end */}
-
-
       {/* Service Start */}
       <div class="container-xxl py-5">
         <div class="container px-lg-5">
@@ -200,6 +182,24 @@ const DefaultBody = () => {
         </div>
       </div>
       {/* Service End */}
+
+
+      {/* Newsletter Start */}
+      <div className="container-xxl bg-primary newsletter my-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div className="container px-lg-5">
+          <div className="row align-items-center" style={{ height: "250px" }}>
+            <div className="col-12 col-md-6">
+              <h3 className="text-white">우리 팀원들을 소개합니다.</h3>
+              <small className="text-white">우리 프로젝트를 빛나게한 재능 있는 사람들</small>
+            </div>
+            <div className="col-md-6 text-center mb-n5 d-none d-md-block">
+              <img src={newsletter} alt="newsletter" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Newsletter end */}
 
 
       {/* Team Start */}

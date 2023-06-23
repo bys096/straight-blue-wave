@@ -22,6 +22,9 @@ import ProjectList from "./pages/ProjectList";
 import GptPage from "./pages/GptPage";
 import MemberList from "./pages/MemberList";
 
+// ui 용으로 임시 라우팅
+import Chat from "./pages/MainPage";
+
 function App() {
   return (
     <div className="App" style={{ backgroundColor: "white" }}>
@@ -57,6 +60,8 @@ function App() {
         <Route path="/gpt" Component={GptPage}></Route>
         <Route path="/memlist" Component={MemberList}></Route>
         <Route path="/post/modify/:post_id" element={<CreatePostPage />} />
+        <Route path="/chat" element={<Chat />} />
+
       </Routes>
     </div>
   );

@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 @AllArgsConstructor
 @Data
 @Slf4j
-public class PostResponseDTO<DTO> {
+public class PostResponseDTO<DTO, EN> {
 
     private Long BoardId;
     private String boardName;
@@ -36,8 +36,8 @@ public class PostResponseDTO<DTO> {
     private List<Integer> pageList;
 
 
-    public PostResponseDTO(Page<DTO> result) {
-        dtoList = result.getContent();
+    public PostResponseDTO(Page<EN> result, Function<EN, DTO> fn) {
+        dtoList = result.stream().map(fn).collect(Collectors.toList());
         totalPage = result.getTotalPages();
         makePageList(result.getPageable());
     }

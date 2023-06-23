@@ -44,8 +44,9 @@ public class PostController {
 
     // board id에 관한 리스트 반환, 조건 검색 추가
     @PostMapping("/list")
-    public List<Post> getBoard(@RequestBody PostRequestDTO pageRequestDTO) {
+    public PostResponseDTO<PostDTO, Object[]> getBoard(@RequestBody PostRequestDTO pageRequestDTO) {
         return postService.getPostListWithCondition(pageRequestDTO);
+//        return null;
     }
 
     @GetMapping("/calender")
