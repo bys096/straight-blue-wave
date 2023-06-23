@@ -12,11 +12,11 @@ import com.straight.bluewave.domain.post.entity.Post;
 import com.straight.bluewave.domain.post.repository.PostRepository;
 import com.straight.bluewave.domain.post.repository.SpringDataPostRepository;
 import com.straight.bluewave.domain.team.dto.TeamDTO;
+import com.straight.bluewave.domain.team.dto.TeamMemberPageResultDTO;
 import com.straight.bluewave.domain.team.entity.Team;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -87,15 +87,11 @@ public class PostServiceImp implements PostService{
     }
 
     @Override
-    public PostResponseDTO<Post> getPostListWithCondition(PostRequestDTO pageRequestDTO) {
-        Page<Post> result = postRepository.searchPostPage(
+    public PostResponseDTO<PostDTO ,Object[]> getPostListWithCondition(PostRequestDTO pageRequestDTO) {
+        Function<Object[], PostDTO> fn = (en -> entityToDto((Post)en[0], (Member)en[1]));
+        Page<Object[]> result = postRepository.searchPostPage(
                 pageRequestDTO, pageRequestDTO.getPageable(Sort.by("post_id").descending())
         );
-        PostResponseDTO<Post> response = new PostResponseDTO<Post>(result);
-        Board board = boardRepository.findById(pageRequestDTO.getBoardId()).get();
-        response.setBoardName(board.getBrdName());
-        response.setBoardId(board.getBrdId());
-        response.setPrjId(board.getProject().getPrjId());
-        return response;
+        return new PostResponseDTO<>(result, fn);
     }
 }

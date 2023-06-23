@@ -47,15 +47,16 @@ public class ProjectController {
     @GetMapping("/list")
     public ResponseEntity<List<Project>> getAllProject() {
         List<Project> users = projectService.findAll();
-        return new ResponseEntity<List<Project>>(users, HttpStatus.OK);
+//        return new ResponseEntity<List<Project>>(users, HttpStatus.OK);
+        return null;
     }
 
     // 프로젝트 리스트 (특정 팀에 속한 프로젝트만 조회)
     @GetMapping("/list/{teamId}")
     public ResponseEntity<List<Project>> getProjectsByTeam(@PathVariable("teamId") Long teamId) {
-        Team team = new Team();
-        team.setTeamId(teamId);
-        List<Project> projects = projectService.findAllByTeam(team);
+        List<Project> projects = projectService.findAllByTeam(teamId);
+        log.warn("team id : {}", teamId);
         return new ResponseEntity<>(projects, HttpStatus.OK);
+//        return null;
     }
 }

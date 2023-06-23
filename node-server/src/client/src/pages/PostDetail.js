@@ -190,8 +190,8 @@ const PostDetail = () => {
                 <h5>
                   [{board.brd_name}] {post.post_name}
                 </h5>
-                <div>작성자 : {post.mem_nick}</div>
-                <div>{post.createdAt}</div>
+                <div>작성자 : {post.mem_name}</div>
+                <div>{post.post_createAt}</div>
               </PostTitle>
             </PostContent.Header>
             <PostContent.Body>

@@ -96,8 +96,8 @@ public class ProjectServiceImp implements ProjectService{
 
     // Team/project List
 
-    public List<Project> findAllByTeam(Team team) {
-        return projectRepository.findProjectsByTeam(team.getTeamId());
+    public List<Project> findAllByTeam(Long teamId) {
+        return projectRepository.findProjectsByTeam(teamId);
     }
 
 

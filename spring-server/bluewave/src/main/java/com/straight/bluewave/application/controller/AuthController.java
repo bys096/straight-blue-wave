@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +32,12 @@ public class AuthController {
     public ResponseEntity<MemberResponseDTO> signup(@RequestBody MemberRequestDTO memberRequestDto) {
         return ResponseEntity.ok(authService.signup(memberRequestDto));
     }
+
+    @GetMapping("/exist/{member_email}")        //회원가입 아이디 중복검사
+    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String member_email) {
+        return ResponseEntity.ok(authService.checkEmailDuplicate(member_email));
+    }
+
 
     @PostMapping("/login")      //로그인
     public ResponseEntity<TokenDTO> login(@RequestBody MemberRequestDTO memberRequestDto, HttpServletResponse response) {
