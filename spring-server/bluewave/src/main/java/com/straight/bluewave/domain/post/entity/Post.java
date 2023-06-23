@@ -76,7 +76,8 @@ public class Post extends BaseEntity {
     /*@Column(name = "deleted_at")
     private LocalDateTime deletedAt;*/
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_id")
     private Member member;
 

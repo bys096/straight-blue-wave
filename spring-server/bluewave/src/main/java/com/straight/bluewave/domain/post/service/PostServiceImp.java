@@ -15,8 +15,7 @@ import com.straight.bluewave.domain.team.dto.TeamDTO;
 import com.straight.bluewave.domain.team.entity.Team;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -87,15 +86,20 @@ public class PostServiceImp implements PostService{
     }
 
     @Override
-    public PostResponseDTO<Post> getPostListWithCondition(PostRequestDTO pageRequestDTO) {
+    public List<Post> getPostListWithCondition(PostRequestDTO pageRequestDTO) {
         Page<Post> result = postRepository.searchPostPage(
                 pageRequestDTO, pageRequestDTO.getPageable(Sort.by("post_id").descending())
         );
-        PostResponseDTO<Post> response = new PostResponseDTO<Post>(result);
-        Board board = boardRepository.findById(pageRequestDTO.getBoardId()).get();
-        response.setBoardName(board.getBrdName());
-        response.setBoardId(board.getBrdId());
-        response.setPrjId(board.getProject().getPrjId());
-        return response;
+        List<Post> p = result.getContent();
+        p.forEach(l -> {
+            System.out.println(l.getPost_content());
+        });
+//        PostResponseDTO<Post> response = new PostResponseDTO<Post>(result);
+//        Board board = boardRepository.findById(pageRequestDTO.getBoardId()).get();
+//        log.info("result 값 체크: {}", result.toString());
+//        response.setBoardName(board.getBrdName());
+//        response.setBoardId(board.getBrdId());
+//        response.setPrjId(board.getProject().getPrjId());
+        return p;
     }
 }

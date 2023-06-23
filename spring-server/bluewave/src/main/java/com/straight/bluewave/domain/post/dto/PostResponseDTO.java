@@ -26,6 +26,8 @@ public class PostResponseDTO<DTO> {
     private String boardName;
     private Long prjId;
     private List<DTO> dtoList;
+
+    private String writer;
     private int totalPage;
     private int page;
     private int size;

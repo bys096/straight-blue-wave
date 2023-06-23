@@ -295,7 +295,7 @@ const ProjectList = () => {
       <div className="main">
         <Header />
         <div className="article">
-          <Sidebar />
+          {/* <Sidebar /> */}
           <div className="section">
             <Container>
               <TeamTitle>

@@ -62,5 +62,5 @@ public interface PostService {
 
     void remove(Long post_id);
 
-    PostResponseDTO<Post> getPostListWithCondition(PostRequestDTO pageRequestDTO);
+    List<Post> getPostListWithCondition(PostRequestDTO pageRequestDTO);
 }

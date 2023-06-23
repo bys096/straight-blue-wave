@@ -33,6 +33,7 @@ public class PostDTO {
 
     private Long attendees_id;
 
+
 //    private boolean file_status;
 //
 //    private boolean voting_status;
