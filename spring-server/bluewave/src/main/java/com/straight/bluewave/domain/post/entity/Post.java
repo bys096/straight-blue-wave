@@ -53,8 +53,8 @@ public class Post extends BaseEntity {
     private String post_name;
 
 
-    @Column(name = "mem_nick")
-    private String mem_nick;
+//    @Column(name = "mem_nick")
+//    private String mem_nick;
 
 /*  BaseEntity 상속했으므로 주석처리
     @Column(name = "post_createAt", updatable = false)

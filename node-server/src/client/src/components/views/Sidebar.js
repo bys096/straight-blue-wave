@@ -15,81 +15,80 @@ import { useSelector } from "react-redux";
 // import { Avatar, CardActionArea, Stack } from "@mui/material";
 
 const hstyle = {
-	color: "black",
-	backgroundColor: "blue",
-	fontFamily: "Arial",
+  color: "black",
+  backgroundColor: "blue",
+  fontFamily: "Arial",
 };
 
 const Sidebar = () => {
-	const [isOpen, setIsOpen] = useState(true);
-	const [activeComponent, setActiveComponent] = useState("team");
-	const member = useSelector((state) => state.authReducer.user);
+  const [isOpen, setIsOpen] = useState(true);
+  const [activeComponent, setActiveComponent] = useState("team");
+  const member = useSelector((state) => state.authReducer.user);
 
-	const changeActiveComponent = (component) => {
-		setActiveComponent(component);
-	};
+  const changeActiveComponent = (component) => {
+    setActiveComponent(component);
+  };
 
-	const renderActiveComponent = () => {
-		switch (activeComponent) {
-			case "team":
-				return <Sidebar1 />;
-			case "friend":
-				return <Sidebar3 />;
-			default:
-				return <Sidebar1 />;
-		}
-	};
+  const renderActiveComponent = () => {
+    switch (activeComponent) {
+      case "team":
+        return <Sidebar1 />;
+      case "friend":
+        return <Sidebar3 />;
+      default:
+        return <Sidebar1 />;
+    }
+  };
 
-	const toggleSidebar = () => {
-		setIsOpen(!isOpen);
-	};
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
 
-	return (
-		<div
-			class="page-wrapper d-flex "
-			id="page-wrapper"
-			data-layout="vertical"
-			data-navbarbg="skin6"
-			data-sidebartype="full"
-			data-sidebar-position="fixed"
-			data-header-position="fixed"
-		>
-			<aside class="left-sidebar">
-				<div>
-					{/* <div class="brand-logo d-flex align-items-center justify-content-between">
+  return (
+    <div
+      class="page-wrapper d-flex "
+      id="page-wrapper"
+      data-layout="vertical"
+      data-navbarbg="skin6"
+      data-sidebartype="full"
+      data-sidebar-position="fixed"
+      data-header-position="fixed"
+    >
+      <aside class="left-sidebar">
+        <div>
+          {/* <div class="brand-logo d-flex align-items-center justify-content-between">
 						<a href="./index.html" class="text-nowrap logo-img">
 							<img src="../assets/images/logos/dark-logo.svg" width="180" alt="" />
 						</a>
 					</div> */}
 
+          <nav class="sidebar-nav" data-simplebar="true">
+            <ul id="sidebarnav">
+              <li class="nav-small-cap">
+                <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                <span class="hide-menu">Home</span>
+              </li>
 
-					<nav class="sidebar-nav" data-simplebar="true">
-						<ul id="sidebarnav">
-							<li class="nav-small-cap">
-								<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-								<span class="hide-menu">Home</span>
-							</li>
-
-							<Accordion flush alwaysOpen>
-								<Accordion.Item eventKey="team">
-									<Accordion.Header>Teams</Accordion.Header>
-									<Accordion.Body>
-										<Sidebar1 />
-									</Accordion.Body>
-								</Accordion.Item>
-								<Accordion.Item eventKey="friend">
-									<Accordion.Header>Friends</Accordion.Header>
-									<Accordion.Body>
-										<Sidebar3 />
-									</Accordion.Body>
-								</Accordion.Item>
-							</Accordion>
-						</ul>
-					</nav>
-				</div>
-			</aside>
-		</div>
-	);
+              <Accordion flush alwaysOpen>
+                <Accordion.Item eventKey="team">
+                  <Accordion.Header>Teams</Accordion.Header>
+                  <Accordion.Body>
+                    <Sidebar1 />
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="friend">
+                  <Accordion.Header>Friends</Accordion.Header>
+                  <Accordion.Body>
+                    <Sidebar3 />
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+    </div>
+  );
 };
 
 export default Sidebar;

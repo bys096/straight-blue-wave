@@ -105,17 +105,19 @@ const SettingPage = () => {
   return (
     <>
       <Header></Header>
-      {/* <Sidebar></Sidebar> */}
       <div
         class="container-fluid d-flex justify-content-center align-items-center"
         style={{ margin: "50px 0 0 0" }}
       >
         <div class="container-fluid">
-          <div class="card d-flex align-items-stretch">
+          <div
+            class="cardsb d-flex align-items-stretch"
+            style={{ height: "600px" }}
+          >
             <div class="card-body d-flex">
               <div class="col-md-4">
                 <h5 class="card-title fw-semibold mb-4">정보 수정 페이지</h5>
-                <div class="card">
+                <div class="cardsb" style={{ width: "350px" }}>
                   <img
                     src={selectedImage || member_photo}
                     className="card-img-container"
@@ -147,11 +149,11 @@ const SettingPage = () => {
               </div>
               <div class="col-md-8 d-flex align-items-center">
                 <div
-                  class="card"
+                  class="cardsb"
                   style={{
                     width: "100%",
-                    height: "82%",
-                    margin: "25px 0 0 0",
+                    height: "83%",
+                    margin: "5px 0 0 0",
                   }}
                 >
                   <div class="card-body">
