@@ -11,6 +11,8 @@ import com.straight.bluewave.domain.team.entity.Team;
 public interface TeamService {
     TeamMemberPageResultDTO<TeamDTO, Object[]> getList(TeamMemberPageRequestDTO pageRequestDTO);
 
+
+
     default TeamDTO entityToDTO(Team team, Member member, TeamMemberMapping teamMember) {
 
         TeamDTO teamDTO = TeamDTO.builder()

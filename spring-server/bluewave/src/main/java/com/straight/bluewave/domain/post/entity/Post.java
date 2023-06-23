@@ -53,6 +53,9 @@ public class Post extends BaseEntity {
     private String post_name;
 
 
+    @Column(name = "mem_nick")
+    private String mem_nick;
+
 /*  BaseEntity 상속했으므로 주석처리
     @Column(name = "post_createAt", updatable = false)
     private LocalDateTime post_createAt;
@@ -78,6 +81,7 @@ public class Post extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_id")
+    @JsonIgnore
     private Member member;
 
     @JsonIgnore
@@ -94,6 +98,7 @@ public class Post extends BaseEntity {
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
     // 게시글 삭제시 댓글 삭제
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies;
 

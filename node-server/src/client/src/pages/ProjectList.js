@@ -21,13 +21,23 @@ const TeamTitle = styled.div`
   margin: 1rem;
 `;
 
-const TeamImage = styled(Image)`
-  width: 25vh;
-  height: 20vh;
-  object-fit: fill;
+const Title = styled.p`
+  font-size: 2.3em;
+  color: black;
+  text-align: center;
+
+  padding: 1rem;
+  margin-top: 5rem;
 `;
 
-const Title = styled.h1`
+const TeamImage = styled(Image)`
+  width: 30vh;
+  height: 30vh;
+  object-fit: fill;
+  margin-top: 2em;
+`;
+
+const TeamName = styled.h1`
   font-size: 2.5em;
   font-weight: bold;
   color: black;
@@ -67,7 +77,12 @@ const Line = styled.hr`
 
 const Buttons = styled.div`
   display: flex;
+  margin-bottom: 1em;
 `;
+
+const BLA = styled.div`
+  margin-left: auto;
+`
 
 const ProjectList = () => {
   const [members, setMembers] = useState([]);
@@ -301,9 +316,11 @@ const ProjectList = () => {
               <TeamTitle>
                 <TeamImage src={Team.team_photo} roundedCircle />
               </TeamTitle>
-              <Title>{Team.teamName}</Title>
-
+              <TeamName>{Team.teamName}</TeamName>
+              <div class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp" data-wow-delay="0.1s">
               <Title>프로젝트 목록</Title>
+              </div>
+
               {showButton && (
                 <Buttons>
                   <Button
@@ -312,24 +329,41 @@ const ProjectList = () => {
                     style={{
                       width: "150px",
                       height: "50px",
+                      margin: "0.5em"
                     }}
                   >
                     회원 추가
                   </Button>
+
+                  {/* <Button
+                  variant="primary"
+                  onClick={() => navigate("/memlist")}
+                  style={{
+                    width: "150px",
+                    height: "50px",
+                  }}
+                >
+                  회원 목록 조회
+                </Button> */}
+
                   <Button
                     variant="primary"
                     onClick={() => setShowMemberModal(true)}
-                    style={{ width: "150px", height: "50px" }}
-                  >
+                    style={{ width: "150px", height: "50px", margin: "0.5em"}}
+                  > 
                     회원관리
                   </Button>
+
+                  <BLA>
                   <Button
                     variant="danger"
                     onClick={() => deleteTeam()}
-                    style={{ width: "150px", height: "50px" }}
+                    style={{ width: "150px", height: "50px", margin: "0.5em" }}
                   >
                     팀 삭제
                   </Button>
+                  </BLA>
+
                 </Buttons>
               )}
               <Buttons>
@@ -342,18 +376,8 @@ const ProjectList = () => {
                     팀 탈퇴
                   </Button>
                 )}
-                <Button
-                  variant="primary"
-                  onClick={() => navigate("/memlist")}
-                  style={{
-                    width: "150px",
-                    height: "50px",
-                  }}
-                >
-                  회원 목록 조회
-                </Button>
               </Buttons>
-              <Line />
+              {/* <Line /> */}
               <Projects>
                 {showButton && (
                   <ProjectCreateCard onProjectCreated={onProjectCreated} />
@@ -413,7 +437,7 @@ const ProjectList = () => {
         <Modal.Header closeButton>
           <Modal.Title>회원목록</Modal.Title>
         </Modal.Header>
-        <Line></Line>
+        <Line></Line>        
         <Modal.Body>
           {members.map((member) => (
             <div key={member.teamMemberId}>
