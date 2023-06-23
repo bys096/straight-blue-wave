@@ -8,16 +8,15 @@ import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 
-import "../assets/css/styles.min.css"
-import styled from 'styled-components'
+import "../assets/css/styles.min.css";
+import styled from "styled-components";
 
 import axios from "axios";
 
-
 const BoxCommon = styled.div`
-    width : ${props=> (props.isBig? 200:100)}px;    // (1)
-    height : 50px;
-    background-color:#aaaaaa;
+  width: ${(props) => (props.isBig ? 200 : 100)}px; // (1)
+  height: 50px;
+  background-color: #aaaaaa;
 `;
 
 function MainPage(props) {
@@ -129,29 +128,25 @@ function MainPage(props) {
 
     const minutesid = sessionStorage.getItem("minutesid");
     const memid = sessionStorage.getItem("memid");
-    const memnick = sessionStorage.getItem("memnick");
-    socket.emit("summarize", prjid, minutesid);
+    socket.emit("summarize", prjid, minutesid, memid);
     // 사용자 입력과 대화 기록을 API 요청의 본문에 포함합니다.
     // await axios.get()
   };
 
-
-  socket.on('summarizeResult', (acceptData) => {
+  socket.on("summarizeResult", (acceptData) => {
     setSummarizeResult(acceptData);
     setAttendees(acceptData.attendees);
     setDate(acceptData.date);
     setSummary(acceptData.setSummary);
     setConclusion(acceptData.conclusion);
     setWriter(acceptData.writer);
-    console.log('accpeted Data: ');
+    console.log("accpeted Data: ");
     console.log(acceptData);
-    console.log('summarizeResult');
+    console.log("summarizeResult");
     console.log(summarizeResult);
     // console.log('attendees: ', summarizeResult.attendees[0]);
     // setC
-
   });
-
 
   async function getCameras() {
     try {
@@ -464,8 +459,8 @@ function MainPage(props) {
     setChatHidden(true);
     socket.disconnect();
   }
-  socket.on('hii', (text) => {
-    console.log('socket id로부터 수신');
+  socket.on("hii", (text) => {
+    console.log("socket id로부터 수신");
     console.log(text);
   });
 
@@ -484,13 +479,17 @@ function MainPage(props) {
               <button onClick={handleWelcomeSubmit}>Enter room</button>
             </form>
           </div>
-          
+
           <div
             id="call"
             ref={callRef}
             style={{ display: hidden ? "none" : "block" }}
           >
-            <div id="myStream" ref={myStreamRef} class="rounded mx-auto d-block">
+            <div
+              id="myStream"
+              ref={myStreamRef}
+              class="rounded mx-auto d-block"
+            >
               <video
                 id="myFace"
                 ref={myFaceRef}
@@ -520,7 +519,9 @@ function MainPage(props) {
               ></video>
             </div>
 
-            <button class="btn btn-primary" onClick={leaveRoom}>Leave</button>
+            <button class="btn btn-primary" onClick={leaveRoom}>
+              Leave
+            </button>
           </div>
         </div>
       </div>
@@ -563,74 +564,122 @@ function MainPage(props) {
         </div>
       </div>
 
-
-
       <div class="container-fluid">
         <div class="container-fluid">
-          <div class="card">
-            <div class="card-body">
+          <div class="card" style={{ width: "500px", height: "800px" }}>
+            <div class="card-body" style={{ height: "0px" }}>
               <h5 class="card-title fw-semibold mb-4">대화 내용</h5>
-              <div class="card">
+              <div class="card" style={{ width: "465px" }}>
                 <div class="card-body">
                   <form>
                     <div class="mb-3">
                       {/* <label for="exampleInputEmail1" class="form-label">중간값</label> */}
                       <div dangerouslySetInnerHTML={{ __html: result }}></div>
-                      
-                      <div id="emailHelp" class="form-text" value={transText}></div>
+
+                      <div
+                        id="emailHelp"
+                        class="form-text"
+                        value={transText}
+                      ></div>
                     </div>
                     <div class="mb-3">
                       {/* <label for="exampleInputPassword1" class="form-label">결과값</label> */}
                       {/* <div id="emailHelp" class="form-text" value={transText}></div> */}
                     </div>
-                    <button class="btn btn-primary" onClick={handleMessageSubmit}>SUBMIT</button>
-                    
+                    <button
+                      class="btn btn-primary"
+                      onClick={handleMessageSubmit}
+                    >
+                      SUBMIT
+                    </button>
                   </form>
                 </div>
               </div>
             </div>
-            <div class="card-body">
+            <div
+              class="card-body"
+              style={{ position: "relative", bottom: "100px" }}
+            >
               <h5 class="card-title fw-semibold mb-4">요약 내용</h5>
-              <div class="card">
+              <div class="card" style={{ width: "465px", height: "450px" }}>
                 <div class="card-body">
                   <div class="mb-3">
                     {/* <div>{summarizeResult}</div> */}
-                    <label for="exampleInputEmail1" class="form-label">안건</label>
-                    { summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.date}</div> }
+                    <label for="exampleInputEmail1" class="form-label">
+                      안건
+                    </label>
+                    {summarizeResult && (
+                      <div id="emailHelp" class="form-text">
+                        {summarizeResult.date}
+                      </div>
+                    )}
                   </div>
                   <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">참석자</label>
+                    <label for="exampleInputEmail1" class="form-label">
+                      참석자
+                    </label>
                     {/* {summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.attendees}</div> } */}
-                    {summarizeResult && Array.isArray(summarizeResult.attendees) && summarizeResult.attendees.map((attendee, index) => (
-                      <div key={index} id="emailHelp" className="form-text">{attendee}</div>
-))}
-
+                    {summarizeResult &&
+                      Array.isArray(summarizeResult.attendees) &&
+                      summarizeResult.attendees.map((attendee, index) => (
+                        <div key={index} id="emailHelp" className="form-text">
+                          {attendee}
+                        </div>
+                      ))}
                   </div>
                   <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">시간</label>
-                    {summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.date}</div>}
+                    <label for="exampleInputEmail1" class="form-label">
+                      시간
+                    </label>
+                    {summarizeResult && (
+                      <div id="emailHelp" class="form-text">
+                        {summarizeResult.date}
+                      </div>
+                    )}
                   </div>
                   <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">내용</label>
-                    {summarizeResult && <div id="emailHelp" class="form-text">
-                      {/* <span>{ summarizeResult.contents.speaker } : { summarizeResult.contents.content }</span> */}
-                      {/* {summarizeResult && summarizeResult.contents.map((content, index) => (
+                    <label for="exampleInputEmail1" class="form-label">
+                      내용
+                    </label>
+                    {summarizeResult && (
+                      <div id="emailHelp" class="form-text">
+                        {/* <span>{ summarizeResult.contents.speaker } : { summarizeResult.contents.content }</span> */}
+                        {/* {summarizeResult && summarizeResult.contents.map((content, index) => (
                       <div key={index} id="emailHelp" className="form-text">{content}</div>
                     ))} */}
-                    </div>}
+                      </div>
+                    )}
                   </div>
                   <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">요약</label>
-                    {summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.summary}</div>}
+                    <label for="exampleInputEmail1" class="form-label">
+                      요약
+                    </label>
+                    {summarizeResult && (
+                      <div id="emailHelp" class="form-text">
+                        {summarizeResult.summary}
+                      </div>
+                    )}
                   </div>
                   <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">결론</label>
-                    {summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.conclusion}</div>}
+                    <label for="exampleInputEmail1" class="form-label">
+                      결론
+                    </label>
+                    {summarizeResult && (
+                      <div id="emailHelp" class="form-text">
+                        {summarizeResult.conclusion}
+                      </div>
+                    )}
                   </div>
-                  
+
                   <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">작성자</label>
-                    {summarizeResult && <div id="emailHelp" class="form-text">{summarizeResult.writer}</div>}
+                    <label for="exampleInputEmail1" class="form-label">
+                      작성자
+                    </label>
+                    {summarizeResult && (
+                      <div id="emailHelp" class="form-text">
+                        {summarizeResult.writer}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -643,4 +692,3 @@ function MainPage(props) {
 }
 
 export default MainPage;
-
