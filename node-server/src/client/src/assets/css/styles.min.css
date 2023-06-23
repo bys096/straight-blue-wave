@@ -5552,6 +5552,12 @@ fieldset:disabled .btn {
 		border-bottom-left-radius: 0;
 	}
 }
+
+/* 포인트색상 지정(현주) */
+.pointColor{
+	color: #0085AD;
+}
+
 .accordion {
 	--bs-accordion-color: var(--bs-body-color);
 	--bs-accordion-bg: var(--bs-body-bg);

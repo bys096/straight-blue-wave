@@ -324,7 +324,6 @@ const ProjectList = () => {
               {showButton && (
                 <Buttons>
                   <Button
-                    variant="primary"
                     onClick={() => setShowModal(true)}
                     style={{
                       width: "150px",

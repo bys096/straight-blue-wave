@@ -24,6 +24,7 @@ import PopOver from "../PopOver";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../actions/auth";
+import l1 from "../../assets/1_1.png";
 
 function Header() {
 	const ref = useRef(null);
@@ -59,12 +60,12 @@ function Header() {
 
 	return (
 		<>
-			<Navbar collapseOnSelect expand="lg" bg="white" variant="white" sticky="top">
+			<Navbar collapseOnSelect expand="lg" bg="white" variant="white" sticky="top" className="shadow-sm">
 				<Container style={{ display: "flex", justifyContent: "space-between" }}>
 					<Navbar.Brand>
 						<Link to="/LoggedIn">
 							<img
-								src={logo}
+								src={l1}
 								width="60"
 								height="40"
 								className="d-inline-block align-top"
@@ -72,9 +73,10 @@ function Header() {
 							/>
 						</Link>
 					</Navbar.Brand>
-					<Navbar.Brand style={{ color: "blue", margin: "0 10px 0 -10px" }}>
-						<Link to="/LoggedIn" style={{ textDecoration: "none" }}>
-							Blue<span style={{ color: "black" }}>Wave</span>
+					<Navbar.Brand style={{ color: "#0085AD", margin: "0 10px 0 -10px" }}>
+						<Link to="/LoggedIn" style={{ textDecoration: "none", color: "#0085AD" }}>
+							Blue
+							<span style={{ color: "black" }}>Wave</span>
 						</Link>
 					</Navbar.Brand>
 					<Navbar.Collapse id="responsive-navbar-nav">
@@ -89,14 +91,14 @@ function Header() {
 								<AiOutlineBell size={"1.5rem"} />
 							</Nav.Link>
 							<Nav.Link>
-								<Link to="/setting" style={{ textDecoration: "none" }}>
+								<Link to="/setting" style={{ textDecoration: "none", color: "#0085AD" }}>
 									설정
 								</Link>
 							</Nav.Link>
 							<Nav.Link>
 								<Link
 									to="/"
-									style={{ textDecoration: "none" }}
+									style={{ textDecoration: "none", color: "#0085AD" }}
 									onClick={() => {
 										dispatch(logout());
 										sessionStorage.clear();
