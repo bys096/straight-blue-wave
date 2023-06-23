@@ -61,19 +61,7 @@ const Sidebar = () => {
 							<img src="../assets/images/logos/dark-logo.svg" width="180" alt="" />
 						</a>
 					</div> */}
-{/* 
-					<Card sx={{ maxWidth: 345 }}>
-						<CardActionArea>
-							<CardContent>
-								<Typography variant="h5" component="div" noWrap>
-									<Stack direction="row" spacing={5}>
-										<Avatar src={member.memberPhoto} sx={{ width: 40, height: 40 }} />
-										{member.memberNick}
-									</Stack>
-								</Typography>
-							</CardContent>
-						</CardActionArea>
-					</Card> */}
+
 
 					<nav class="sidebar-nav" data-simplebar="true">
 						<ul id="sidebarnav">
