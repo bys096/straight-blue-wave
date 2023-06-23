@@ -32,16 +32,18 @@ public class ReplyDTO {
 
     private String writer;
 
-    private List<ReplyDTO> children;
+    private List<ReplyDTO> children = new ArrayList<>();
 
-    public ReplyDTO(Long replyId, String replyContent, Long memId, String writer) {
+    public ReplyDTO(Long replyId, String replyContent, Long memId, String writer, LocalDateTime replyCreateAt, LocalDateTime replyUpdateAt) {
         this.replyId = replyId;
         this.replyContent = replyContent;
         this.memId = memId;
         this.writer = writer;
+        this.replyCreateAt = replyCreateAt;
+        this.replyUpdateAt = replyUpdateAt;
     }
 
     public static ReplyDTO convertReplyDTO(Reply reply) {
-        return new ReplyDTO(reply.getReplyId(), reply.getReplyContent(), reply.getMember().getMemberId(), reply.getMember().getMemberName());
+        return new ReplyDTO(reply.getReplyId(), reply.getReplyContent(), reply.getMember().getMemberId(), reply.getMember().getMemberName(), reply.getCreatedAt(), reply.getUpdatedAt());
     }
 }
