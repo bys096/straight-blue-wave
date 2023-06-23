@@ -80,7 +80,6 @@ const CreatePostPage = () => {
       const modifiedPost = {
         ...post,
         mem_id: sessionStorage.getItem("memid"),
-        mem_nick: sessionStorage.getItem("memnick"),
         brd_id: sessionStorage.getItem("boardid"),
       };
 

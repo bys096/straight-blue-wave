@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 public interface SpringDataPostRepository extends JpaRepository<Post, Long> {
@@ -17,5 +18,7 @@ public interface SpringDataPostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT r.post.post_id FROM Reply r WHERE r.replyId = :replyId")
     Long findPostIdByReplyId(@Param("replyId") Long replyId);
 
+
+    Optional<List> findByBoard_BrdId(Long brdId);
 
 }

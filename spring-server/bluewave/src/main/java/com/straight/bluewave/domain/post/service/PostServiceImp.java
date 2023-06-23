@@ -16,8 +16,7 @@ import com.straight.bluewave.domain.team.dto.TeamMemberPageResultDTO;
 import com.straight.bluewave.domain.team.entity.Team;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

@@ -280,7 +280,7 @@ const ProjectDetail = () => {
                       <tr key={post.createdAt}>
                         <td>{post.createdAt}</td>
                         <td>{post.post_name}</td>
-                        <td>{post.mem_nick}</td>
+                        <td>{sessionStorage.getItem("memnick")}</td>
                       </tr>
                     </tbody>
                   ))}
