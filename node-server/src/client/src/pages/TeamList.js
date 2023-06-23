@@ -6,12 +6,11 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { teamConnect } from "../actions/team";
 
-const Title = styled.h1`
+const Title = styled.p`
 	font-size: 2.5em;
-	font-weight: bold;
 	color: black;
 	text-align: center;
-	margin-bottom: 2em;
+	margin-top: 2em;
 `;
 
 const Container = styled.div`
@@ -31,19 +30,20 @@ const Teams = styled.div`
 	gap: 4rem;
 `;
 
-const Line = styled.hr`
-	border: none;
-	border-top: 1px solid #aaa;
-	background: linear-gradient(
-		to right,
-		rgba(0, 0, 0, 0),
-		rgba(0, 0, 0, 0.75),
-		rgba(0, 0, 0, 0)
-	);
-	height: 1px;
-	width: 100%;
-	margin: 0.5em 0;
-`;
+// const Line = styled.hr`
+// 	border: none;
+// 	border-top: 1px solid #aaa;
+// 	background: linear-gradient(
+// 		to right,
+// 		rgba(0, 0, 0, 0),
+// 		rgba(0, 0, 0, 0.75),
+// 		rgba(0, 0, 0, 0)
+// 	);
+// 	height: 1px;
+// 	width: 100%;
+// 	margin: 0.5em 0;
+// 	margin-bottom: 3em;
+// `;
 
 const TeamList = () => {
 	const [teams, setTeams] = useState([]);
@@ -74,8 +74,10 @@ const TeamList = () => {
 
 	return (
 		<Container>
-			<Title>팀 목록</Title>
-			<Line />
+			<div class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp" data-wow-delay="0.1s">
+				<Title>팀 목록</Title>
+			</div>
+			{/* <Line /> */}
 			<Teams>
 				<TeamCreateCard onTeamCreated={onTeamCreated} />
 				{teams.map((team, index) => (
