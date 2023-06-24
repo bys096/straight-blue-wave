@@ -26,6 +26,7 @@ function LoginPage() {
         } else {
           sessionStorage.setItem("accessToken", res1.data.accessToken);
           sessionStorage.setItem("refreshToken", res1.data.refreshToken);
+          sessionStorage.setItem("accessTokenExpiresIn", res1.data.accessTokenExpiresIn);
           const memberInfo = axios
             .get(`http://localhost:8002/api/member/${member_email}`)
             .then((res) => {

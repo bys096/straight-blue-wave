@@ -204,7 +204,7 @@ const ProjectDetail = () => {
       <Article>
         <Sidebar />
 
-        <Content>
+        <Content style={{ margin: '1.5rem' }}>
           <ButtonGroup>
             <Button variant="primary" onClick={() => navigate(-1)}>
               프로젝트 목록
@@ -255,12 +255,16 @@ const ProjectDetail = () => {
           <br />
 
           <BoardList>
-          <div class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp" data-wow-delay="0.1s">
-            <h2>최근 이슈</h2>
+            <div
+              class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp"
+              data-wow-delay="0.1s"
+              style={{ margin: '5rem' }}
+            >
+              <h2>최근 이슈</h2>
             </div>
             {boardList.map((board) => (
-              <BoardItem className="card card-title fw-semibold mb-4 table-responsive text-dark
-              "
+              <BoardItem
+                className="cardsb mb-4 table-responsive text-dark"
                 key={board.brd_id}
                 onClick={() => {
                   navigate("/post", { state: { board } });
@@ -269,18 +273,20 @@ const ProjectDetail = () => {
                 }}
               >
                 <h4>{board.brd_name}</h4>
-                <Table hover>
-                  <tr>
+                <Table className="tableList">
+                  <tr className="card-title">
                     <th>작성일</th>
                     <th>제목</th>
                     <th>작성자</th>
                   </tr>
                   {posts[board.brd_id]?.map((post) => (
                     <tbody>
-                      <tr key={post.createdAt}>
-                        <td>{post.createdAt}</td>
+                      <tr key={post.postid}>
+                        <td>
+                          {new Date(post.post_createAt).toLocaleDateString()}
+                        </td>
                         <td>{post.post_name}</td>
-                        <td>{post.mem_nick}</td>
+                        <td>{post.mem_name}</td>
                       </tr>
                     </tbody>
                   ))}

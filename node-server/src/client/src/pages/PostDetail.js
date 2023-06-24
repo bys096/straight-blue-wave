@@ -27,10 +27,12 @@ const Content = styled.div`
 `;
 
 const PostTitle = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	width: 100%;
+	// display: flex;
+	// flex-direction: column;
+	// justify-content: space-around;
+	// width: 100%;
+
+	margin: 2rem;
 `;
 
 const PostContent = styled(Card)`
@@ -104,39 +106,11 @@ const PostDetail = () => {
 
 	const [comments, setComments] = useState([]);
 
-	const [replies, setReplies] = useState();
-
-	useEffect(() => {
-		fetchReply();
-	}, []);
-
-	const handlePostDelete = async () => {
-		if (post.mem_id === auth.memberId || post.mem_nick === "AI 어시스턴트") {
-			await axios
-				.delete(`http://localhost:8002/api/post/delete/${post.post_id}`)
-				.then((res) => {
-					console.log("글 삭제 완료", res.data);
-					alert("글 삭제가 완료되었습니다.");
-					navigate(-1);
-				})
-				.catch((error) => {
-					console.error(error);
-					console.log(error);
-				});
-		} else {
-			alert("권한이 없습니다.");
-		}
-	};
-
-	const handlePostModify = () => {
-		if (post.mem_id === auth.memberId) {
-			navigate(`/post/modify/${post.post_id}`, {
-				state: { posts: post, isModify: true },
-			});
-		} else {
-			alert("권한이 없습니다.");
-		}
-	};
+	const [replies, setReplies] = useState(
+		localStorage.getItem(post.post_id + "_replies")
+			? JSON.parse(localStorage.getItem(post.post_id + "_replies"))
+			: []
+	);
 
 	const fetchReply = async () => {
 		await axios
@@ -175,25 +149,55 @@ const PostDetail = () => {
 					// setReplies((prevReplies) => [...prevReplies, newReply]);
 					await axios.post("http://localhost:8002/api/reply/create", newReply);
 					// localStorage.setItem(
-					// 	post.post_id + "_replies",
-					// 	JSON.stringify([...replies, newReply])
+					//    post.post_id + "_replies",
+					//    JSON.stringify([...replies, newReply])
 					// );
 					setActiveCommentId(null); // Reset the active comment ID
 				} else {
 					// Otherwise, add a new comment
 					// setComments((prevComments) => [...prevComments, newComment]);
-					await axios.post("http://localhost:8002/api/reply/create", newComment);
+					await axios.post(
+						"http://localhost:8002/api/reply/create",
+						newComment
+					);
 					// localStorage.setItem(
-					// 	post.post_id,
-					// 	JSON.stringify([...comments, newComment])
+					//    post.post_id,
+					//    JSON.stringify([...comments, newComment])
 					// );
 				}
-        await fetchReply();
-
+				await fetchReply();
 				event.target.value = "";
 			}
 		} catch (err) {
 			console.log(err);
+		}
+	};
+
+	const handlePostDelete = async () => {
+		if (post.mem_id === auth.memberId || post.mem_nick === "AI 어시스턴트") {
+			await axios
+				.delete(`http://localhost:8002/api/post/delete/${post.post_id}`)
+				.then((res) => {
+					console.log("글 삭제 완료", res.data);
+					alert("글 삭제가 완료되었습니다.");
+					navigate(-1);
+				})
+				.catch((error) => {
+					console.error(error);
+					console.log(error);
+				});
+		} else {
+			alert("권한이 없습니다.");
+		}
+	};
+
+	const handlePostModify = () => {
+		if (post.mem_id === auth.memberId) {
+			navigate(`/post/modify/${post.post_id}`, {
+				state: { posts: post, isModify: true },
+			});
+		} else {
+			alert("권한이 없습니다.");
 		}
 	};
 
@@ -202,18 +206,32 @@ const PostDetail = () => {
 			<Header />
 			<Article>
 				<Sidebar />
-				<Content>
-					<Button onClick={() => navigate(-1)}>글 목록</Button>
-					<PostContent border="primary">
-						<PostContent.Header>
+				<Content style={{ margin: "3rem" }}>
+					<Button
+						onClick={() => navigate(-1)}
+						className="mb-4 MybtnDe"
+						style={{ width: "6rem", marginRight: "auto" }}
+					>
+						글 목록
+					</Button>
+					<div className="cardsb">
+						<div>
 							<PostTitle>
-								<h5>
-									[{board.brd_name}] {post.post_name}
-								</h5>
-								<div>작성자 : {post.mem_nick}</div>
-								<div>{post.createdAt}</div>
+								<p
+									style={{
+										fontWeight: "bold",
+										fontSize: "12px",
+										marginBottom: "-0.1rem",
+										color: "#0085AD",
+									}}
+								>
+									{board.brd_name}
+								</p>
+								<h4 style={{ fontWeight: "bold" }}>{post.post_name}</h4>
+								<div style={{ fontWeight: "bold" }}>{post.mem_name}</div>
+								<div style={{ fontSize: "12px" }}>{post.post_createAt}</div>
 							</PostTitle>
-						</PostContent.Header>
+						</div>
 						<PostContent.Body>
 							<div>{post.post_content}</div>
 						</PostContent.Body>
@@ -229,20 +247,30 @@ const PostDetail = () => {
 													: {}
 											}
 										>
-											<strong>{comment.writer}</strong>
+											<div style={{ fontWeight: "bold" }}>{comment.writer}</div>
 											<div>{comment.replyContent}</div>
-											<div>{comment.replyCreateAt}</div>
+											<div style={{ fontSize: "12px" }}>
+												{new Date(comment.replyCreateAt).toLocaleDateString()}
+											</div>
 										</CommentItem>
 										{/* Render replies */}
 										<Replies>
 											{comment.children.map((reply) => (
 												<ReplySection key={reply.replyId}>
-													<div style={{ display: "flex", alignItems: "center" }}>
-														<BsArrowReturnRight style={{ marginLeft: "20px" }} />
+													<div
+														style={{ display: "flex", alignItems: "center" }}
+													>
+														<BsArrowReturnRight
+															style={{ marginLeft: "20px" }}
+														/>
 														<div style={{ marginLeft: "10px" }}>
-															<ReplyHeader>{reply.writer}</ReplyHeader>
+															<ReplyHeader style={{ fontWeight: "bold" }}>{reply.writer}</ReplyHeader>
 															<div>{reply.replyContent}</div>
-															<div>{new Date(reply.replyCreatedAt).toLocaleDateString()}</div>
+															<div style={{ fontSize: "12px" }}>
+																{new Date(
+																	reply.replyCreateAt
+																).toLocaleDateString()}
+															</div>
 														</div>
 													</div>
 												</ReplySection>
@@ -254,17 +282,21 @@ const PostDetail = () => {
 							<CommentInput
 								type="text"
 								placeholder={
-									activeCommentId ? "대댓글을 입력하세요..." : "댓글을 입력하세요..."
+									activeCommentId
+										? "대댓글을 입력하세요..."
+										: "댓글을 입력하세요..."
 								}
 								onKeyDown={addComment}
 							/>
 							{activeCommentId ? (
-								<Button onClick={() => setActiveCommentId(null)}>답글 취소</Button>
+								<Button onClick={() => setActiveCommentId(null)}>
+									답글 취소
+								</Button>
 							) : null}
 							<br />
 						</PostContent.Footer>
-					</PostContent>
-					<ButtonGroup>
+					</div>
+					<ButtonGroup style={{ width: "6rem", marginLeft: "auto" }}>
 						<Button variant="secondary" onClick={handlePostModify}>
 							수정
 						</Button>

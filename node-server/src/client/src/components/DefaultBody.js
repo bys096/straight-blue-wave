@@ -54,7 +54,7 @@ const DefaultBody = () => {
       }}
     >
 
-      <div class="container-xxl py-5 bg-primary hero-header mb-5">
+      <div class="container-xxl py-5 bg-dullAqua hero-header mb-5">
         <div class="container my-5 py-5 px-lg-5">
           <div class="row g-5 py-5">
             <div class="col-lg-6 text-center text-lg-start">
@@ -185,7 +185,7 @@ const DefaultBody = () => {
 
 
       {/* Newsletter Start */}
-      <div className="container-xxl bg-primary newsletter my-5 wow fadeInUp" data-wow-delay="0.1s">
+      <div className="container-xxl bg-dullAqua newsletter my-5 wow fadeInUp" data-wow-delay="0.1s">
         <div className="container px-lg-5">
           <div className="row align-items-center" style={{ height: "250px" }}>
             <div className="col-12 col-md-6">
@@ -318,7 +318,7 @@ const DefaultBody = () => {
 
 
       {/* Footer Start */}
-      <div class="container-fluid bg-primary text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+      <div class="container-fluid bg-dullAqua text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
         <div class="container py-5 px-lg-5">
           <div class="row g-5">
             <div class="col-md-6 col-lg-3">

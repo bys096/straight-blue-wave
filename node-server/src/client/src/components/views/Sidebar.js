@@ -15,34 +15,34 @@ import { useSelector } from "react-redux";
 // import { Avatar, CardActionArea, Stack } from "@mui/material";
 
 const hstyle = {
-	color: "black",
-	backgroundColor: "blue",
-	fontFamily: "Arial",
+  color: "black",
+  backgroundColor: "blue",
+  fontFamily: "Arial",
 };
 
 const Sidebar = () => {
-	const [isOpen, setIsOpen] = useState(true);
-	const [activeComponent, setActiveComponent] = useState("team");
-	const member = useSelector((state) => state.authReducer.user);
+  const [isOpen, setIsOpen] = useState(true);
+  const [activeComponent, setActiveComponent] = useState("team");
+  const member = useSelector((state) => state.authReducer.user);
 
-	const changeActiveComponent = (component) => {
-		setActiveComponent(component);
-	};
+  const changeActiveComponent = (component) => {
+    setActiveComponent(component);
+  };
 
-	const renderActiveComponent = () => {
-		switch (activeComponent) {
-			case "team":
-				return <Sidebar1 />;
-			case "friend":
-				return <Sidebar3 />;
-			default:
-				return <Sidebar1 />;
-		}
-	};
+  const renderActiveComponent = () => {
+    switch (activeComponent) {
+      case "team":
+        return <Sidebar1 />;
+      case "friend":
+        return <Sidebar3 />;
+      default:
+        return <Sidebar1 />;
+    }
+  };
 
-	const toggleSidebar = () => {
-		setIsOpen(!isOpen);
-	};
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
 
 	return (
 		<div
