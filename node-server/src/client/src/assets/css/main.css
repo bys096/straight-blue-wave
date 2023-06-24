@@ -112,6 +112,11 @@ background-color: #ffffff !important;
     background: #fff;
   }
 
+/* 마우스 오버 */
+.tableList tbody tr:hover {
+    background-position: right;
+    background: #cedbdf;
+  }
 
 
 .navbar-light .navbar-brand h1 {

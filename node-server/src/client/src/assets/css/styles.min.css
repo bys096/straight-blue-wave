@@ -155,6 +155,7 @@
 	--bs-breakpoint-lg: 992px;
 	--bs-breakpoint-xl: 1200px;
 	--bs-breakpoint-xxl: 1400px;
+	--dullAqua: #0085AD;
 }
 [data-bs-theme="dark"] {
 	--bs-body-color: #5a6a85;
@@ -10602,6 +10603,12 @@ fieldset:disabled .btn {
 	--bs-bg-opacity: 1;
 	background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
 }
+/* 백그라운드(현주) */
+.bg-dullAqua{
+	--bs-bg-opacity: 1;
+	background-color: var(--dullAqua) !important;
+}
+
 .bg-secondary {
 	--bs-bg-opacity: 1;
 	background-color: rgba(

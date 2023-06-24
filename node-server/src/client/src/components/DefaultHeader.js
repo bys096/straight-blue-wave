@@ -25,7 +25,7 @@ function DefaultHeader() {
 
   return (
     <Navbar
-  className={`navbar navbar-expand-lg px-4 px-lg-5 py-3 py-lg-0 ${
+  className={`navbar navbar-expand-lg px-4 px-lg-5 py-3 py-lg-0 shadow-sm ${
     isScrolled ? "sticky-top shadow-sm " : ""
   }`}
 //   style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}
