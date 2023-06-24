@@ -215,9 +215,9 @@ const PostDetail = () => {
                           : {}
                       }
                     >
-                      <div>{comment.member}</div>
+                      <div style={{fontWeight: "bold"}}>{comment.member}</div>
                       <div>{comment.text}</div>
-                      <div>
+                      <div style={{fontSize: "12px"}}>
                         {new Date(comment.createdAt).toLocaleDateString()}
                       </div>
                     </CommentItem>
@@ -266,7 +266,7 @@ const PostDetail = () => {
               <br />
             </PostContent.Footer>
           </div>
-          <ButtonGroup>
+          <ButtonGroup style={{ width: "6rem", marginLeft: "auto" }}>
             <Button variant="secondary" onClick={handlePostModify}>
               수정
             </Button>
