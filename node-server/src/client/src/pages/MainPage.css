@@ -8,3 +8,21 @@
   #peerFace {
     display: none;
   }
+
+  #myStream {
+    display: flex !important;
+      justify-content: center;
+      flex-flow: row wrap;
+      gap: 14px;
+  }
+.container-fluid {
+  display: flex !important;
+  justify-content: center;
+}
+
+.leaveBtn {
+  display: flex;
+  /* justify-content: end; */
+  /* position: relative; */
+  /* right: 5vw; */
+}

@@ -65,12 +65,16 @@ function MainPage(props) {
   let pcObj = {};
 
   useEffect(() => {
-    setUserId(sessionStorage.getItem("user_id"));
+    setUserId(sessionStorage.getItem("memid"));
+    setRoomName(sessionStorage.getItem('prjid'));
     setChatHidden(true);
     console.log("nic, prj check");
     console.log(sessionStorage.getItem("memnick"));
     console.log(sessionStorage.getItem("prjid"));
 
+    // socket.emit("join_room", roomForm.value, userId);
+    socket.emit("join_room", roomName, userId);
+    console.log("방입장: ", roomName);
     // stt
     // stt code
     const recognition = new window.webkitSpeechRecognition();
@@ -116,7 +120,11 @@ function MainPage(props) {
       $("#chat-circle").toggle("scale");
       $(".chat-box").toggle("scale");
     });
-  }, []);
+
+    return () => {
+      socket.disconnect();
+    }
+  }, [userId, roomName]);
 
   // gpt
 
@@ -236,17 +244,16 @@ function MainPage(props) {
 
   async function handleWelcomeSubmit(event) {
     event.preventDefault();
-    const roomForm = welcomeFormRef.current.querySelector("input");
+    // const roomForm = welcomeFormRef.current.querySelector("input");
 
-    if (socket.disconnected) {
-      socket.connect();
-    }
-    socket.emit("join_room", roomForm.value, userId);
-    setRoomName(roomForm.value);
-    console.log("방입장: ", roomName);
-    // console.log(`입장, 방이름: ${roomName}`);
-    roomForm.value = "";
-    // console.log(`입장, 방이름?: ${roomName}`);
+    // if (socket.disconnected) {
+    //   socket.connect();
+    // }
+    // // socket.emit("join_room", roomForm.value, userId);
+    // socket.emit("join_room", roomName, userId);
+    // console.log("방입장: ", roomName);
+    // roomForm.value = "";
+    
   }
 
   // socket.on("reject_join", () => {
@@ -469,7 +476,7 @@ function MainPage(props) {
       <h1>영상통화</h1>
       <div className="video">
         <div>
-          <div
+          {/* <div
             id="welcome"
             ref={welcomeRef}
             style={{ display: welHidden ? "none" : "block" }}
@@ -478,7 +485,7 @@ function MainPage(props) {
               <input placeholder="room name" required type="text" />
               <button onClick={handleWelcomeSubmit}>Enter room</button>
             </form>
-          </div>
+          </div> */}
 
           <div
             id="call"
@@ -489,6 +496,7 @@ function MainPage(props) {
               id="myStream"
               ref={myStreamRef}
               class="rounded mx-auto d-block"
+
             >
               <video
                 id="myFace"
@@ -519,9 +527,7 @@ function MainPage(props) {
               ></video>
             </div>
 
-            <button class="btn btn-primary" onClick={leaveRoom}>
-              Leave
-            </button>
+            
           </div>
         </div>
       </div>
@@ -689,6 +695,12 @@ function MainPage(props) {
         </div>
       </div>
 
+      </div>
+      <div className="leaveBtn">
+
+      <button class="btn btn-primary" onClick={leaveRoom}>
+        Leave
+      </button>
       </div>
     </Container>
   );
