@@ -539,30 +539,7 @@ function MainPage(props) {
               <i className="material-icons">close</i>
             </span>
           </div>
-          <div className="chat-box-body">
-            <div className="chat-box-overlay"></div>
-            <div className="chat-logs" ref={chatLogsRef}></div>
-          </div>
-          <div className="chat-input">
-            <form>
-              <input
-                ref={chatInputRef}
-                type="text"
-                id="chat-input"
-                placeholder="Send a message..."
-              />
-              <button
-                type="submit"
-                class="chat-submit"
-                id="chat-submit"
-                onClick={sendChat}
-              >
-                <i class="material-icons">send</i>
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
+          
 
       <div class="container-fluid">
         <div class="container-fluid">
@@ -686,6 +663,32 @@ function MainPage(props) {
             </div>
           </div>
         </div>
+
+        <div className="chat-box-body">
+            <div className="chat-box-overlay"></div>
+            <div className="chat-logs" ref={chatLogsRef}></div>
+          </div>
+          <div className="chat-input">
+            <form>
+              <input
+                ref={chatInputRef}
+                type="text"
+                id="chat-input"
+                placeholder="Send a message..."
+              />
+              <button
+                type="submit"
+                class="chat-submit"
+                id="chat-submit"
+                onClick={sendChat}
+              >
+                <i class="material-icons">send</i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
       </div>
     </Container>
   );
