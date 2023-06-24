@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/views/Header";
 import Sidebar from "../components/views/Sidebar";
-import {  Table, Modal, Pagination, Form } from "react-bootstrap";
+import { Table, Modal, Pagination, Form } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { postConnect } from "../actions/post";
 
 import Notification from "./notification";
+import { io } from "socket.io-client";
 
 const Main = styled.div`
   height: 100%;
@@ -41,6 +42,7 @@ const PostList = styled.div`
 const PostPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const socket = io();
 
   const [posts, setPosts] = useState([]);
   // const [show, setShow] = useState(false);
@@ -97,29 +99,35 @@ const PostPage = () => {
                   <h2>{board.brd_name}</h2>
                 </div>
                 <div>
-                  <button onClick={() => navigate("/createpost")} style={{ marginRight: "1rem" }}
+                  <button
+                    onClick={() => navigate("/createpost")}
+                    style={{ marginRight: "1rem" }}
                     className="MybtnDe"
                   >
                     게시글 작성
                   </button>
-                  <button onClick={() => navigate(-1, { replace: true })} style={{ marginRight: "1rem" }}
+                  <button
+                    onClick={() => navigate(-1, { replace: true })}
+                    style={{ marginRight: "1rem" }}
                     className="MybtnDe"
                   >
                     이전 화면
                   </button>
                 </div>
               </div>
-                <Form.Select onChange={handlePageSize} aria-label="글갯수"
-                    style={{ width: "6rem", marginLeft: "auto" }}
-                    >
-                    <option value="10">10개</option>
-                    <option value="30">30개</option>
-                    <option value="50">50개</option>
-                  </Form.Select>
+              <Form.Select
+                onChange={handlePageSize}
+                aria-label="글갯수"
+                style={{ width: "6rem", marginLeft: "auto" }}
+              >
+                <option value="10">10개</option>
+                <option value="30">30개</option>
+                <option value="50">50개</option>
+              </Form.Select>
               <Table className="tableList">
                 <thead>
-                  <tr style={{ color: "#0085AD"}}>
-                    <th >#</th>
+                  <tr style={{ color: "#0085AD" }}>
+                    <th>#</th>
                     <th>제목</th>
                     <th>약속일</th>
                     <th>작성자</th>
@@ -129,7 +137,9 @@ const PostPage = () => {
                 <tbody>
                   {posts.map((post) => (
                     <tr key={post.post_id} onClick={() => handleShow(post)}>
-                      <td style={{ color: "#0085AD", fontWeight: "bold" }}>{post.post_id}</td>
+                      <td style={{ color: "#0085AD", fontWeight: "bold" }}>
+                        {post.post_id}
+                      </td>
                       <td>{post.post_name}</td>
                       <td>{post.meeting_date}</td>
                       <td>{post.mem_name}</td>

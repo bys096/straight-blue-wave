@@ -37,28 +37,48 @@ function Notification() {
     });
 
     // 알림 이벤트 수신
-    socket.on("eventData", (eventData, tmid) => {
+    socket.on("eventData", (eventData) => {
       console.log("Received event data:", eventData);
       setEventData(eventData);
-      const { prjName, post_name, post_content } = eventData;
-      const notificationMessage = `${prjName}프로젝트에 새로운 글이 등록되었습니다.\n제목: ${post_name}\n내용: ${post_content}`;
+      const {
+        prjName,
+        post_name,
+        post_content,
+        post_id,
+        schedule_id,
+        team_id,
+      } = eventData;
+      const notificationMessage = `${prjName} 프로젝트에 새로운 글이 등록되었습니다.\n제목: ${post_name}\n내용: ${post_content}`;
       console.log(notificationMessage);
       const sendNotification = async () => {
         await axios
-          .post(`http://localhost:8002/api/team/teamMemList/${tmid}`)
+          .get(`http://localhost:8002/api/team/teamMemList/${team_id}`)
           .then(async (res) => {
             const members = res.data;
-            for (const member of members) {
-              await axios.post(
-                `http://localhost:8002/api/notification/storage/${member.memberId}`,
-                {
-                  // 추후 추가 예정
-                }
-              );
+            if (post_id) {
+              for (const member of members) {
+                await axios.post(
+                  `http://localhost:8002/api/notification/storage/${member.memberId}`,
+                  {
+                    post_id: post_id,
+                    notification_type: 0,
+                  }
+                );
+              }
+            } else {
+              for (const member of members) {
+                await axios.post(
+                  `http://localhost:8002/api/notification/storage/${member.memberId}`,
+                  {
+                    schedule_id: schedule_id,
+                    notification_type: 1,
+                  }
+                );
+              }
             }
           });
       };
-      alert(notificationMessage);
+      sendNotification();
     });
 
     // 컴포넌트 언마운트 시 소켓 연결 정리
