@@ -26,13 +26,14 @@ function MainPage(props) {
   const cameraRef = useRef(null);
   const camerasRef = useRef(null);
   const callRef = useRef(null);
+  const chatCircleRef = useRef(null);
+  const chatBoxRef = useRef(null);
   const welcomeRef = useRef(null);
   const welcomeFormRef = useRef(null);
   const peerFaceRef = useRef(null);
   const myStreamRef = useRef(null);
   const [hidden, setHidden] = useState(true);
   const [welHidden, setWelHidden] = useState(false);
-  const [chatHidden, setChatHidden] = useState(true);
   const [roomName, setRoomName] = useState("");
   const [userId, setUserId] = useState("");
 
@@ -67,7 +68,6 @@ function MainPage(props) {
   useEffect(() => {
     setUserId(sessionStorage.getItem("memid"));
     setRoomName(sessionStorage.getItem('prjid'));
-    setChatHidden(true);
     console.log("nic, prj check");
     console.log(sessionStorage.getItem("memnick"));
     console.log(sessionStorage.getItem("prjid"));
@@ -111,22 +111,43 @@ function MainPage(props) {
 
     recognition.start();
 
-    $("#chat-circle").click(function () {
-      $("#chat-circle").toggle("scale");
-      $(".chat-box").toggle("scale");
-    });
+    
 
-    $(".chat-box-toggle").click(function () {
+    const handleCircleClick = () => {
+      console.log('scale circle');
       $("#chat-circle").toggle("scale");
       $(".chat-box").toggle("scale");
-    });
+    };
+
+    const handleToggleClick = () => {
+      console.log('scale box');
+      $("#chat-circle").toggle("scale");
+      $(".chat-box").toggle("scale");
+    };
+
+    $(chatCircleRef.current).on('click', handleCircleClick);
+    $(chatBoxRef.current).find('.chat-box-toggle').on('click', handleToggleClick);
 
     return () => {
       socket.disconnect();
+      $(chatCircleRef.current).off('click', handleCircleClick);
+      $(chatBoxRef.current).find('.chat-box-toggle').off('click', handleToggleClick);
     }
   }, [userId, roomName]);
 
   // gpt
+  // $("#chat-circle").click(function () {
+  //     console.log('sacle circle');
+  //     $("#chat-circle").toggle("scale");
+  //     $(".chat-box").toggle("scale");
+  //   });
+
+  //   $(".chat-box-toggle").click(function () {
+  //     console.log('scale box');
+  //     $("#chat-circle").toggle("scale");
+  //     $(".chat-box").toggle("scale");
+  //   });
+
 
   const handleMessageSubmit = async (event) => {
     event.preventDefault();
@@ -238,7 +259,6 @@ function MainPage(props) {
   async function initCall() {
     setWelHidden(true);
     setHidden(false);
-    setChatHidden(false);
     await getMedia();
   }
 
@@ -463,7 +483,6 @@ function MainPage(props) {
   function leaveRoom() {
     // console.log(`try to leave sokcet id: ${socket.id}`);
     navigate("/project/:prjid");
-    setChatHidden(true);
     socket.disconnect();
   }
   socket.on("hii", (text) => {
@@ -532,19 +551,7 @@ function MainPage(props) {
         </div>
       </div>
 
-      <div style={{ display: chatHidden ? "none" : "block" }}>
-        <div id="chat-circle" className="btn btn-raised">
-          <div id="chat-overlay"></div>
-          <i className="material-icons">speaker_phone</i>
-        </div>
-
-        <div className="chat-box">
-          <div class="chat-box-header">
-            ChatBot
-            <span className="chat-box-toggle">
-              <i className="material-icons">close</i>
-            </span>
-          </div>
+      
           
 
       <div class="container-fluid">
@@ -670,6 +677,19 @@ function MainPage(props) {
           </div>
         </div>
 
+
+        <div>
+          <div id="chat-circle" className="btn btn-raised" ref={chatCircleRef}>
+            <div id="chat-overlay"></div>
+            <i className="material-icons">speaker_phone</i>
+          </div>
+        <div className="chat-box" ref={chatBoxRef} >
+          <div class="chat-box-header">
+            ChatBot
+            <span className="chat-box-toggle">
+              <i className="material-icons">close</i>
+            </span>
+          </div>
         <div className="chat-box-body">
             <div className="chat-box-overlay"></div>
             <div className="chat-logs" ref={chatLogsRef}></div>
