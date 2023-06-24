@@ -112,12 +112,42 @@ background-color: #ffffff !important;
     background: #fff;
   }
 
+  /* 다른 버튼들에 쓸것 */
+  .MybtnDe {
+    position:relative;
+    /* left:100%; */
+    /* transform: translateX(-50%); */
+    width:100px;
+    height:40px;
+    background: rgb(255, 255, 255);
+    background-position: left;
+    background-size: 200%;
+    color:#0085AD;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    border: 1px solid #0085AD;
+    cursor:pointer;
+    transition: 0.4s;
+    display:inline;
+    margin-bottom: 1rem;
+  }
+  
+  .MybtnDe:hover {
+    background-position: right;
+    border: 1px solid #0085AD;
+    color: #fff;
+    background: #0085AD;
+  }
+
+
+
 /* 마우스 오버 */
 .tableList tbody tr:hover {
     background-position: right;
     background: #cedbdf;
   }
-
+ 
+  
 
 .navbar-light .navbar-brand h1 {
     color: #FFFFFF;

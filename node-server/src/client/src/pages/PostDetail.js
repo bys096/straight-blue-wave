@@ -27,12 +27,11 @@ const Content = styled.div`
 `;
 
 const PostTitle = styled.div`
-	// display: flex;
-	// flex-direction: column;
-	// justify-content: space-around;
-	// width: 100%;
-
-	margin: 2rem;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-around;
+  // width: 100%;
+  margin: 2rem;
 `;
 
 const PostContent = styled(Card)`
@@ -200,6 +199,7 @@ const PostDetail = () => {
 			alert("권한이 없습니다.");
 		}
 	};
+
 
 	return (
 		<Main>
