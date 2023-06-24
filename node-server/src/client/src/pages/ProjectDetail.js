@@ -274,7 +274,7 @@ const ProjectDetail = () => {
               >
                 <h4>{board.brd_name}</h4>
                 <Table className="tableList">
-                  <tr className="card-title">
+                  <tr className="card-title" >
                     <th>작성일</th>
                     <th>제목</th>
                     <th>작성자</th>

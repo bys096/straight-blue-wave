@@ -27,10 +27,12 @@ const Content = styled.div`
 `;
 
 const PostTitle = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 100%;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-around;
+  // width: 100%;
+
+  margin: 2rem;
 `;
 
 const PostContent = styled(Card)`
@@ -182,18 +184,22 @@ const PostDetail = () => {
       <Header />
       <Article>
         <Sidebar />
-        <Content>
-          <Button onClick={() => navigate(-1)}>글 목록</Button>
-          <PostContent border="primary">
-            <PostContent.Header>
+        <Content style={{margin: "3rem"}}>
+          <button onClick={() => navigate(-1)} className="mb-4 MybtnDe"
+            style={{ width: "6rem", marginRight: "auto" }}
+          >글 목록</button>
+          <div className="cardsb">
+            <div>              
               <PostTitle>
-                <h5>
-                  [{board.brd_name}] {post.post_name}
-                </h5>
-                <div>작성자 : {post.mem_name}</div>
-                <div>{post.post_createAt}</div>
+              <p style={{fontWeight: "bold", fontSize: "12px", marginBottom: "-0.1rem", color: "#0085AD"}} >
+                {board.brd_name}</p>
+                <h4 style={{fontWeight: "bold"}}>
+                   {post.post_name}
+                </h4>
+                <div style={{fontWeight: "bold"}}>{post.mem_name}</div>
+                <div style={{fontSize: "12px"}}>{post.post_createAt}</div>
               </PostTitle>
-            </PostContent.Header>
+            </div>
             <PostContent.Body>
               <div>{post.post_content}</div>
             </PostContent.Body>
@@ -259,7 +265,7 @@ const PostDetail = () => {
               ) : null}
               <br />
             </PostContent.Footer>
-          </PostContent>
+          </div>
           <ButtonGroup>
             <Button variant="secondary" onClick={handlePostModify}>
               수정
