@@ -310,7 +310,7 @@ const ProjectList = () => {
       <div className="main">
         <Header />
         <div className="article">
-          {/* <Sidebar /> */}
+          <Sidebar />
           <div className="section">
             <Container>
               <TeamTitle>
@@ -324,7 +324,6 @@ const ProjectList = () => {
               {showButton && (
                 <Buttons>
                   <Button
-                    variant="primary"
                     onClick={() => setShowModal(true)}
                     style={{
                       width: "150px",

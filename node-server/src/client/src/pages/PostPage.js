@@ -105,7 +105,7 @@ const PostPage = () => {
                 <option value="30">30개</option>
                 <option value="50">50개</option>
               </Form.Select>
-              <Table striped bordered hover>
+              <Table className="tableList" >
                 <thead>
                   <tr>
                     <th>#</th>

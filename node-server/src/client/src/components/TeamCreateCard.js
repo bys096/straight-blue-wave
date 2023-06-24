@@ -53,6 +53,7 @@ const Plus = styled(PiPlusThin)`
 	width: 100%;
 	height: 100%;
 	padding: 1em;
+	color: #0085AD;
 `;
 
 const TeamCreateCard = () => {
