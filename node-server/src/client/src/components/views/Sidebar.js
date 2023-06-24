@@ -44,51 +44,53 @@ const Sidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  return (
-    <div
-      class="page-wrapper d-flex "
-      id="page-wrapper"
-      data-layout="vertical"
-      data-navbarbg="skin6"
-      data-sidebartype="full"
-      data-sidebar-position="fixed"
-      data-header-position="fixed"
-    >
-      <aside class="left-sidebar">
-        <div>
-          {/* <div class="brand-logo d-flex align-items-center justify-content-between">
+	return (
+		<div
+			class="page-wrapper d-flex  "
+			id="page-wrapper"
+			data-layout="vertical"
+			data-navbarbg="skin6"
+			data-sidebartype="full"
+			data-sidebar-position="fixed"
+			data-header-position="fixed"
+		>
+			<aside
+				className="left-sidebar"
+			>
+				<div>
+					{/* <div class="brand-logo d-flex align-items-center justify-content-between">
 						<a href="./index.html" class="text-nowrap logo-img">
 							<img src="../assets/images/logos/dark-logo.svg" width="180" alt="" />
 						</a>
 					</div> */}
 
-          <nav class="sidebar-nav" data-simplebar="true">
-            <ul id="sidebarnav">
-              <li class="nav-small-cap">
-                <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                <span class="hide-menu">Home</span>
-              </li>
+					<nav class="sidebar-nav sidebar-item sidebarnav">
+						<ul id="sidebarnav ">
+							<li class="nav-small-cap">
+								<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+								<span class="hide-menu">Home</span>
+							</li>
 
-              <Accordion flush alwaysOpen>
-                <Accordion.Item eventKey="team">
-                  <Accordion.Header>Teams</Accordion.Header>
-                  <Accordion.Body>
-                    <Sidebar1 />
-                  </Accordion.Body>
-                </Accordion.Item>
-                <Accordion.Item eventKey="friend">
-                  <Accordion.Header>Friends</Accordion.Header>
-                  <Accordion.Body>
-                    <Sidebar3 />
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion>
-            </ul>
-          </nav>
-        </div>
-      </aside>
-    </div>
-  );
+							<Accordion flush alwaysOpen>
+								<Accordion.Item eventKey="team">
+									<Accordion.Header>Teams</Accordion.Header>
+									<Accordion.Body>
+										<Sidebar1 />
+									</Accordion.Body>
+								</Accordion.Item>
+								<Accordion.Item eventKey="friend">
+									<Accordion.Header>Friends</Accordion.Header>
+									<Accordion.Body>
+										<Sidebar3 />
+									</Accordion.Body>
+								</Accordion.Item>
+							</Accordion>
+						</ul>
+					</nav>
+				</div>
+			</aside>
+		</div>
+	);
 };
 
 export default Sidebar;
