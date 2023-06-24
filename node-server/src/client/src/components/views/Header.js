@@ -73,7 +73,7 @@ function Header() {
 							/>
 						</Link>
 					</Navbar.Brand>
-					<Navbar.Brand style={{ color: "#0085AD", margin: "0 10px 0 -10px" }}>
+					<Navbar.Brand style={{ color: "#0085AD", margin: "0 20px 0 -10px" }}>
 						<Link to="/LoggedIn" style={{ textDecoration: "none", color: "#0085AD" }}>
 							Blue
 							<span style={{ color: "black" }}>Wave</span>
