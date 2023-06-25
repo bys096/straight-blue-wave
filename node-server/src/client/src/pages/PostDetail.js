@@ -27,10 +27,11 @@ const Content = styled.div`
 `;
 
 const PostTitle = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 100%;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-around;
+  // width: 100%;
+  margin: 2rem;
 `;
 
 const PostContent = styled(Card)`
@@ -102,11 +103,7 @@ const PostDetail = () => {
 
   const [activeCommentId, setActiveCommentId] = useState(null);
 
-  const [comments, setComments] = useState(
-    localStorage.getItem(post.post_id)
-      ? JSON.parse(localStorage.getItem(post.post_id))
-      : []
-  );
+  const [comments, setComments] = useState([]);
 
   const [replies, setReplies] = useState(
     localStorage.getItem(post.post_id + "_replies")
@@ -114,38 +111,64 @@ const PostDetail = () => {
       : []
   );
 
-  // 댓글을 로컬스토리지에 추가하는 함수
-  const addComment = (event) => {
-    if (event.key === "Enter" && event.target.value !== "") {
-      const newComment = {
-        id: Math.random().toString(36).substr(2, 9),
-        text: event.target.value,
-        createdAt: new Date().toISOString(),
-        member: auth.memberNick,
-      };
+  const fetchReply = async () => {
+    await axios
+      .get(`http://localhost:8002/api/reply/replies/${post.post_id}`)
+      .then((res) => {
+        setComments(res.data);
+        setReplies(res.data.children);
+        console.log(replies);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-      // If there's an active comment, add a reply to it
-      if (activeCommentId) {
-        const newReply = {
-          ...newComment,
-          parentId: activeCommentId,
+  // 댓글 추가 함수
+  const addComment = async (event) => {
+    try {
+      if (event.key === "Enter" && event.target.value !== "") {
+        const newComment = {
+          replyContent: event.target.value,
+          memId: auth.memberId,
+          postId: post.post_id,
+          // id: Math.random().toString(36).substr(2, 9),
+          // text: event.target.value,
+          // createdAt: new Date().toISOString(),
+          // member: auth.memberNick,
         };
-        setReplies((prevReplies) => [...prevReplies, newReply]);
-        localStorage.setItem(
-          post.post_id + "_replies",
-          JSON.stringify([...replies, newReply])
-        );
-        setActiveCommentId(null); // Reset the active comment ID
-      } else {
-        // Otherwise, add a new comment
-        setComments((prevComments) => [...prevComments, newComment]);
-        localStorage.setItem(
-          post.post_id,
-          JSON.stringify([...comments, newComment])
-        );
-      }
 
-      event.target.value = "";
+        // If there's an active comment, add a reply to it
+        if (activeCommentId) {
+          const newReply = {
+            ...newComment,
+            parentId: activeCommentId,
+          };
+          // setReplies((prevReplies) => [...prevReplies, newReply]);
+          await axios.post("http://localhost:8002/api/reply/create", newReply);
+          // localStorage.setItem(
+          //    post.post_id + "_replies",
+          //    JSON.stringify([...replies, newReply])
+          // );
+          setActiveCommentId(null); // Reset the active comment ID
+        } else {
+          // Otherwise, add a new comment
+          // setComments((prevComments) => [...prevComments, newComment]);
+          await axios.post(
+            "http://localhost:8002/api/reply/create",
+            newComment
+          );
+          // localStorage.setItem(
+          //    post.post_id,
+          //    JSON.stringify([...comments, newComment])
+          // );
+        }
+        await fetchReply();
+        event.target.value = "";
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -182,63 +205,79 @@ const PostDetail = () => {
       <Header />
       <Article>
         <Sidebar />
-        <Content>
-          <Button onClick={() => navigate(-1)}>글 목록</Button>
-          <PostContent border="primary">
-            <PostContent.Header>
+        <Content style={{ margin: "3rem", paddingLeft: "280px" }}>
+          <Button
+            onClick={() => navigate(-1)}
+            className="mb-4 MybtnDe"
+            style={{ width: "6rem", marginRight: "auto" }}
+          >
+            글 목록
+          </Button>
+          <div className="cardsb">
+            <div>
               <PostTitle>
-                <h5>
-                  [{board.brd_name}] {post.post_name}
-                </h5>
-                <div>작성자 : {post.mem_name}</div>
-                <div>{post.post_createAt}</div>
+                <p
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "12px",
+                    marginBottom: "-0.1rem",
+                    color: "#0085AD",
+                  }}
+                >
+                  {board.brd_name}
+                </p>
+                <h4 style={{ fontWeight: "bold" }}>{post.post_name}</h4>
+                <div style={{ fontWeight: "bold" }}>{post.mem_name}</div>
+                <div style={{ fontSize: "12px" }}>
+                  {new Date(post.post_createAt).toLocaleDateString()}
+                </div>
               </PostTitle>
-            </PostContent.Header>
+            </div>
             <PostContent.Body>
               <div>{post.post_content}</div>
             </PostContent.Body>
             <PostContent.Footer>
               <CommentSection>
                 {comments.map((comment) => (
-                  <Comments key={comment.id}>
+                  <Comments key={comment.replyId}>
                     <CommentItem
-                      onClick={() => setActiveCommentId(comment.id)}
+                      onClick={() => setActiveCommentId(comment.replyId)}
                       style={
-                        activeCommentId === comment.id
+                        activeCommentId === comment.replyId
                           ? { backgroundColor: "lightgray" }
                           : {}
                       }
                     >
-                      <div>{comment.member}</div>
-                      <div>{comment.text}</div>
-                      <div>
-                        {new Date(comment.createdAt).toLocaleDateString()}
+                      <div style={{ fontWeight: "bold" }}>{comment.writer}</div>
+                      <div>{comment.replyContent}</div>
+                      <div style={{ fontSize: "12px" }}>
+                        {new Date(comment.replyCreateAt).toLocaleDateString()}
                       </div>
                     </CommentItem>
                     {/* Render replies */}
                     <Replies>
-                      {replies
-                        .filter((reply) => reply.parentId === comment.id)
-                        .map((reply) => (
-                          <ReplySection key={reply.id}>
-                            <div
-                              style={{ display: "flex", alignItems: "center" }}
-                            >
-                              <BsArrowReturnRight
-                                style={{ marginLeft: "20px" }}
-                              />
-                              <div style={{ marginLeft: "10px" }}>
-                                <ReplyHeader>{post.mem_nick}</ReplyHeader>
-                                <div>{reply.text}</div>
-                                <div>
-                                  {new Date(
-                                    reply.createdAt
-                                  ).toLocaleDateString()}
-                                </div>
+                      {comment.children.map((reply) => (
+                        <ReplySection key={reply.replyId}>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <BsArrowReturnRight
+                              style={{ marginLeft: "20px" }}
+                            />
+                            <div style={{ marginLeft: "10px" }}>
+                              <ReplyHeader style={{ fontWeight: "bold" }}>
+                                {reply.writer}
+                              </ReplyHeader>
+                              <div>{reply.replyContent}</div>
+                              <div style={{ fontSize: "12px" }}>
+                                {new Date(
+                                  reply.replyCreateAt
+                                ).toLocaleDateString()}
                               </div>
                             </div>
-                          </ReplySection>
-                        ))}
+                          </div>
+                        </ReplySection>
+                      ))}
                     </Replies>
                   </Comments>
                 ))}
@@ -259,8 +298,8 @@ const PostDetail = () => {
               ) : null}
               <br />
             </PostContent.Footer>
-          </PostContent>
-          <ButtonGroup>
+          </div>
+          <ButtonGroup style={{ width: "6rem", marginLeft: "auto" }}>
             <Button variant="secondary" onClick={handlePostModify}>
               수정
             </Button>

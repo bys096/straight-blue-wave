@@ -7,21 +7,21 @@ import "./LoggedIn.css";
 import VideoCall from "../pages/MainPage";
 import TeamList from "./TeamList";
 function LoggedIn() {
-
-	return (
-		<div className="main">
-			<Header />
-
-			<div className="article">
-				<Sidebar />
-
-				<div className="section">
-					<TeamList />
-				</div>
-			</div>
-			<Footer />
-		</div>
-	);
+  return (
+    <div className="main">
+      <Header />
+      <div className="article">
+        <Sidebar />
+        <div
+          className="section"
+          style={{ paddingLeft: "280px", margin: "0 0 100px" }}
+        >
+          <TeamList />
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
 }
 
 export default LoggedIn;

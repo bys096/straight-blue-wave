@@ -4,11 +4,24 @@
     --secondary: #4777F5;
     --light: #F7FAFF;
     --dark: #1D1D27;
+    --dullAqua: #0085AD;
 }
 
 /*** Navbar ***/
+
+.transparent {
+    background-color: transparent !important;
+}
+  
+.scrolled {
+background-color: #ffffff !important;
+}
+  
+  
+   
+
 .navbar-light .navbar-nav .nav-link {
-    position: relative;
+    position: relative !important;
     margin-left: 25px;
     padding: 35px 0;
     color: var(--light) !important;
@@ -23,8 +36,170 @@
 
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link.active {
-    color: var(--secondary) !important;
+    color: var(--dullAqua) !important;
 }
+
+/* 메인헤더 색상(현주) */
+.changeActiveColor{
+    color: var(--dark) !important;
+}
+
+/* 로고 간격 */
+.loMa{
+    margin-left: 4rem;
+    margin-right: 1rem;
+}
+
+/* 버튼 디자인 */
+
+.button-container {
+    display: flex;
+    margin-left: auto;
+  }
+
+.Mybtn {
+    position:relative;
+    left:100%;
+    transform: translateX(-50%);
+    width:150%;
+    height:40px;
+    background: rgb(255, 255, 255);
+    background-position: left;
+    background-size: 200%;
+    color:#0085AD;
+    font-weight: bold;
+    border-radius: 1.5rem;
+    border: 1px solid #0085AD;
+    cursor:pointer;
+    transition: 0.4s;
+    display:inline;
+  }
+  
+  .Mybtn:hover {
+    background-position: right;
+    border: 1px solid #0085AD;
+    color: #fff;
+    background: #0085AD;
+  }
+
+ .MybtnPosition{
+    position: 3rem;
+ }
+
+  .MybtnColor {
+    position:relative;
+    left:100%;
+    transform: translateX(-50%);
+    width:150%;
+    height:40px;
+    
+    background: #0085AD;
+    background-position: left;
+    background-size: 200%;
+    color:#fff;
+    font-weight: bold;
+    border-radius: 1.5rem;
+    border: 1px solid #0085AD;
+    cursor:pointer;
+    transition: 0.4s;
+    display:inline;
+  }
+  
+  .MybtnColor:hover {
+    background-position: right;
+    border: 1px solid #0085AD;
+    color: #0085AD;
+    background: #fff;
+  }
+
+  /* 다른 버튼들에 쓸것 */
+  .MybtnDe {
+    position:relative;
+    /* left:100%; */
+    /* transform: translateX(-50%); */
+    width:100px;
+    height:40px;
+    background: rgb(255, 255, 255);
+    background-position: left;
+    background-size: 200%;
+    color:#0085AD;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    border: 1px solid #0085AD;
+    cursor:pointer;
+    transition: 0.4s;
+    display:inline;
+    margin-bottom: 1rem;
+  }
+  
+  .MybtnDe:hover {
+    background-position: right;
+    border: 1px solid #0085AD;
+    color: #fff;
+    background: #0085AD;
+  }
+
+  /* input */
+  .inputDe{
+    width: 70%;
+    height:40px;
+    color:#0085AD;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    border: 1px solid #0085AD;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    padding: 1rem;
+  }
+
+  .inputLong{
+    width: 100%;
+    height:40px;
+    color:#0085AD;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    border: 1px solid #0085AD;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    padding: 1rem;
+  }
+
+  .textArea{
+    width: 100%;
+    height:100%;
+    border-radius: 0.5rem;
+    border: 1px solid #0085AD;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+
+
+/* 테이블 마우스 오버 */
+.tableList tbody tr:hover {
+    background-position: right;
+    background: #cedbdf;
+  }
+ 
+  /* 권한 색상 */
+  .rightColor{
+    /* display: inline-block;
+    border-radius: 2rem;
+    background-color: #0085AD;
+    color: #fff;
+    padding: 3px 8px 3px 8px;
+    font-size: 12px; */
+
+    display: inline-block;
+    border-radius: 2rem;
+    color: #0085AD;
+    background-color: #fff;
+    border: 1px solid #0085AD;
+    padding: 3px 8px 3px 8px;
+    font-size: 12px;
+  }
+  
 
 .navbar-light .navbar-brand h1 {
     color: #FFFFFF;
@@ -37,7 +212,7 @@
 
 .sticky-top.navbar-light .navbar-brand img {
     max-height: 45px;
-}
+} 
 
 @media (max-width: 991.98px) {
     .sticky-top.navbar-light {
@@ -88,7 +263,7 @@
         height: 2px;
         bottom: -1px;
         left: 50%;
-        background: var(--secondary);
+        background: var(--dullAqua);
         transition: .5s;
     }
 

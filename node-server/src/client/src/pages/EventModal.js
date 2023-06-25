@@ -32,17 +32,31 @@ const EventModal = ({
 
   const createSchecule = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:8002/api/schedule/create",
-        {
+      const res = await axios
+        .post("http://localhost:8002/api/schedule/create", {
           schedule_title: title,
           schedule_description: description,
           start_date: startDate,
           end_date: endDate,
           prj_id: sessionStorage.getItem("prjid"),
-        }
-      );
-      console.log(res.data);
+        })
+        .then((res) => {
+          console.log(res);
+          const schedule_id = res.data.scheduleId;
+          // Collect the event data
+          const eventData = {
+            prjRoom: sessionStorage.getItem("prjroom"),
+            prjName: sessionStorage.getItem("prjname"),
+            post_name: title,
+            post_content: description,
+            schedule_id: schedule_id,
+            post_id: "",
+            team_id: sessionStorage.getItem("tmid"),
+          };
+
+          // Emit the event data through the socket
+          socket.emit("eventData", eventData);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -52,17 +66,6 @@ const EventModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Collect the event data
-    const eventData = {
-      prjRoom: sessionStorage.getItem("prjroom"),
-      prjName: sessionStorage.getItem("prjname"),
-      post_name: title,
-      post_content: description,
-    };
-
-    // Emit the event data through the socket
-    socket.emit("eventData", eventData);
 
     // Create the schedule
     await createSchecule();

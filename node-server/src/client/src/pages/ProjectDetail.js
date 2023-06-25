@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { boardConnect } from "../actions/board";
 
 import Notification from "./notification";
+import Footer from "../components/views/Footer";
 
 const Main = styled.div`
   height: 100%;
@@ -203,8 +204,13 @@ const ProjectDetail = () => {
       <Header />
       <Article>
         <Sidebar />
-
-        <Content>
+        <Content
+          style={{
+            margin: "1.5rem",
+            paddingLeft: "280px",
+            margin: "0 0 100px",
+          }}
+        >
           <ButtonGroup>
             <Button variant="primary" onClick={() => navigate(-1)}>
               프로젝트 목록
@@ -217,13 +223,10 @@ const ProjectDetail = () => {
               캘린더
             </Button>
             <Button variant="primary" onClick={makeBoard}>
-              게시판만들기
+              게시판 생성
             </Button>
             <Button variant="primary" onClick={goWBS}>
               WBS
-            </Button>
-            <Button variant="primary" onClick={goGPT}>
-              GPT
             </Button>
             {showButton && (
               <Button variant="danger" onClick={deleteProject}>
@@ -234,15 +237,16 @@ const ProjectDetail = () => {
           <hr />
           <Modal show={showModal} onHide={handleModalClose}>
             <Modal.Header closeButton>
-              <Modal.Title>게시판 만들기</Modal.Title>
+              <Modal.Title style={{ fontWeight: 'bold' }}>게시판 생성</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form.Group>
-                <Form.Label>게시판 이름</Form.Label>
-                <Form.Control
+                <Form.Label style={{ fontWeight: 'bold' }}>게시판 이름</Form.Label>
+                <input
                   type="text"
                   value={boardName}
                   onChange={handleBoardNameChange}
+                  className="inputLong"
                 />
               </Form.Group>
             </Modal.Body>
@@ -258,13 +262,13 @@ const ProjectDetail = () => {
             <div
               class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp"
               data-wow-delay="0.1s"
+              style={{ margin: "5rem" }}
             >
               <h2>최근 이슈</h2>
             </div>
             {boardList.map((board) => (
               <BoardItem
-                className="card card-title fw-semibold mb-4 table-responsive text-dark
-              "
+                className="cardsb mb-4 table-responsive text-dark"
                 key={board.brd_id}
                 onClick={() => {
                   navigate("/post", { state: { board } });
@@ -273,8 +277,8 @@ const ProjectDetail = () => {
                 }}
               >
                 <h4>{board.brd_name}</h4>
-                <Table hover>
-                  <tr>
+                <Table className="tableList">
+                  <tr className="card-title">
                     <th>작성일</th>
                     <th>제목</th>
                     <th>작성자</th>
@@ -296,6 +300,7 @@ const ProjectDetail = () => {
           </BoardList>
         </Content>
       </Article>
+      <Footer></Footer>
     </Main>
   );
 };

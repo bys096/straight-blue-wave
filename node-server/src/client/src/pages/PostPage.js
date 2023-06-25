@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/views/Header";
 import Sidebar from "../components/views/Sidebar";
-import { Button, Table, Modal, Pagination, Form } from "react-bootstrap";
+import { Table, Modal, Pagination, Form } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import { postConnect } from "../actions/post";
 
 import Notification from "./notification";
+import { io } from "socket.io-client";
+import Footer from "../components/views/Footer";
 
 const Main = styled.div`
   height: 100%;
@@ -35,11 +37,13 @@ const PostList = styled.div`
   flex-wrap: wrap;
   align-items: center;
   width: 100%;
+  margin: 5rem;
 `;
 
 const PostPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const socket = io();
 
   const [posts, setPosts] = useState([]);
   // const [show, setShow] = useState(false);
@@ -89,25 +93,45 @@ const PostPage = () => {
         <Header />
         <Article>
           <Sidebar />
-          <Content>
+          <Content style={{ paddingLeft: "280px", margin: "0 0 100px" }}>
             <PostList>
               <div>
-                <h2>{board.brd_name}</h2>
-                <Button onClick={() => navigate("/createpost")}>
-                  게시글 작성
-                </Button>
-                <Button onClick={() => navigate(-1, { replace: true })}>
-                  이전 화면
-                </Button>
+                <div style={{ marginBottom: "3rem" }}>
+                  <h2>{board.brd_name}</h2>
+                </div>
+                <div>
+                  <button
+                    onClick={() => navigate("/createpost")}
+                    style={{ marginRight: "1rem" }}
+                    className="MybtnDe"
+                  >
+                    게시글 작성
+                  </button>
+                  <button
+                    onClick={() => navigate(-1, { replace: true })}
+                    style={{ marginRight: "1rem" }}
+                    className="MybtnDe"
+                  >
+                    이전 화면
+                  </button>
+                </div>
               </div>
-              <Form.Select onChange={handlePageSize} aria-label="글갯수">
+              <Form.Select
+                onChange={handlePageSize}
+                aria-label="글갯수"
+                style={{
+                  width: "6rem",
+                  margin: "70px 0 0",
+                  marginLeft: "auto",
+                }}
+              >
                 <option value="10">10개</option>
                 <option value="30">30개</option>
                 <option value="50">50개</option>
               </Form.Select>
-              <Table striped bordered hover>
+              <Table className="tableList">
                 <thead>
-                  <tr>
+                  <tr style={{ color: "#0085AD" }}>
                     <th>#</th>
                     <th>제목</th>
                     <th>약속일</th>
@@ -118,7 +142,9 @@ const PostPage = () => {
                 <tbody>
                   {posts.map((post) => (
                     <tr key={post.post_id} onClick={() => handleShow(post)}>
-                      <td>{post.post_id}</td>
+                      <td style={{ color: "#0085AD", fontWeight: "bold" }}>
+                        {post.post_id}
+                      </td>
                       <td>{post.post_name}</td>
                       <td>{post.meeting_date}</td>
                       <td>{post.mem_name}</td>
@@ -159,6 +185,7 @@ const PostPage = () => {
             </Pagination>
           </Content>
         </Article>
+        <Footer></Footer>
       </Main>
     </div>
   );

@@ -7,8 +7,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import io from "socket.io-client";
 
-const socket = io();
-
 const Main = styled.div`
   height: 100%;
   width: 100%;
@@ -83,17 +81,6 @@ const CreatePostPage = () => {
         brd_id: sessionStorage.getItem("boardid"),
       };
 
-      const eventData = {
-        prjRoom: sessionStorage.getItem("prjroom"),
-        prjName: sessionStorage.getItem("prjname"),
-        post_name: post.post_name,
-        post_content: post.post_content,
-        meeting_date: post.meeting_date,
-        mem_id: post.mem_id,
-      };
-
-      socket.emit("eventData", eventData);
-
       if (isModify) {
         await axios.put(
           `http://localhost:8002/api/post/modify/${posts.post_id}`,
@@ -102,7 +89,25 @@ const CreatePostPage = () => {
         alert("게시글이 수정되었습니다.");
         navigate(-2);
       } else {
-        await axios.post("http://localhost:8002/api/post/create", modifiedPost);
+        await axios
+          .post("http://localhost:8002/api/post/create", modifiedPost)
+          .then((res) => {
+            const post_id = res.data.post_id;
+            const eventData = {
+              prjRoom: sessionStorage.getItem("prjroom"),
+              prjName: sessionStorage.getItem("prjname"),
+              post_name: post.post_name,
+              post_content: post.post_content,
+              meeting_date: post.meeting_date,
+              mem_id: post.mem_id,
+              post_id: post_id,
+              schedule_id: "",
+              team_id: sessionStorage.getItem("tmid"),
+            };
+
+            const socket = io();
+            socket.emit("eventData", eventData);
+          });
         alert("게시글이 등록되었습니다.");
         navigate(-1);
       }

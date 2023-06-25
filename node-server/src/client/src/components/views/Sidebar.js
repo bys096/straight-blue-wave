@@ -46,15 +46,20 @@ const Sidebar = () => {
 
   return (
     <div
-      class="page-wrapper d-flex "
+      class="page-wrapper d-flex  "
       id="page-wrapper"
       data-layout="vertical"
       data-navbarbg="skin6"
       data-sidebartype="full"
-      data-sidebar-position="fixed"
-      data-header-position="fixed"
     >
-      <aside class="left-sidebar">
+      <aside
+        className="left-sidebar"
+        style={{
+          position: "fixed",
+          zIndex: "99",
+          overflowY: "scroll",
+        }}
+      >
         <div>
           {/* <div class="brand-logo d-flex align-items-center justify-content-between">
 						<a href="./index.html" class="text-nowrap logo-img">
@@ -62,8 +67,8 @@ const Sidebar = () => {
 						</a>
 					</div> */}
 
-          <nav class="sidebar-nav" data-simplebar="true">
-            <ul id="sidebarnav">
+          <nav class="sidebar-nav sidebar-item sidebarnav">
+            <ul id="sidebarnav ">
               <li class="nav-small-cap">
                 <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                 <span class="hide-menu">Home</span>

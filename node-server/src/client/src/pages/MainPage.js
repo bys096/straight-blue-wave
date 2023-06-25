@@ -26,13 +26,14 @@ function MainPage(props) {
   const cameraRef = useRef(null);
   const camerasRef = useRef(null);
   const callRef = useRef(null);
+  const chatCircleRef = useRef(null);
+  const chatBoxRef = useRef(null);
   const welcomeRef = useRef(null);
   const welcomeFormRef = useRef(null);
   const peerFaceRef = useRef(null);
   const myStreamRef = useRef(null);
   const [hidden, setHidden] = useState(true);
   const [welHidden, setWelHidden] = useState(false);
-  const [chatHidden, setChatHidden] = useState(true);
   const [roomName, setRoomName] = useState("");
   const [userId, setUserId] = useState("");
 
@@ -65,12 +66,15 @@ function MainPage(props) {
   let pcObj = {};
 
   useEffect(() => {
-    setUserId(sessionStorage.getItem("user_id"));
-    setChatHidden(true);
+    setUserId(sessionStorage.getItem("memid"));
+    setRoomName(sessionStorage.getItem("prjid"));
     console.log("nic, prj check");
     console.log(sessionStorage.getItem("memnick"));
     console.log(sessionStorage.getItem("prjid"));
 
+    // socket.emit("join_room", roomForm.value, userId);
+    socket.emit("join_room", roomName, userId);
+    console.log("방입장: ", roomName);
     // stt
     // stt code
     const recognition = new window.webkitSpeechRecognition();
@@ -107,18 +111,44 @@ function MainPage(props) {
 
     recognition.start();
 
-    $("#chat-circle").click(function () {
+    const handleCircleClick = () => {
+      console.log("scale circle");
       $("#chat-circle").toggle("scale");
       $(".chat-box").toggle("scale");
-    });
+    };
 
-    $(".chat-box-toggle").click(function () {
+    const handleToggleClick = () => {
+      console.log("scale box");
       $("#chat-circle").toggle("scale");
       $(".chat-box").toggle("scale");
-    });
-  }, []);
+    };
+
+    $(chatCircleRef.current).on("click", handleCircleClick);
+    $(chatBoxRef.current)
+      .find(".chat-box-toggle")
+      .on("click", handleToggleClick);
+
+    return () => {
+      socket.disconnect();
+      $(chatCircleRef.current).off("click", handleCircleClick);
+      $(chatBoxRef.current)
+        .find(".chat-box-toggle")
+        .off("click", handleToggleClick);
+    };
+  }, [userId, roomName]);
 
   // gpt
+  // $("#chat-circle").click(function () {
+  //     console.log('sacle circle');
+  //     $("#chat-circle").toggle("scale");
+  //     $(".chat-box").toggle("scale");
+  //   });
+
+  //   $(".chat-box-toggle").click(function () {
+  //     console.log('scale box');
+  //     $("#chat-circle").toggle("scale");
+  //     $(".chat-box").toggle("scale");
+  //   });
 
   const handleMessageSubmit = async (event) => {
     event.preventDefault();
@@ -230,23 +260,20 @@ function MainPage(props) {
   async function initCall() {
     setWelHidden(true);
     setHidden(false);
-    setChatHidden(false);
     await getMedia();
   }
 
   async function handleWelcomeSubmit(event) {
     event.preventDefault();
-    const roomForm = welcomeFormRef.current.querySelector("input");
+    // const roomForm = welcomeFormRef.current.querySelector("input");
 
-    if (socket.disconnected) {
-      socket.connect();
-    }
-    socket.emit("join_room", roomForm.value, userId);
-    setRoomName(roomForm.value);
-    console.log("방입장: ", roomName);
-    // console.log(`입장, 방이름: ${roomName}`);
-    roomForm.value = "";
-    // console.log(`입장, 방이름?: ${roomName}`);
+    // if (socket.disconnected) {
+    //   socket.connect();
+    // }
+    // // socket.emit("join_room", roomForm.value, userId);
+    // socket.emit("join_room", roomName, userId);
+    // console.log("방입장: ", roomName);
+    // roomForm.value = "";
   }
 
   // socket.on("reject_join", () => {
@@ -456,7 +483,6 @@ function MainPage(props) {
   function leaveRoom() {
     // console.log(`try to leave sokcet id: ${socket.id}`);
     navigate("/project/:prjid");
-    setChatHidden(true);
     socket.disconnect();
   }
   socket.on("hii", (text) => {
@@ -465,11 +491,11 @@ function MainPage(props) {
   });
 
   return (
-    <Container>
+    <Container style={{ paddingLeft: "280px" }}>
       <h1>영상통화</h1>
       <div className="video">
         <div>
-          <div
+          {/* <div
             id="welcome"
             ref={welcomeRef}
             style={{ display: welHidden ? "none" : "block" }}
@@ -478,7 +504,7 @@ function MainPage(props) {
               <input placeholder="room name" required type="text" />
               <button onClick={handleWelcomeSubmit}>Enter room</button>
             </form>
-          </div>
+          </div> */}
 
           <div
             id="call"
@@ -518,48 +544,6 @@ function MainPage(props) {
                 height="400"
               ></video>
             </div>
-
-            <button class="btn btn-primary" onClick={leaveRoom}>
-              Leave
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div style={{ display: chatHidden ? "none" : "block" }}>
-        <div id="chat-circle" className="btn btn-raised">
-          <div id="chat-overlay"></div>
-          <i className="material-icons">speaker_phone</i>
-        </div>
-
-        <div className="chat-box">
-          <div class="chat-box-header">
-            ChatBot
-            <span className="chat-box-toggle">
-              <i className="material-icons">close</i>
-            </span>
-          </div>
-          <div className="chat-box-body">
-            <div className="chat-box-overlay"></div>
-            <div className="chat-logs" ref={chatLogsRef}></div>
-          </div>
-          <div className="chat-input">
-            <form>
-              <input
-                ref={chatInputRef}
-                type="text"
-                id="chat-input"
-                placeholder="Send a message..."
-              />
-              <button
-                type="submit"
-                class="chat-submit"
-                id="chat-submit"
-                onClick={sendChat}
-              >
-                <i class="material-icons">send</i>
-              </button>
-            </form>
           </div>
         </div>
       </div>
@@ -686,6 +670,48 @@ function MainPage(props) {
             </div>
           </div>
         </div>
+
+        <div>
+          <div id="chat-circle" className="btn btn-raised" ref={chatCircleRef}>
+            <div id="chat-overlay"></div>
+            <i className="material-icons">speaker_phone</i>
+          </div>
+          <div className="chat-box" ref={chatBoxRef}>
+            <div class="chat-box-header">
+              ChatBot
+              <span className="chat-box-toggle">
+                <i className="material-icons">close</i>
+              </span>
+            </div>
+            <div className="chat-box-body">
+              <div className="chat-box-overlay"></div>
+              <div className="chat-logs" ref={chatLogsRef}></div>
+            </div>
+            <div className="chat-input">
+              <form>
+                <input
+                  ref={chatInputRef}
+                  type="text"
+                  id="chat-input"
+                  placeholder="Send a message..."
+                />
+                <button
+                  type="submit"
+                  class="chat-submit"
+                  id="chat-submit"
+                  onClick={sendChat}
+                >
+                  <i class="material-icons">send</i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="leaveBtn">
+        <button class="btn btn-primary" onClick={leaveRoom}>
+          Leave
+        </button>
       </div>
     </Container>
   );
