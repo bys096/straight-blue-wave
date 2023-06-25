@@ -67,7 +67,7 @@ function MainPage(props) {
 
   useEffect(() => {
     setUserId(sessionStorage.getItem("memid"));
-    setRoomName(sessionStorage.getItem('prjid'));
+    setRoomName(sessionStorage.getItem("prjid"));
     console.log("nic, prj check");
     console.log(sessionStorage.getItem("memnick"));
     console.log(sessionStorage.getItem("prjid"));
@@ -111,28 +111,30 @@ function MainPage(props) {
 
     recognition.start();
 
-    
-
     const handleCircleClick = () => {
-      console.log('scale circle');
+      console.log("scale circle");
       $("#chat-circle").toggle("scale");
       $(".chat-box").toggle("scale");
     };
 
     const handleToggleClick = () => {
-      console.log('scale box');
+      console.log("scale box");
       $("#chat-circle").toggle("scale");
       $(".chat-box").toggle("scale");
     };
 
-    $(chatCircleRef.current).on('click', handleCircleClick);
-    $(chatBoxRef.current).find('.chat-box-toggle').on('click', handleToggleClick);
+    $(chatCircleRef.current).on("click", handleCircleClick);
+    $(chatBoxRef.current)
+      .find(".chat-box-toggle")
+      .on("click", handleToggleClick);
 
     return () => {
       socket.disconnect();
-      $(chatCircleRef.current).off('click', handleCircleClick);
-      $(chatBoxRef.current).find('.chat-box-toggle').off('click', handleToggleClick);
-    }
+      $(chatCircleRef.current).off("click", handleCircleClick);
+      $(chatBoxRef.current)
+        .find(".chat-box-toggle")
+        .off("click", handleToggleClick);
+    };
   }, [userId, roomName]);
 
   // gpt
@@ -147,7 +149,6 @@ function MainPage(props) {
   //     $("#chat-circle").toggle("scale");
   //     $(".chat-box").toggle("scale");
   //   });
-
 
   const handleMessageSubmit = async (event) => {
     event.preventDefault();
@@ -273,7 +274,6 @@ function MainPage(props) {
     // socket.emit("join_room", roomName, userId);
     // console.log("방입장: ", roomName);
     // roomForm.value = "";
-    
   }
 
   // socket.on("reject_join", () => {
@@ -491,7 +491,7 @@ function MainPage(props) {
   });
 
   return (
-    <Container>
+    <Container style={{ paddingLeft: "280px" }}>
       <h1>영상통화</h1>
       <div className="video">
         <div>
@@ -515,7 +515,6 @@ function MainPage(props) {
               id="myStream"
               ref={myStreamRef}
               class="rounded mx-auto d-block"
-
             >
               <video
                 id="myFace"
@@ -545,14 +544,9 @@ function MainPage(props) {
                 height="400"
               ></video>
             </div>
-
-            
           </div>
         </div>
       </div>
-
-      
-          
 
       <div class="container-fluid">
         <div class="container-fluid">
@@ -677,50 +671,47 @@ function MainPage(props) {
           </div>
         </div>
 
-
         <div>
           <div id="chat-circle" className="btn btn-raised" ref={chatCircleRef}>
             <div id="chat-overlay"></div>
             <i className="material-icons">speaker_phone</i>
           </div>
-        <div className="chat-box" ref={chatBoxRef} >
-          <div class="chat-box-header">
-            ChatBot
-            <span className="chat-box-toggle">
-              <i className="material-icons">close</i>
-            </span>
-          </div>
-        <div className="chat-box-body">
-            <div className="chat-box-overlay"></div>
-            <div className="chat-logs" ref={chatLogsRef}></div>
-          </div>
-          <div className="chat-input">
-            <form>
-              <input
-                ref={chatInputRef}
-                type="text"
-                id="chat-input"
-                placeholder="Send a message..."
-              />
-              <button
-                type="submit"
-                class="chat-submit"
-                id="chat-submit"
-                onClick={sendChat}
-              >
-                <i class="material-icons">send</i>
-              </button>
-            </form>
+          <div className="chat-box" ref={chatBoxRef}>
+            <div class="chat-box-header">
+              ChatBot
+              <span className="chat-box-toggle">
+                <i className="material-icons">close</i>
+              </span>
+            </div>
+            <div className="chat-box-body">
+              <div className="chat-box-overlay"></div>
+              <div className="chat-logs" ref={chatLogsRef}></div>
+            </div>
+            <div className="chat-input">
+              <form>
+                <input
+                  ref={chatInputRef}
+                  type="text"
+                  id="chat-input"
+                  placeholder="Send a message..."
+                />
+                <button
+                  type="submit"
+                  class="chat-submit"
+                  id="chat-submit"
+                  onClick={sendChat}
+                >
+                  <i class="material-icons">send</i>
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-
-      </div>
       <div className="leaveBtn">
-
-      <button class="btn btn-primary" onClick={leaveRoom}>
-        Leave
-      </button>
+        <button class="btn btn-primary" onClick={leaveRoom}>
+          Leave
+        </button>
       </div>
     </Container>
   );

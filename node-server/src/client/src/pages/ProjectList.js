@@ -82,7 +82,7 @@ const Buttons = styled.div`
 
 const BLA = styled.div`
   margin-left: auto;
-`
+`;
 
 const ProjectList = () => {
   const [members, setMembers] = useState([]);
@@ -311,14 +311,20 @@ const ProjectList = () => {
         <Header />
         <div className="article">
           <Sidebar />
-          <div className="section">
+          <div
+            className="section"
+            style={{ paddingLeft: "280px", margin: "0 0 100px" }}
+          >
             <Container>
               <TeamTitle>
                 <TeamImage src={Team.team_photo} roundedCircle />
               </TeamTitle>
               <TeamName>{Team.teamName}</TeamName>
-              <div class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp" data-wow-delay="0.1s">
-              <Title>프로젝트 목록</Title>
+              <div
+                class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp"
+                data-wow-delay="0.1s"
+              >
+                <Title>프로젝트 목록</Title>
               </div>
 
               {showButton && (
@@ -328,7 +334,7 @@ const ProjectList = () => {
                     style={{
                       width: "150px",
                       height: "50px",
-                      margin: "0.5em"
+                      margin: "0.5em",
                     }}
                   >
                     회원 추가
@@ -348,21 +354,24 @@ const ProjectList = () => {
                   <Button
                     variant="primary"
                     onClick={() => setShowMemberModal(true)}
-                    style={{ width: "150px", height: "50px", margin: "0.5em"}}
-                  > 
+                    style={{ width: "150px", height: "50px", margin: "0.5em" }}
+                  >
                     회원관리
                   </Button>
 
                   <BLA>
-                  <Button
-                    variant="danger"
-                    onClick={() => deleteTeam()}
-                    style={{ width: "150px", height: "50px", margin: "0.5em" }}
-                  >
-                    팀 삭제
-                  </Button>
+                    <Button
+                      variant="danger"
+                      onClick={() => deleteTeam()}
+                      style={{
+                        width: "150px",
+                        height: "50px",
+                        margin: "0.5em",
+                      }}
+                    >
+                      팀 삭제
+                    </Button>
                   </BLA>
-
                 </Buttons>
               )}
               <Buttons>
@@ -436,7 +445,7 @@ const ProjectList = () => {
         <Modal.Header closeButton>
           <Modal.Title>회원목록</Modal.Title>
         </Modal.Header>
-        <Line></Line>        
+        <Line></Line>
         <Modal.Body>
           {members.map((member) => (
             <div key={member.teamMemberId}>

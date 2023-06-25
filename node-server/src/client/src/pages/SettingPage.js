@@ -8,6 +8,7 @@ import Sidebar from "../components/views/Sidebar";
 import "../assets/css/SettingPage.css";
 import { useDispatch } from "react-redux";
 import { updateTeamImage } from "../actions/team";
+import Footer from "../components/views/Footer";
 
 const SettingPage = () => {
   const navigate = useNavigate();
@@ -105,111 +106,114 @@ const SettingPage = () => {
   return (
     <>
       <Header></Header>
-      <div
-        class="container-fluid d-flex justify-content-center align-items-center"
-        style={{ margin: "50px 0 0 0" }}
-      >
-        <div class="container-fluid">
-          <div
-            class="cardsb d-flex align-items-stretch"
-            style={{ height: "600px" }}
-          >
-            <div class="card-body d-flex">
-              <div class="col-md-4">
-                <h5 class="card-title fw-semibold mb-4">정보 수정 페이지</h5>
-                <div class="cardsb" style={{ width: "350px" }}>
-                  <img
-                    src={selectedImage || member_photo}
-                    className="card-img-container"
-                    alt="..."
-                  />
-                  <div class="card-body">
-                    <button
-                      onClick={() => {
-                        document.getElementById("imageUpload").click();
-                      }}
-                      className="btn btn-primary"
-                      style={{
-                        backgroundColor: "royalblue",
-                        color: "white",
-                        width: "100%",
-                      }}
-                    >
-                      프로필 사진 수정
-                    </button>
-                    <input
-                      type="file"
-                      id="imageUpload"
-                      accept="image/*"
-                      style={{ display: "none" }}
-                      onChange={handleImageChange}
+      <Sidebar></Sidebar>
+      <div style={{ paddingLeft: "280px", margin: "0 0 300px" }}>
+        <div
+          class="container-fluid d-flex justify-content-center align-items-center"
+          style={{ margin: "50px 0 0 0" }}
+        >
+          <div class="container-fluid">
+            <div
+              class="cardsb d-flex align-items-stretch"
+              style={{ height: "600px", width: "1200px" }}
+            >
+              <div class="card-body d-flex">
+                <div class="col-md-4">
+                  <h5 class="card-title fw-semibold mb-4">정보 수정 페이지</h5>
+                  <div class="cardsb" style={{ width: "350px" }}>
+                    <img
+                      src={selectedImage || member_photo}
+                      className="card-img-container"
+                      alt="..."
                     />
+                    <div class="card-body">
+                      <button
+                        onClick={() => {
+                          document.getElementById("imageUpload").click();
+                        }}
+                        className="btn btn-primary"
+                        style={{
+                          backgroundColor: "royalblue",
+                          color: "white",
+                          width: "100%",
+                        }}
+                      >
+                        프로필 사진 수정
+                      </button>
+                      <input
+                        type="file"
+                        id="imageUpload"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={handleImageChange}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-md-8 d-flex align-items-center">
-                <div
-                  class="cardsb"
-                  style={{
-                    width: "100%",
-                    height: "83%",
-                    margin: "5px 0 0 0",
-                  }}
-                >
-                  <div class="card-body">
-                    <form>
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">
-                          이름
-                        </label>
-                        <input
-                          type="text"
-                          value={member_name || ""}
-                          onChange={(e) => setName(e.target.value)}
-                          class="form-control"
-                          id="exampleInputEmail1"
-                          aria-describedby="emailHelp"
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">
-                          별명
-                        </label>
-                        <input
-                          type="text"
-                          value={member_nick || ""}
-                          onChange={(e) => setNick(e.target.value)}
-                          class="form-control"
-                          id="exampleInputPassword1"
-                        />
-                      </div>
-                      <div class="d-flex justify-content-between">
-                        <button
-                          type="submit"
-                          class="btn btn-primary"
-                          onClick={handleUserUpdate}
-                          style={{
-                            margin: "142px 0 0 0",
-                            backgroundColor: "royalblue",
-                            color: "white",
-                          }}
-                        >
-                          정보 수정
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-danger"
-                          onClick={userDeleteButton}
-                          style={{
-                            margin: "142px 0 0 0",
-                            backgroundColor: "red",
-                            color: "white",
-                          }}
-                        >
-                          회원 탈퇴
-                        </button>
-                      </div>
-                    </form>
+                <div class="col-md-8 d-flex align-items-center">
+                  <div
+                    class="cardsb"
+                    style={{
+                      width: "100%",
+                      height: "83%",
+                      margin: "5px 0 0 0",
+                    }}
+                  >
+                    <div class="card-body">
+                      <form>
+                        <div class="mb-3">
+                          <label for="exampleInputEmail1" class="form-label">
+                            이름
+                          </label>
+                          <input
+                            type="text"
+                            value={member_name || ""}
+                            onChange={(e) => setName(e.target.value)}
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            aria-describedby="emailHelp"
+                          />
+                        </div>
+                        <div class="mb-3">
+                          <label for="exampleInputPassword1" class="form-label">
+                            별명
+                          </label>
+                          <input
+                            type="text"
+                            value={member_nick || ""}
+                            onChange={(e) => setNick(e.target.value)}
+                            class="form-control"
+                            id="exampleInputPassword1"
+                          />
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <button
+                            type="submit"
+                            class="btn btn-primary"
+                            onClick={handleUserUpdate}
+                            style={{
+                              margin: "142px 0 0 0",
+                              backgroundColor: "royalblue",
+                              color: "white",
+                            }}
+                          >
+                            정보 수정
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-danger"
+                            onClick={userDeleteButton}
+                            style={{
+                              margin: "142px 0 0 0",
+                              backgroundColor: "red",
+                              color: "white",
+                            }}
+                          >
+                            회원 탈퇴
+                          </button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -217,6 +221,7 @@ const SettingPage = () => {
           </div>
         </div>
       </div>
+      <Footer></Footer>
     </>
   );
 };
