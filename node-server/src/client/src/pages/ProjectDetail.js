@@ -223,7 +223,7 @@ const ProjectDetail = () => {
               캘린더
             </Button>
             <Button variant="primary" onClick={makeBoard}>
-              게시판만들기
+              게시판 생성
             </Button>
             <Button variant="primary" onClick={goWBS}>
               WBS
@@ -237,15 +237,16 @@ const ProjectDetail = () => {
           <hr />
           <Modal show={showModal} onHide={handleModalClose}>
             <Modal.Header closeButton>
-              <Modal.Title>게시판 만들기</Modal.Title>
+              <Modal.Title style={{ fontWeight: 'bold' }}>게시판 생성</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form.Group>
-                <Form.Label>게시판 이름</Form.Label>
-                <Form.Control
+                <Form.Label style={{ fontWeight: 'bold' }}>게시판 이름</Form.Label>
+                <input
                   type="text"
                   value={boardName}
                   onChange={handleBoardNameChange}
+                  className="inputLong"
                 />
               </Form.Group>
             </Modal.Body>

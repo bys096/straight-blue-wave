@@ -63,7 +63,7 @@ function LoginPage() {
     <>
       <div className="Login">
         <div className="auth-form-container">
-          <h2 onClick={() => navigate("/")}>BlueWave</h2>
+          <h2 onClick={() => navigate("/")}>로그인</h2>
           <form className="login-form" onSubmit={handleSubmit}>
             <label htmlFor="userid" className="register-label">
               이메일
