@@ -10,6 +10,7 @@ import { postConnect } from "../actions/post";
 
 import Notification from "./notification";
 import { io } from "socket.io-client";
+import Footer from "../components/views/Footer";
 
 const Main = styled.div`
   height: 100%;
@@ -92,7 +93,7 @@ const PostPage = () => {
         <Header />
         <Article>
           <Sidebar />
-          <Content>
+          <Content style={{ paddingLeft: "280px", margin: "0 0 100px" }}>
             <PostList>
               <div>
                 <div style={{ marginBottom: "3rem" }}>
@@ -118,7 +119,11 @@ const PostPage = () => {
               <Form.Select
                 onChange={handlePageSize}
                 aria-label="글갯수"
-                style={{ width: "6rem", marginLeft: "auto" }}
+                style={{
+                  width: "6rem",
+                  margin: "70px 0 0",
+                  marginLeft: "auto",
+                }}
               >
                 <option value="10">10개</option>
                 <option value="30">30개</option>
@@ -180,6 +185,7 @@ const PostPage = () => {
             </Pagination>
           </Content>
         </Article>
+        <Footer></Footer>
       </Main>
     </div>
   );

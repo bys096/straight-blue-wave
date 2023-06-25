@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import "../assets/css/Register&Login.css";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../actions/auth";
-
+import DefaultHeader from "../components/DefaultHeader";
+import Footer from "../components/views/Footer";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -26,25 +27,27 @@ function LoginPage() {
         } else {
           sessionStorage.setItem("accessToken", res1.data.accessToken);
           sessionStorage.setItem("refreshToken", res1.data.refreshToken);
-          sessionStorage.setItem("accessTokenExpiresIn", res1.data.accessTokenExpiresIn);
+          sessionStorage.setItem(
+            "accessTokenExpiresIn",
+            res1.data.accessTokenExpiresIn
+          );
           const memberInfo = axios
             .get(`http://localhost:8002/api/member/${member_email}`)
             .then((res) => {
               const userInfo = {
-                memberId : res.data.member_id,
-                memberNick : res.data.member_nick,
-                memberEmail : res.data.member_email,
-                memberPhoto : res.data.profile_photo,
-                accessToken : res1.data.accessToken,
-                refreshToken : res1.data.refreshToken
-              }
-              
+                memberId: res.data.member_id,
+                memberNick: res.data.member_nick,
+                memberEmail: res.data.member_email,
+                memberPhoto: res.data.profile_photo,
+                accessToken: res1.data.accessToken,
+                refreshToken: res1.data.refreshToken,
+              };
+
               dispatch(loginSuccess(userInfo));
 
               sessionStorage.setItem("memid", res.data.member_id);
               sessionStorage.setItem("memnick", res.data.member_nick);
               sessionStorage.setItem("email", member_email);
-              
             })
             .catch((err) => {
               console.log(err);
@@ -61,6 +64,7 @@ function LoginPage() {
 
   return (
     <>
+      <DefaultHeader></DefaultHeader>
       <div className="Login">
         <div className="auth-form-container">
           <h2 onClick={() => navigate("/")}>로그인</h2>
@@ -103,6 +107,9 @@ function LoginPage() {
             아직 회원이 아니신가요? 바로 여기서 회원가입을 진행할 수 있습니다.
           </button>
         </div>
+      </div>
+      <div style={{ margin: "-47px 0 0 0" }}>
+        <Footer></Footer>
       </div>
     </>
   );

@@ -82,7 +82,7 @@ const Buttons = styled.div`
 
 const BLA = styled.div`
   margin-left: auto;
-`
+`;
 
 const ProjectList = () => {
   const [members, setMembers] = useState([]);
@@ -311,14 +311,20 @@ const ProjectList = () => {
         <Header />
         <div className="article">
           <Sidebar />
-          <div className="section">
+          <div
+            className="section"
+            style={{ paddingLeft: "280px", margin: "0 0 100px" }}
+          >
             <Container>
               <TeamTitle>
                 <TeamImage src={Team.team_photo} roundedCircle />
               </TeamTitle>
               <TeamName>{Team.teamName}</TeamName>
-              <div class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp" data-wow-delay="0.1s">
-              <Title>프로젝트 목록</Title>
+              <div
+                class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp"
+                data-wow-delay="0.1s"
+              >
+                <Title>프로젝트 목록</Title>
               </div>
 
               {showButton && (
@@ -328,7 +334,7 @@ const ProjectList = () => {
                     style={{
                       width: "150px",
                       height: "50px",
-                      margin: "0.5em"
+                      margin: "0.5em",
                     }}
                   >
                     팀원 추가
@@ -348,21 +354,24 @@ const ProjectList = () => {
                   <Button
                     variant="primary"
                     onClick={() => setShowMemberModal(true)}
-                    style={{ width: "150px", height: "50px", margin: "0.5em"}}
-                  > 
+                    style={{ width: "150px", height: "50px", margin: "0.5em" }}
+                  >
                     팀원 관리
                   </Button>
 
                   <BLA>
-                  <Button
-                    variant="danger"
-                    onClick={() => deleteTeam()}
-                    style={{ width: "150px", height: "50px", margin: "0.5em" }}
-                  >
-                    팀 삭제
-                  </Button>
+                    <Button
+                      variant="danger"
+                      onClick={() => deleteTeam()}
+                      style={{
+                        width: "150px",
+                        height: "50px",
+                        margin: "0.5em",
+                      }}
+                    >
+                      팀 삭제
+                    </Button>
                   </BLA>
-
                 </Buttons>
               )}
               <Buttons>
@@ -394,7 +403,7 @@ const ProjectList = () => {
       </div>
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title style={{ fontWeight: 'bold' }}>팀원 추가</Modal.Title>
+          <Modal.Title style={{ fontWeight: "bold" }}>팀원 추가</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input
@@ -402,36 +411,40 @@ const ProjectList = () => {
             value={userEmail}
             onChange={(e) => setUserEmail(e.target.value)}
             placeholder="이메일 입력"
-						className="inputDe"
+            className="inputDe"
           />
-          <button onClick={handleSearch} className="MybtnDe">검색</button>
+          <button onClick={handleSearch} className="MybtnDe">
+            검색
+          </button>
           {userData ? (
             <div>
-              <span style={{ fontWeight: 'bold', marginLeft: "1rem" }}>
-								{userData.email}
-							</span>
-              <Button variant="primary" onClick={() => addUser(userData.email)}
-                style={{margin: "1rem"}}
+              <span style={{ fontWeight: "bold", marginLeft: "1rem" }}>
+                {userData.email}
+              </span>
+              <Button
+                variant="primary"
+                onClick={() => addUser(userData.email)}
+                style={{ margin: "1rem" }}
               >
                 추가
               </Button>
             </div>
           ) : (
-            <p style={{marginLeft: "0.5rem"}}>검색하신 친구가 없습니다.</p>
+            <p style={{ marginLeft: "0.5rem" }}>검색하신 친구가 없습니다.</p>
           )}
           <hr />
           <div>
-            <h4 style={{ fontWeight: 'bold', marginTop: "2rem" }}>친구 목록</h4>
+            <h4 style={{ fontWeight: "bold", marginTop: "2rem" }}>친구 목록</h4>
             <ul>
               {friendList.map((friend) => (
-                <li  key={friend.friendId}>
-                  <span style={{ fontWeight: 'bold'}}>
+                <li key={friend.friendId}>
+                  <span style={{ fontWeight: "bold" }}>
                     {friend.friendName}{" "}
                   </span>
                   <Button
                     variant="primary"
                     onClick={() => addUserFriend(friend.friendId)}
-                    style={{ margin: "1rem"}}
+                    style={{ margin: "1rem" }}
                   >
                     추가
                   </Button>
@@ -443,24 +456,27 @@ const ProjectList = () => {
       </Modal>
       <Modal show={showMemberModal} onHide={handleCloseMemberModal}>
         <Modal.Header closeButton>
-          <Modal.Title style={{ fontWeight: 'bold' }}>팀원 목록</Modal.Title>
+          <Modal.Title style={{ fontWeight: "bold" }}>팀원 목록</Modal.Title>
         </Modal.Header>
-        <Line></Line>        
+        <Line></Line>
         <Modal.Body>
           {members.map((member) => (
             <div key={member.teamMemberId}>
-               <span style={{ fontWeight: 'bold'}}>
-                  {member.teamName}
-                </span>
-                <span className="rightColor" 
-                  style={{ marginLeft: '0.5rem', marginRight: '1rem', fontWeight: "bold"}}
-                >
-                  {member.teamPosition}{" "}
-                  </span>
+              <span style={{ fontWeight: "bold" }}>{member.teamName}</span>
+              <span
+                className="rightColor"
+                style={{
+                  marginLeft: "0.5rem",
+                  marginRight: "1rem",
+                  fontWeight: "bold",
+                }}
+              >
+                {member.teamPosition}{" "}
+              </span>
               <Button
                 variant="danger"
                 onClick={() => removeMember(member.memberId)}
-                style={{ fontSize: "14px", marginLeft: "1rem"}}
+                style={{ fontSize: "14px", marginLeft: "1rem" }}
               >
                 탈퇴
               </Button>

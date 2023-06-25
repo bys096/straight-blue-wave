@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { boardConnect } from "../actions/board";
 
 import Notification from "./notification";
+import Footer from "../components/views/Footer";
 
 const Main = styled.div`
   height: 100%;
@@ -203,8 +204,13 @@ const ProjectDetail = () => {
       <Header />
       <Article>
         <Sidebar />
-
-        <Content style={{ margin: '1.5rem' }}>
+        <Content
+          style={{
+            margin: "1.5rem",
+            paddingLeft: "280px",
+            margin: "0 0 100px",
+          }}
+        >
           <ButtonGroup>
             <Button variant="primary" onClick={() => navigate(-1)}>
               프로젝트 목록
@@ -221,9 +227,6 @@ const ProjectDetail = () => {
             </Button>
             <Button variant="primary" onClick={goWBS}>
               WBS
-            </Button>
-            <Button variant="primary" onClick={goGPT}>
-              GPT
             </Button>
             {showButton && (
               <Button variant="danger" onClick={deleteProject}>
@@ -259,7 +262,7 @@ const ProjectDetail = () => {
             <div
               class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp"
               data-wow-delay="0.1s"
-              style={{ margin: '5rem' }}
+              style={{ margin: "5rem" }}
             >
               <h2>최근 이슈</h2>
             </div>
@@ -275,7 +278,7 @@ const ProjectDetail = () => {
               >
                 <h4>{board.brd_name}</h4>
                 <Table className="tableList">
-                  <tr className="card-title" >
+                  <tr className="card-title">
                     <th>작성일</th>
                     <th>제목</th>
                     <th>작성자</th>
@@ -297,6 +300,7 @@ const ProjectDetail = () => {
           </BoardList>
         </Content>
       </Article>
+      <Footer></Footer>
     </Main>
   );
 };
