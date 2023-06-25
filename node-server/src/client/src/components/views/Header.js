@@ -153,14 +153,14 @@ function Header() {
         backdrop={false}
       >
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>도움말</Offcanvas.Title>
+          <Offcanvas.Title style={{ fontWeight: 'bold'}}>도움말</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Accordion>
             {helpContent === "guide" && (
               <>
                 <p>
-                  블루웨이브에선 여러분들의 회의를 돕기 위한 회의 가이드라인을
+                  <span style={{color: '#0085AD', fontWeight: 'bold'}}>블루웨이브</span>에선 여러분들의 회의를 돕기 위한 회의 가이드라인을
                   제공합니다. 회의 진행을 하다 막히신다면 저희 가이드라인을
                   참조해보시길 바랍니다.
                 </p>
@@ -197,7 +197,7 @@ function Header() {
             {helpContent === "idea-generation" && (
               <>
                 <h4>아이디어 창출 기법</h4>
-                <ul>
+                <ul style={{ cursor: 'default'}}>
                   <li onClick={() => handleShowHelp("brainstorming")}>
                     브레인스토밍
                   </li>

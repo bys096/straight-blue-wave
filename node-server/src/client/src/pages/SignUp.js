@@ -202,14 +202,14 @@ const SignUp = () => {
 						onChange={onChangeEmail}
 					></input>
 					{!validEmail && (
-						<p className="error-message">유효한 이메일 형식을 입력해주세요.</p>
+						<p className="error-message" style={{color: 'red'}}>유효한 이메일 형식을 입력해주세요.</p>
 					)}
-					<Button
-						style={{ backgroundColor: "white", margin: "0 0 10px" }}
+					<button
 						onClick={checkEmail}
+						className="MybtnDe"
 					>
 						중복체크
-					</Button>
+					</button>
 					<label htmlFor="member_pw" className="register-label">
 						비밀번호
 					</label>
@@ -269,7 +269,7 @@ const SignUp = () => {
 								ref={imgRef}
 							/>
 						</ImageContainer>
-						<ImageLabel htmlFor="teamImage">이미지 삽입</ImageLabel>
+						<ImageLabel htmlFor="teamImage" style={{color: '#0085AD'}}>이미지 삽입</ImageLabel>
 					</Form.Group>
 					<br></br>
 					<button
@@ -279,7 +279,7 @@ const SignUp = () => {
 						style={{
 							borderRadius: "10px",
 							cursor: "pointer",
-							padding: "20px",
+							padding: "15px",
 							margin: "20px 0",
 						}}
 					>

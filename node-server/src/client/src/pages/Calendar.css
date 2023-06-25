@@ -4,7 +4,7 @@
     height: 100%;
     width: 100%;
     max-width: 800px;
-    margin: 0 auto;
+    margin-top: 5rem;
 }
 
 .CalendarHeader {
@@ -31,7 +31,7 @@
     overflow: hidden; /* 초과하는 내용 숨기기 */    
 }
 .DateCell:hover {
-    background-color: #ccb;
+    background-color: #cedbdf;
 }
 
 .schedules .badge {
@@ -39,4 +39,23 @@
     white-space: nowrap; /* 줄바꿈 없애기 */
     overflow: hidden; /* 초과하는 내용 숨기기 */
     text-overflow: ellipsis; /* 초과하는 텍스트를 ...로 표시 */
+  }
+
+
+  /* =============(현주) */
+  .calendarBtn {
+    position:relative;
+    width:50px;
+    height:35px;
+    background: #fff;
+    background-position: left;
+    background-size: 200%;
+    color:#0085AD;
+    font-weight: bold;
+    border: 1px solid #0085AD;
+    border-radius: 0.5rem;
+    cursor:pointer;
+    transition: 0.4s;
+    display:inline;
+    margin-bottom: 1rem;
   }
