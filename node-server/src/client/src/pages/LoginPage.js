@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../assets/css/Register&Login.css";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../actions/auth";
+import { useCookies } from 'react-cookie';
 
 
 function LoginPage() {
@@ -12,6 +13,8 @@ function LoginPage() {
 
   const [member_email, setMemEmail] = useState("");
   const [member_pw, setPassword] = useState("");
+
+  const [cookies, setCookie] = useCookies(['token']);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -24,6 +27,8 @@ function LoginPage() {
         if (res1.data.accessToken === undefined) {
           alert("입력하신 로그인 정보가 일치하지 않습니다.");
         } else {
+          setCookie('token', res1.data.refreshToken, { path: '/api', maxAge: 3600 });
+
           sessionStorage.setItem("accessToken", res1.data.accessToken);
           sessionStorage.setItem("refreshToken", res1.data.refreshToken);
           sessionStorage.setItem("accessTokenExpiresIn", res1.data.accessTokenExpiresIn);

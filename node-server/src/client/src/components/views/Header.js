@@ -1,4 +1,6 @@
 import { useState } from "react";
+import React, { useEffect } from 'react';
+import axios from "axios";
 import Container from "react-bootstrap/Container";
 import {
 	Nav,
@@ -24,8 +26,15 @@ import PopOver from "../PopOver";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../actions/auth";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 
 function Header() {
+	const navigate = useNavigate();
+	const [cookies, setCookie, removeCookie] = useCookies(['token']);
+	const accessTokenExpiresIn = sessionStorage.getItem("accessTokenExpiresIn");
+	const expirationTime = parseInt(accessTokenExpiresIn, 10);
+  	const [currentTime, setCurrentTime] = useState(new Date().getTime());
 	const ref = useRef(null);
 	const dispatch = useDispatch();
 	const [showHelp, setShowHelp] = useState(false);
@@ -56,6 +65,63 @@ function Header() {
 		setShowNotify(!showNotify);
 		setTarget(e.target);
 	};
+
+	const logout = async () => {
+		await axios
+		.post(`http://localhost:8002/api/auth/logout`, {}, {
+			headers: {
+				Authorization: 'Bearer ' + sessionStorage.getItem("accessToken")
+			},
+			withCredentials: true
+		})
+		.then(() => {
+			navigate("/");
+			sessionStorage.clear();
+			removeCookie('token');	
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+	};
+
+	useEffect(() => {
+		const timer = setInterval(() => {
+			setCurrentTime(new Date().getTime());
+		}, 1000);
+
+		return () => {
+			clearInterval(timer);
+		};
+	}, []);
+
+	useEffect(() => {
+		if(expirationTime <= currentTime) {
+			reissueToken();
+		}
+	}, [expirationTime, currentTime]);
+
+	const reissueToken = async () => {
+		await axios
+			.post(`http://localhost:8002/api/auth/reissue`, {
+				"accessToken": sessionStorage.getItem("accessToken"),
+				"refreshToken": sessionStorage.getItem("refreshToken")
+			}, {
+				headers: {
+					Authorization: 'Bearer ' + sessionStorage.getItem("accessToken")
+				},
+				withCredentials: true
+			})
+			.then((res) => {
+				setCookie('token', res.data.refreshToken, { path: '/api', maxAge: 3600 });
+          		sessionStorage.setItem("accessToken", res.data.accessToken);
+				sessionStorage.setItem("refreshToken", res.data.refreshToken);
+          		sessionStorage.setItem("accessTokenExpiresIn", res.data.accessTokenExpiresIn);
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+	
 
 	return (
 		<>
@@ -95,12 +161,8 @@ function Header() {
 							</Nav.Link>
 							<Nav.Link>
 								<Link
-									to="/"
 									style={{ textDecoration: "none" }}
-									onClick={() => {
-										dispatch(logout());
-										sessionStorage.clear();
-									}}
+									onClick={logout}
 								>
 									로그아웃
 								</Link>

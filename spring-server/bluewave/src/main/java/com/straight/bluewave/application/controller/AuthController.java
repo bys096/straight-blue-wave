@@ -8,6 +8,7 @@ import com.straight.bluewave.domain.member.repository.RefreshTokenRepository;
 import com.straight.bluewave.domain.member.service.AuthService;
 import com.straight.bluewave.global.oauth.naver.NaverLoginParams;
 import com.straight.bluewave.global.oauth.service.OAuthLoginService;
+import com.straight.bluewave.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,7 @@ public class AuthController {
     @PostMapping("/login")      //로그인
     public ResponseEntity<TokenDTO> login(@RequestBody MemberRequestDTO memberRequestDto, HttpServletResponse response) {
         TokenDTO tokenDTO = authService.login(memberRequestDto);
+
 
         Cookie cookie = new Cookie("token", tokenDTO.getRefreshToken());        //RefreshToken을 쿠키에 저장
         cookie.setMaxAge(3600);     //초 단위 시간

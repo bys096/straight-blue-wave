@@ -170,12 +170,16 @@ const SignUp = () => {
 			return;
 		}
 		await axios
-			.get(`http://localhost:8002/api/member/${member_email}`)
-			.then(() => {
-				alert("이미 가입되어 있는 이메일입니다.");
+			.get(`http://localhost:8002/api/auth/exist/${member_email}`)
+			.then((res) => {
+				if(res.data === true) {
+					alert("이미 가입한 이메일 입니다.")
+				} else {
+					alert("사용 가능한 이메일 입니다.")
+				}
 			})
 			.catch(() => {
-				alert("가입할 수 있는 이메일입니다.");
+
 			});
 	};
 
