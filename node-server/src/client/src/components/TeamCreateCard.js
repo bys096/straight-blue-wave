@@ -177,7 +177,7 @@ const TeamCreateCard = () => {
 
 			<Modal show={showModal} onHide={handleClose}>
 				<Modal.Header closeButton>
-					<Modal.Title>팀 생성</Modal.Title>
+					<Modal.Title tyle={{ fontWeight: 'bold' }}>팀 생성</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<Form>
@@ -193,25 +193,29 @@ const TeamCreateCard = () => {
 									ref={imgRef}
 								/>
 							</ImageContainer>
-							<ImageLabel htmlFor="teamImage">이미지 삽입</ImageLabel>
+							<ImageLabel htmlFor="teamImage" style={{ color:'#0085AD' }}>
+								이미지 삽입
+							</ImageLabel>
 						</Form.Group>
 						<Form.Group>
 							<Form.Label>팀 이름</Form.Label>
-							<Form.Control
+							<input
 								type="text"
 								value={teamName}
 								onChange={(e) => setTeamName(e.target.value)}
 								required
+								className="inputLong"
 							/>
 						</Form.Group>
 						<Form.Group>
 							<Form.Label>팀 설명</Form.Label>
-							<Form.Control
+							<textarea
 								as="textarea"
 								rows={3}
 								value={teamDesc}
 								onChange={(e) => setTeamDesc(e.target.value)}
 								required
+								className="textArea"
 							/>
 						</Form.Group>
 					</Form>
