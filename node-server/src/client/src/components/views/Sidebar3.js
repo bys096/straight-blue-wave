@@ -115,7 +115,7 @@ function Sidebar() {
 	return (
 		<div style={{ textAlign: "center" }}>
 			<Button variant="primary" onClick={() => setShowModal(true)}>
-				유저 검색
+				친구 찾기
 			</Button>
 			{friends.map((friend, index) => (
 				<>
@@ -144,24 +144,31 @@ function Sidebar() {
 
 			<Modal show={showModal} onHide={handleCloseModal}>
 				<Modal.Header closeButton>
-					<Modal.Title>유저 검색(이메일로 검색)</Modal.Title>
+					<Modal.Title style={{ fontWeight: 'bold' }}>친구 찾기</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<input
 						type="text"
 						value={userEmail}
 						onChange={(e) => setUserEmail(e.target.value)}
+						placeholder="이메일 입력"
+						className="inputDe"
 					/>
-					<button onClick={handleSearch}>검색</button>
+					<button onClick={handleSearch} className="MybtnDe" >검색</button>
 					{userData ? (
 						<div>
-							User Email: {userData.email}
-							<Button variant="primary" onClick={addFriend}>
-								친구요청
+							<span style={{ fontWeight: 'bold', marginLeft: "1rem" }}>
+								{userData.email}
+							</span>
+							
+							<Button variant="primary" onClick={addFriend}
+								style={{margin: "1rem"}}
+							>
+								추가
 							</Button>
 						</div>
 					) : (
-						<p>No user found</p>
+						<p style={{marginLeft: "0.5rem"}}>검색하신 친구가 없습니다.</p>
 					)}
 				</Modal.Body>
 			</Modal>
