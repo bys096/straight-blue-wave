@@ -25,13 +25,11 @@ function DefaultHeader() {
 
   return (
     <Navbar
-  className={`navbar navbar-expand-lg px-4 px-lg-5 py-3 py-lg-0 shadow-sm ${
-    isScrolled ? "sticky-top shadow-sm " : ""
-  }`}
-//   style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}
->
-
-
+      className={`navbar navbar-expand-lg px-4 px-lg-5 py-3 py-lg-0 shadow-sm ${
+        isScrolled ? "sticky-top shadow-sm " : ""
+      }`}
+      //   style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}
+    >
       <a href="/" className="navbar-brand p-0">
         <img
           src={l1}
@@ -40,7 +38,7 @@ function DefaultHeader() {
           className="d-inline-block align-top loMa"
           alt="React Bootstrap logo"
         />
-        <font style={{ color: "#0085AD", margin: "0 10px 0 -10px"}} >
+        <font style={{ color: "#0085AD", margin: "0 10px 0 -10px" }}>
           Blue<font style={{ color: "black" }}>Wave</font>
         </font>
       </a>
@@ -55,7 +53,7 @@ function DefaultHeader() {
       <div className="collapse navbar-collapse" id="navbarCollapse">
         <div className="navbar-nav py-0">
           {/* <a href="#" className="nav-item nav-link"> */}
-		  <a href="#" className="nav-item nav-link active">
+          <a href="#" className="nav-item nav-link active">
             Home
           </a>
           <a
@@ -73,21 +71,15 @@ function DefaultHeader() {
             자료
           </a>
         </div>
-			
-		<div className="button-container">
-			<Link to="/login" style={{ margin: "0 20px" }}>
-				<button className="Mybtn">
-				로그인
-				</button>
-			</Link>
-			<Link to="/SignUp" style={{ margin: "0 20px" }}>
-				<button className="MybtnColor">
-				회원가입
-				</button>
-			</Link>
-		</div>
 
-			
+        <div className="button-container">
+          <Link to="/login" style={{ margin: "0 20px" }}>
+            <button className="Mybtn">로그인</button>
+          </Link>
+          <Link to="/SignUp" style={{ margin: "0 20px" }}>
+            <button className="MybtnColor">회원가입</button>
+          </Link>
+        </div>
       </div>
     </Navbar>
   );
