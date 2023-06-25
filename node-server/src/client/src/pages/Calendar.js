@@ -266,11 +266,11 @@ const Calendar = () => {
 		<div className="CalendarWrapper">
 			<Notification></Notification>
 			<div className="CalendarHeader">
-				<button onClick={handlePrevMonth}>이전</button>
-				<h2>
+				<button onClick={handlePrevMonth} className="calendarBtn">이전</button>
+				<h2 style={{ color: '#0085AD'}}>
 					{currentDate.getFullYear()}년 {currentDate.getMonth() + 1}월
 				</h2>
-				<button onClick={handleNextMonth}>다음</button>
+				<button onClick={handleNextMonth} className="calendarBtn">다음</button>
 			</div>
 			<div className="DaysRow">
 				{daysOfWeek.map((day, index) => (

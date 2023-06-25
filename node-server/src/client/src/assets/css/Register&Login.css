@@ -5,8 +5,9 @@
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  color: white;
-  background-image: linear-gradient(79deg, #5433ff, #20bdff, #a5fecb);
+  /* color: white; */
+  /* background-image: linear-gradient(79deg, #5433ff, #20bdff, #a5fecb); */
+  background-color: #eaf0f1;
 }
 
 .auth-form-container {
@@ -25,33 +26,39 @@
 @media screen and (min-width: 600px) {
   .auth-form-container {
     padding: 5rem;
-    border: 1px solid white;
+    background-color: #fff;
     border-radius: 10px;
     margin: 0.5rem;
+    box-shadow: 0px 2px 5px rgba(163, 163, 163, 0.4);
   }
 }
 
 .register-label {
   text-align: left;
   padding: 0.25rem 0;
+  font-weight: bold;
 }
 
 .register-input {
-  margin: 0.5rem 0;
-  padding: 1rem;
-  border: none;
-  border-radius: 10px;
-  width: 600px;
+  width: 100%;
+    height:40px;
+    border-radius: 0.5rem;
+    border: 1px solid #0085AD;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    padding: 1rem;
 }
 
 .register-button {
   border: none;
-  background-color: white;
-  padding: 20px;
+  background-color: #0085AD;
   border-radius: 10px;
   cursor: pointer;
-  color: #7439db;
   width: 600px;
+  color:#fff;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 1rem;
 }
 
 .register-select {
@@ -60,7 +67,7 @@
 
 .link-btn {
   background: none;
-  color: white;
+  color: #0085AD;
   text-decoration: underline;
   border: none;
 }
