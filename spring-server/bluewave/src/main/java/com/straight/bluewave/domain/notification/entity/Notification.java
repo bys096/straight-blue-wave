@@ -1,5 +1,6 @@
 package com.straight.bluewave.domain.notification.entity;
 
+import com.straight.bluewave.domain.mapping.entity.MemberNotificationMapping;
 import com.straight.bluewave.domain.notification.dto.NotificationDTO;
 import com.straight.bluewave.domain.post.entity.Post;
 import com.straight.bluewave.domain.schedule.entity.Schedule;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Builder
@@ -30,6 +32,9 @@ public class Notification {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @OneToMany(mappedBy = "notification", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemberNotificationMapping> notifications;
 
     public void setPost(Post post) {
         this.post = post;

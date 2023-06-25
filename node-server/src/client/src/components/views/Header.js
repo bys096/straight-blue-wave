@@ -151,12 +151,13 @@ function Header() {
         bg="white"
         variant="white"
         sticky="top"
+        className="shadow-sm"
       >
         <Container style={{ display: "flex", justifyContent: "space-between" }}>
           <Navbar.Brand>
             <Link to="/LoggedIn">
               <img
-                src={logo}
+                src={l1}
                 width="60"
                 height="40"
                 className="d-inline-block align-top"
@@ -164,9 +165,13 @@ function Header() {
               />
             </Link>
           </Navbar.Brand>
-          <Navbar.Brand style={{ color: "blue", margin: "0 10px 0 -10px" }}>
-            <Link to="/LoggedIn" style={{ textDecoration: "none" }}>
-              Blue<span style={{ color: "black" }}>Wave</span>
+          <Navbar.Brand style={{ color: "#0085AD", margin: "0 20px 0 -10px" }}>
+            <Link
+              to="/LoggedIn"
+              style={{ textDecoration: "none", color: "#0085AD" }}
+            >
+              Blue
+              <span style={{ color: "black" }}>Wave</span>
             </Link>
           </Navbar.Brand>
           <Navbar.Collapse id="responsive-navbar-nav">
@@ -177,11 +182,14 @@ function Header() {
               >
                 도움말
               </Nav.Link>
-              <Nav.Link onClick={handleShowNotify}>
+              <Nav.Link onClick={handleToggleModal}>
                 <AiOutlineBell size={"1.5rem"} />
               </Nav.Link>
               <Nav.Link>
-                <Link to="/setting" style={{ textDecoration: "none" }}>
+                <Link
+                  to="/setting"
+                  style={{ textDecoration: "none", color: "#0085AD" }}
+                >
                   설정
                 </Link>
               </Nav.Link>
@@ -202,18 +210,19 @@ function Header() {
         backdrop={false}
       >
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>도움말</Offcanvas.Title>
+          <Offcanvas.Title style={{ fontWeight: 'bold'}}>도움말</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Accordion>
             {helpContent === "guide" && (
               <>
                 <p>
-                  블루웨이브에선 여러분들의 회의를 돕기 위한 회의 가이드라인을
+                  <span style={{color: '#0085AD', fontWeight: 'bold'}}>블루웨이브</span>에선 여러분들의 회의를 돕기 위한 회의 가이드라인을
                   제공합니다. 회의 진행을 하다 막히신다면 저희 가이드라인을
                   참조해보시길 바랍니다.
                 </p>
-                <p>아래에서 원하는 섹션을 선택하세요:</p>\
+                <p>아래에서 원하는 섹션을 선택하세요:</p>
+
                 <ul>
                   <li>
                     <Button
@@ -245,7 +254,7 @@ function Header() {
             {helpContent === "idea-generation" && (
               <>
                 <h4>아이디어 창출 기법</h4>
-                <ul style={{ cursor: "default" }}>
+                <ul style={{ cursor: 'default'}}>
                   <li onClick={() => handleShowHelp("brainstorming")}>
                     브레인스토밍
                   </li>

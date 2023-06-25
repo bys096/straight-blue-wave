@@ -2,10 +2,7 @@ package com.straight.bluewave.domain.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.straight.bluewave.application.entity.BaseEntity;
-import com.straight.bluewave.domain.mapping.entity.FriendMapping;
-import com.straight.bluewave.domain.mapping.entity.ProjectMemberMapping;
-import com.straight.bluewave.domain.mapping.entity.ScheduleMemberMapping;
-import com.straight.bluewave.domain.mapping.entity.TeamMemberMapping;
+import com.straight.bluewave.domain.mapping.entity.*;
 import com.straight.bluewave.domain.member.dto.MemberUpdateDTO;
 import com.straight.bluewave.domain.project.entity.Project;
 import com.straight.bluewave.domain.reply.entity.Reply;
@@ -87,6 +84,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemberNotificationMapping> members;
 
     public void setMemberId(Long memberId) {
         this.memberId = memberId;
