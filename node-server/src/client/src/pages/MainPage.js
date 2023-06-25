@@ -550,10 +550,10 @@ function MainPage(props) {
 
       <div class="container-fluid">
         <div class="container-fluid">
-          <div class="card" style={{ width: "500px", height: "800px" }}>
+          <div class="cardsb" style={{ width: "500px", height: "800px" }}>
             <div class="card-body" style={{ height: "0px" }}>
               <h5 class="card-title fw-semibold mb-4">대화 내용</h5>
-              <div class="card" style={{ width: "465px" }}>
+              <div class="cardsb" style={{ width: "465px" }}>
                 <div class="card-body">
                   <form>
                     <div class="mb-3">
@@ -585,7 +585,7 @@ function MainPage(props) {
               style={{ position: "relative", bottom: "100px" }}
             >
               <h5 class="card-title fw-semibold mb-4">요약 내용</h5>
-              <div class="card" style={{ width: "465px", height: "450px" }}>
+              <div class="cardsb" style={{ width: "465px", height: "450px" }}>
                 <div class="card-body">
                   <div class="mb-3">
                     {/* <div>{summarizeResult}</div> */}
