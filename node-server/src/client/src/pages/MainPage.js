@@ -444,7 +444,7 @@ function MainPage(props) {
       roomName: roomName,
       msg: msg,
       sid: socket.id,
-      userId: userId,
+      userId: sessionStorage.getItem("memnick"),
     };
 
     socket.emit("sendChat", chat);
