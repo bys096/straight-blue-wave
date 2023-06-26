@@ -122,7 +122,7 @@ const ProjectDetail = () => {
         )
         .then((res) => {
           alert("프로젝트가 삭제되었습니다.");
-          navigate(-1);
+          navigate(`/team/${sessionStorage.getItem("tmid")}`);
         })
         .catch((err) => {
           console.log(err);

@@ -171,20 +171,24 @@ const SignUp = () => {
       });
   };
 
-  const checkEmail = async () => {
-    if (member_email === "") {
-      alert("값이 비어있습니다");
-      return;
-    }
-    await axios
-      .get(`http://localhost:8002/api/member/${member_email}`)
-      .then(() => {
-        alert("이미 가입되어 있는 이메일입니다.");
-      })
-      .catch(() => {
-        alert("가입할 수 있는 이메일입니다.");
-      });
-  };
+	const checkEmail = async () => {
+		if (member_email === "") {
+			alert("값이 비어있습니다");
+			return;
+		}
+		await axios
+			.get(`http://localhost:8002/api/auth/exist/${member_email}`)
+			.then((res) => {
+				if(res.data === true) {
+					alert("이미 가입한 이메일 입니다.")
+				} else {
+					alert("사용 가능한 이메일 입니다.")
+				}
+			})
+			.catch(() => {
+
+			});
+	};
 
   const validateEmail = (email) => {
     // 이메일 형식을 확인하는 정규식

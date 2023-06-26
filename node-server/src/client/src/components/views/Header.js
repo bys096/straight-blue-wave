@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import React, { useEffect } from 'react';
+import axios from "axios";
 import Container from "react-bootstrap/Container";
 import {
   Nav,
@@ -25,14 +27,19 @@ import PopOver from "../PopOver";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../actions/auth";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 import l1 from "../../assets/1_1.png";
-import axios from "axios";
-
 function Header() {
-  const ref = useRef(null);
-  const dispatch = useDispatch();
-  const [showHelp, setShowHelp] = useState(false);
-  const [showNotify, setShowNotify] = useState(false);
+	const navigate = useNavigate();
+	const [cookies, setCookie, removeCookie] = useCookies(['token']);
+	const accessTokenExpiresIn = sessionStorage.getItem("accessTokenExpiresIn");
+	const expirationTime = parseInt(accessTokenExpiresIn, 10);
+  	const [currentTime, setCurrentTime] = useState(new Date().getTime());
+	const ref = useRef(null);
+	const dispatch = useDispatch();
+	const [showHelp, setShowHelp] = useState(false);
+	const [showNotify, setShowNotify] = useState(false);
 
   const [helpContent, setHelpContent] = useState("");
   const [previousContent, setPreviousContent] = useState("");
@@ -58,6 +65,62 @@ function Header() {
     setPreviousContent("");
   };
 
+	const logout = async () => {
+		await axios
+		.post(`http://localhost:8002/api/auth/logout`, {}, {
+			headers: {
+				Authorization: 'Bearer ' + sessionStorage.getItem("accessToken")
+			},
+			withCredentials: true
+		})
+		.then(() => {
+			navigate("/");
+			sessionStorage.clear();
+			removeCookie('token');	
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+	};
+
+	useEffect(() => {
+		const timer = setInterval(() => {
+			setCurrentTime(new Date().getTime());
+		}, 1000);
+
+		return () => {
+			clearInterval(timer);
+		};
+	}, []);
+
+	useEffect(() => {
+		if(expirationTime <= currentTime) {
+			reissueToken();
+		}
+	}, [expirationTime, currentTime]);
+
+	const reissueToken = async () => {
+		await axios
+			.post(`http://localhost:8002/api/auth/reissue`, {
+				"accessToken": sessionStorage.getItem("accessToken"),
+				"refreshToken": sessionStorage.getItem("refreshToken")
+			}, {
+				headers: {
+					Authorization: 'Bearer ' + sessionStorage.getItem("accessToken")
+				},
+				withCredentials: true
+			})
+			.then((res) => {
+				setCookie('token', res.data.refreshToken, { path: '/api', maxAge: 3600 });
+          		sessionStorage.setItem("accessToken", res.data.accessToken);
+				sessionStorage.setItem("refreshToken", res.data.refreshToken);
+          		sessionStorage.setItem("accessTokenExpiresIn", res.data.accessTokenExpiresIn);
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	};
+
   const fetchNotifications = async () => {
     try {
       const response = await axios.get(
@@ -78,8 +141,9 @@ function Header() {
   useEffect(() => {
     fetchNotifications();
   }, []);
+	
 
-  return (
+	return (
     <>
       <Navbar
         collapseOnSelect
@@ -130,14 +194,7 @@ function Header() {
                 </Link>
               </Nav.Link>
               <Nav.Link>
-                <Link
-                  to="/"
-                  style={{ textDecoration: "none", color: "#0085AD" }}
-                  onClick={() => {
-                    dispatch(logout());
-                    sessionStorage.clear();
-                  }}
-                >
+                <Link style={{ textDecoration: "none" }} onClick={logout}>
                   로그아웃
                 </Link>
               </Nav.Link>

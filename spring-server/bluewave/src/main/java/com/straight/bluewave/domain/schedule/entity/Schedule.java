@@ -62,6 +62,10 @@ public class Schedule extends BaseEntity {
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScheduleMemberMapping> scheduleMemberMappings;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
+
     public void changeChTitle(String scheduleTitle){
         this.scheduleTitle = scheduleTitle;
     }
