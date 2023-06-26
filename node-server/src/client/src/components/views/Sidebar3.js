@@ -14,7 +14,7 @@ function Sidebar() {
 		const fetchFriend = async () => {
 			await axios
 				.get(
-					`http://localhost:8002/api/member/friendList/${sessionStorage.getItem(
+					`https://yjubluewave.shop/api/member/friendList/${sessionStorage.getItem(
 						"memid"
 					)}`
 				)
@@ -46,13 +46,13 @@ function Sidebar() {
 				alert("자기 자신은 검색할 수 없습니다.");
 			} else {
 				const response = await axios
-					.get(`http://localhost:8002/api/member/${userEmail}`)
+					.get(`https://yjubluewave.shop/api/member/${userEmail}`)
 					.then((res) => {
 						const resEmail = res.data.member_email;
 						const resId = res.data.member_id;
 						axios
 							.get(
-								`http://localhost:8002/api/member/friendList/${sessionStorage.getItem(
+								`https://yjubluewave.shop/api/member/friendList/${sessionStorage.getItem(
 									"memid"
 								)}`
 							)
@@ -81,7 +81,7 @@ function Sidebar() {
 	const addFriend = async () => {
 		await axios
 			.post(
-				`http://localhost:8002/api/member/addFriend?memId=${sessionStorage.getItem(
+				`https://yjubluewave.shop/api/member/addFriend?memId=${sessionStorage.getItem(
 					"memid"
 				)}&friendId=${friendId}`
 			)
@@ -99,7 +99,7 @@ function Sidebar() {
 	const deleteFriend = async (id) => {
 		await axios
 			.delete(
-				`http://localhost:8002/api/member/deleteFriend?memId=${sessionStorage.getItem(
+				`https://yjubluewave.shop/api/member/deleteFriend?memId=${sessionStorage.getItem(
 					"memid"
 				)}&friendId=${id}`
 			)

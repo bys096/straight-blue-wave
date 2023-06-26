@@ -9,7 +9,7 @@ const ProjectCreate = (props) => {
 
   const addProject = () => {
     return axios
-      .post("http://localhost:8002/api/project/create", {
+      .post("https://yjubluewave.shop/api/project/create", {
         prj_name: project_name,
       })
       .then((res) => {

@@ -98,11 +98,11 @@ const ProjectList = () => {
   console.log(Team.teamName);
   const addUser = async (email) => {
     await axios
-      .get(`http://localhost:8002/api/member/${email}`)
+      .get(`https://yjubluewave.shop/api/member/${email}`)
       .then((res) => {
         axios
           .post(
-            `http://localhost:8002/api/team/inviteTeam?memberId=${
+            `https://yjubluewave.shop/api/team/inviteTeam?memberId=${
               res.data.member_id
             }&teamId=${sessionStorage.getItem("tmid")}`
           )
@@ -123,7 +123,7 @@ const ProjectList = () => {
 
   const addUserFriend = async (id) => {
     await axios
-      .post(`http://localhost:8002/api/team/member/list`, {
+      .post(`https://yjubluewave.shop/api/team/member/list`, {
         pageNumber: 1,
         pageSize: 100,
         teamId: sessionStorage.getItem("tmid"),
@@ -137,7 +137,7 @@ const ProjectList = () => {
         } else {
           axios
             .post(
-              `http://localhost:8002/api/team/inviteTeam?memberId=${id}&teamId=${sessionStorage.getItem(
+              `https://yjubluewave.shop/api/team/inviteTeam?memberId=${id}&teamId=${sessionStorage.getItem(
                 "tmid"
               )}`
             )
@@ -161,13 +161,13 @@ const ProjectList = () => {
   const handleSearch = async () => {
     try {
       await axios
-        .get(`http://localhost:8002/api/member/${userEmail}`)
+        .get(`https://yjubluewave.shop/api/member/${userEmail}`)
         .then((res) => {
           const username = res.data.member_name;
           const foundEmail = res.data.member_email;
           axios
             .get(
-              `http://localhost:8002/api/team/teamMemList/${sessionStorage.getItem(
+              `https://yjubluewave.shop/api/team/teamMemList/${sessionStorage.getItem(
                 "tmid"
               )}`
             )
@@ -196,7 +196,7 @@ const ProjectList = () => {
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8002/api/project/list/${sessionStorage.getItem(
+        `https://yjubluewave.shop/api/project/list/${sessionStorage.getItem(
           "tmid"
         )}`
       );
@@ -210,7 +210,7 @@ const ProjectList = () => {
     if (window.confirm("정말로 탈퇴시키겠습니까?")) {
       await axios
         .delete(
-          `http://localhost:8002/api/team/leaveTeam?memberId=${id}&teamId=${sessionStorage.getItem(
+          `https://yjubluewave.shop/api/team/leaveTeam?memberId=${id}&teamId=${sessionStorage.getItem(
             "tmid"
           )}`
         )
@@ -227,7 +227,7 @@ const ProjectList = () => {
   const fetchMembers = async () => {
     await axios
       .get(
-        `http://localhost:8002/api/team/teamMemList/${sessionStorage.getItem(
+        `https://yjubluewave.shop/api/team/teamMemList/${sessionStorage.getItem(
           "tmid"
         )}`
       )
@@ -245,7 +245,7 @@ const ProjectList = () => {
   const whoIsAdmin = async () => {
     await axios
       .get(
-        `http://localhost:8002/api/team/readTeam/${sessionStorage.getItem(
+        `https://yjubluewave.shop/api/team/readTeam/${sessionStorage.getItem(
           "tmid"
         )}`
       )
@@ -265,7 +265,7 @@ const ProjectList = () => {
   const fetchFriendList = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8002/api/member/friendList/${sessionStorage.getItem(
+        `https://yjubluewave.shop/api/member/friendList/${sessionStorage.getItem(
           "memid"
         )}`
       );
@@ -279,7 +279,7 @@ const ProjectList = () => {
     if (window.confirm("정말로 삭제하시겠습니까?")) {
       await axios
         .delete(
-          `http://localhost:8002/api/team/deleteTeam/${sessionStorage.getItem(
+          `https://yjubluewave.shop/api/team/deleteTeam/${sessionStorage.getItem(
             "tmid"
           )}`
         )

@@ -33,7 +33,7 @@ const EventModal = ({
   const createSchecule = async () => {
     try {
       const res = await axios
-        .post("http://localhost:8002/api/schedule/create", {
+        .post("https://yjubluewave.shop/api/schedule/create", {
           schedule_title: title,
           schedule_description: description,
           start_date: startDate,
@@ -76,7 +76,7 @@ const EventModal = ({
     try {
       if (scheduleId) {
         await axios.delete(
-          `http://localhost:8002/api/schedule/delete/${scheduleId}`
+          `https://yjubluewave.shop/api/schedule/delete/${scheduleId}`
         );
         const updatedEvents = eventsForSelectedDate.filter(
           (schedule) => schedule.schedule_id !== scheduleId

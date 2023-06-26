@@ -52,13 +52,13 @@ function Notification() {
       console.log(notificationMessage);
       const sendNotification = async () => {
         await axios
-          .get(`http://localhost:8002/api/team/teamMemList/${team_id}`)
+          .get(`https://yjubluewave.shop/api/team/teamMemList/${team_id}`)
           .then(async (res) => {
             const members = res.data;
             if (post_id) {
               for (const member of members) {
                 await axios.post(
-                  `http://localhost:8002/api/notification/storage/${member.memberId}`,
+                  `https://yjubluewave.shop/api/notification/storage/${member.memberId}`,
                   {
                     post_id: post_id,
                     notification_type: 0,
@@ -68,7 +68,7 @@ function Notification() {
             } else {
               for (const member of members) {
                 await axios.post(
-                  `http://localhost:8002/api/notification/storage/${member.memberId}`,
+                  `https://yjubluewave.shop/api/notification/storage/${member.memberId}`,
                   {
                     schedule_id: schedule_id,
                     notification_type: 1,
