@@ -678,7 +678,7 @@ function MainPage(props) {
           </div>
           <div className="chat-box" ref={chatBoxRef}>
             <div class="chat-box-header">
-              ChatBot
+              채팅방
               <span className="chat-box-toggle">
                 <i className="material-icons">close</i>
               </span>
