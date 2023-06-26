@@ -38,7 +38,7 @@ const Calendar = () => {
 	const fetchBoards = async () => {
 		try {
 			const response = await axios.get(
-				`http://localhost:8002/api/board/list/${sessionStorage.getItem("prjid")}`
+				`https://yjubluewave.shop/api/board/list/${sessionStorage.getItem("prjid")}`
 			);
 			setBoards(response.data);
 
@@ -51,7 +51,7 @@ const Calendar = () => {
 	// 각 보드에서 포스트를 가져오는 함수
 	const fetchPosts = async (brdid) => {
 		try {
-			const response = await axios.post(`http://localhost:8002/api/post/list`, {
+			const response = await axios.post(`https://yjubluewave.shop/api/post/list`, {
 				page: 1,
 				size: 10,
 				boardId: brdid,
@@ -97,7 +97,7 @@ const Calendar = () => {
 	const fetchSchedules = async () => {
 		try {
 			const response = await axios.get(
-				`http://localhost:8002/api/schedule/list/${sessionStorage.getItem("prjid")}`
+				`https://yjubluewave.shop/api/schedule/list/${sessionStorage.getItem("prjid")}`
 			);
 			const fetchedData = response.data;
 

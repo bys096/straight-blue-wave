@@ -205,7 +205,7 @@ async function summarize(data, minutesid, memid) {
     console.log(memid);
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleString();
-    axios.post(`http://localhost:8002/api/post/create`, {
+    axios.post(`https://yjubluewave.shop/api/post/create`, {
       brd_id: minutesid,
       post_content: answer,
       post_name: `${formattedDate}, AI 회의록 자동 생성`,

@@ -86,7 +86,7 @@ const ProjectCreateCard = () => {
 		const filetype = file.type;
 
 		try {
-			const res = await axios.get("http://localhost:8002/api/aws/s3/url", {
+			const res = await axios.get("https://yjubluewave.shop/api/aws/s3/url", {
 				params: { filename, filetype },
 			});
 
@@ -145,7 +145,7 @@ const ProjectCreateCard = () => {
 			.split(".")[0];
 
 		await axios
-			.post("http://localhost:8002/api/project/create", {
+			.post("https://yjubluewave.shop/api/project/create", {
 				prj_name: prjName,
 				team_id: sessionStorage.getItem("tmid"),
 				prj_photo: imageUrl,

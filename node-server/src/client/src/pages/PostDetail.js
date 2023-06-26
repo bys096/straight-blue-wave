@@ -113,7 +113,7 @@ const PostDetail = () => {
 
   const fetchReply = async () => {
     await axios
-      .get(`http://localhost:8002/api/reply/replies/${post.post_id}`)
+      .get(`https://yjubluewave.shop/api/reply/replies/${post.post_id}`)
       .then((res) => {
         setComments(res.data);
         setReplies(res.data.children);
@@ -146,7 +146,7 @@ const PostDetail = () => {
             parentId: activeCommentId,
           };
           // setReplies((prevReplies) => [...prevReplies, newReply]);
-          await axios.post("http://localhost:8002/api/reply/create", newReply);
+          await axios.post("https://yjubluewave.shop/api/reply/create", newReply);
           // localStorage.setItem(
           //    post.post_id + "_replies",
           //    JSON.stringify([...replies, newReply])
@@ -156,7 +156,7 @@ const PostDetail = () => {
           // Otherwise, add a new comment
           // setComments((prevComments) => [...prevComments, newComment]);
           await axios.post(
-            "http://localhost:8002/api/reply/create",
+            "https://yjubluewave.shop/api/reply/create",
             newComment
           );
           // localStorage.setItem(
@@ -175,7 +175,7 @@ const PostDetail = () => {
   const handlePostDelete = async () => {
     if (post.mem_id === auth.memberId || post.mem_nick === "AI 어시스턴트") {
       await axios
-        .delete(`http://localhost:8002/api/post/delete/${post.post_id}`)
+        .delete(`https://yjubluewave.shop/api/post/delete/${post.post_id}`)
         .then((res) => {
           console.log("글 삭제 완료", res.data);
           alert("글 삭제가 완료되었습니다.");

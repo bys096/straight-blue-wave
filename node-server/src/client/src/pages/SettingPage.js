@@ -24,7 +24,7 @@ const SettingPage = () => {
       console.log("fetch start");
       console.log(auth);
       await axios
-        .get(`http://localhost:8002/api/member/me`, {
+        .get(`https://yjubluewave.shop/api/member/me`, {
           headers: {
             // Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
             Authorization: `Bearer ${auth.accessToken}`,
@@ -54,7 +54,7 @@ const SettingPage = () => {
   const handleUserUpdate = async () => {
     await axios
       .put(
-        `http://localhost:8002/api/member/update`,
+        `https://yjubluewave.shop/api/member/update`,
         {
           member_name: member_name,
           member_nick: member_nick,
@@ -84,7 +84,7 @@ const SettingPage = () => {
       )
     ) {
       await axios
-        .delete(`http://localhost:8002/api/member/delete`, {
+        .delete(`https://yjubluewave.shop/api/member/delete`, {
           headers: {
             Authorization: `Bearer ${auth.accessToken}`,
           },
