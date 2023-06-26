@@ -8,6 +8,7 @@ import Header from "../components/views/Header";
 import Sidebar from "../components/views/Sidebar";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { Viewer } from '@toast-ui/react-editor';
 
 const Main = styled.div`
   height: 100%;
@@ -234,7 +235,7 @@ const PostDetail = () => {
               </PostTitle>
             </div>
             <PostContent.Body>
-              <div>{post.post_content}</div>
+              <Viewer initialValue={post.post_content}></Viewer>
             </PostContent.Body>
             <PostContent.Footer>
               <CommentSection>
