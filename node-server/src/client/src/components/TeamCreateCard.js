@@ -88,7 +88,7 @@ const TeamCreateCard = () => {
 		const filetype = file.type;
 
 		try {
-			const res = await axios.get("https://yjubluewave.shop/api/aws/s3/url", {
+			const res = await axios.get("http://localhost:8002/api/aws/s3/url", {
 				params: { filename, filetype },
 			});
 
@@ -145,7 +145,7 @@ const TeamCreateCard = () => {
 
 		await axios
 			.post(
-				`https://yjubluewave.shop/api/team/joinTeam/${sessionStorage.getItem(
+				`http://localhost:8002/api/team/joinTeam/${sessionStorage.getItem(
 					"memid"
 				)}`,
 				{

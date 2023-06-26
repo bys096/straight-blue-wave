@@ -67,7 +67,7 @@ const PostPage = () => {
 
   const fetchPosts = async () => {
     await axios
-      .post("https://yjubluewave.shop/api/post/list", {
+      .post("http://localhost:8002/api/post/list", {
         page: currentPage,
         size: pageSize,
         boardId: sessionStorage.getItem("boardid"),

@@ -66,7 +66,7 @@ const SignUp = () => {
     const filetype = file.type;
 
     try {
-      const res = await axios.get("https://yjubluewave.shop/api/aws/s3/url", {
+      const res = await axios.get("http://localhost:8002/api/aws/s3/url", {
         params: { filename, filetype },
       });
 
@@ -153,7 +153,7 @@ const SignUp = () => {
       .split(".")[0];
 
     await axios
-      .post("https://yjubluewave.shop/api/auth/signup", {
+      .post("http://localhost:8002/api/auth/signup", {
         member_email: member_email,
         member_pw: member_pw,
         member_name: member_name,
@@ -177,7 +177,7 @@ const SignUp = () => {
 			return;
 		}
 		await axios
-			.get(`https://yjubluewave.shop/api/auth/exist/${member_email}`)
+			.get(`http://localhost:8002/api/auth/exist/${member_email}`)
 			.then((res) => {
 				if(res.data === true) {
 					alert("이미 가입한 이메일 입니다.")

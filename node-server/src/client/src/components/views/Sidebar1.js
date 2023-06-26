@@ -13,7 +13,7 @@ function Sidebar(props) {
 		const fetchTeam = async () => {
 			await axios
 				.get(
-					`https://yjubluewave.shop/api/team/list/${sessionStorage.getItem("memid")}`
+					`http://localhost:8002/api/team/list/${sessionStorage.getItem("memid")}`
 				)
 				.then((res) => {
 					setTeams(res.data.dtoList);

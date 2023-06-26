@@ -21,7 +21,7 @@ function LoginPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await axios
-      .post("https://yjubluewave.shop/api/auth/login", {
+      .post("http://localhost:8002/api/auth/login", {
         member_email: member_email,
         member_pw: member_pw,
       })
@@ -38,7 +38,7 @@ function LoginPage() {
             res1.data.accessTokenExpiresIn
           );
           const memberInfo = axios
-            .get(`https://yjubluewave.shop/api/member/${member_email}`)
+            .get(`http://localhost:8002/api/member/${member_email}`)
             .then((res) => {
               const userInfo = {
                 memberId: res.data.member_id,

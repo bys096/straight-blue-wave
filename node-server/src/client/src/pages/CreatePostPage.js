@@ -83,14 +83,14 @@ const CreatePostPage = () => {
 
       if (isModify) {
         await axios.put(
-          `https://yjubluewave.shop/api/post/modify/${posts.post_id}`,
+          `http://localhost:8002/api/post/modify/${posts.post_id}`,
           modifiedPost
         );
         alert("게시글이 수정되었습니다.");
         navigate(-2);
       } else {
         await axios
-          .post("https://yjubluewave.shop/api/post/create", modifiedPost)
+          .post("http://localhost:8002/api/post/create", modifiedPost)
           .then((res) => {
             const post_id = res.data.post_id;
             const eventData = {

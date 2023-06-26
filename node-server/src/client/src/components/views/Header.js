@@ -67,7 +67,7 @@ function Header() {
 
 	const logout = async () => {
 		await axios
-		.post(`https://yjubluewave.shop/api/auth/logout`, {}, {
+		.post(`http://localhost:8002/api/auth/logout`, {}, {
 			headers: {
 				Authorization: 'Bearer ' + sessionStorage.getItem("accessToken")
 			},
@@ -101,7 +101,7 @@ function Header() {
 
 	const reissueToken = async () => {
 		await axios
-			.post(`https://yjubluewave.shop/api/auth/reissue`, {
+			.post(`http://localhost:8002/api/auth/reissue`, {
 				"accessToken": sessionStorage.getItem("accessToken"),
 				"refreshToken": sessionStorage.getItem("refreshToken")
 			}, {
@@ -124,7 +124,7 @@ function Header() {
   const fetchNotifications = async () => {
     try {
       const response = await axios.get(
-        `https://yjubluewave.shop/api/notification/list/${sessionStorage.getItem(
+        `http://localhost:8002/api/notification/list/${sessionStorage.getItem(
           "memid"
         )}`
       );

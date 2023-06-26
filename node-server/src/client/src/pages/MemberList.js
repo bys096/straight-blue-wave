@@ -11,7 +11,7 @@ const MemberList = () => {
   useEffect(() => {
     axios
       .get(
-        `https://yjubluewave.shop/api/team/teamMemList/${sessionStorage.getItem(
+        `http://localhost:8002/api/team/teamMemList/${sessionStorage.getItem(
           "tmid"
         )}`
       )

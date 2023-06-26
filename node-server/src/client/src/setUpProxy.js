@@ -4,7 +4,7 @@ module.exports = function (app) {
 	app.use(
 		"/api/*",
 		createProxyMiddleware({
-			target: "https://yjubluewave.shop",
+			target: "http://localhost:8002",
 			changeOrigin: true,
 		})
 	);

@@ -95,7 +95,7 @@ const ProjectDetail = () => {
   const whoIsAdmin = async () => {
     await axios
       .get(
-        `https://yjubluewave.shop/api/team/readTeam/${sessionStorage.getItem(
+        `http://localhost:8002/api/team/readTeam/${sessionStorage.getItem(
           "tmid"
         )}`
       )
@@ -116,7 +116,7 @@ const ProjectDetail = () => {
     if (window.confirm("정말로 삭제하시겠습니까?")) {
       await axios
         .delete(
-          `https://yjubluewave.shop/api/project/delete/${sessionStorage.getItem(
+          `http://localhost:8002/api/project/delete/${sessionStorage.getItem(
             "prjid"
           )}`
         )
@@ -133,7 +133,7 @@ const ProjectDetail = () => {
   const getBoardList = () => {
     axios
       .get(
-        `https://yjubluewave.shop/api/board/list/${sessionStorage.getItem(
+        `http://localhost:8002/api/board/list/${sessionStorage.getItem(
           "prjid"
         )}`
       )
@@ -153,7 +153,7 @@ const ProjectDetail = () => {
 
   const fetchPosts = (boardId) => {
     axios
-      .post("https://yjubluewave.shop/api/post/list", {
+      .post("http://localhost:8002/api/post/list", {
         page: 1,
         size: 5,
         boardId: boardId,
@@ -183,7 +183,7 @@ const ProjectDetail = () => {
 
   const handleBoardSubmit = () => {
     axios
-      .post("https://yjubluewave.shop/api/board/create", {
+      .post("http://localhost:8002/api/board/create", {
         brd_name: boardName,
         prj_id: `${sessionStorage.getItem("prjid")}`,
       })
