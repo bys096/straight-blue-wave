@@ -52,9 +52,10 @@ let ncnt = 0;
 wsServer.on("connection", (socket) => {
   let myRoomName = null;
   let myUserId = null;
+  let myNick = null;
   // let myNickname = null;
 
-  socket.on("join_room", (roomName, userId) => {
+  socket.on("join_room", (roomName, userId, memNick) => {
     ncnt++;
     console.log("참가자수: " + ncnt);
     // for (let key in obj) {
@@ -63,9 +64,11 @@ wsServer.on("connection", (socket) => {
     // }
     myRoomName = roomName;
     myUserId = userId;
+    myNick = memNick;
     const joinUser = {
       userId: userId,
-      msg: `${userId}님이 방에 참가하셨습니다.`,
+      msg: `${memNick}님이 방에 참가하셨습니다.`,
+      memNick: memNick
     };
 
     let isRoomExist = false;
@@ -129,6 +132,7 @@ wsServer.on("connection", (socket) => {
       sid: socket.id,
       msg: `나감`,
       mid: myUserId,
+      mnick: myNick
     };
     socket.rooms.forEach((room) => socket.to(room).emit("left", user));
   });
@@ -262,3 +266,4 @@ wsServer.on("connection", (socket) => {
     socket.to(eventData.prjRoom).emit("eventData", eventData);
   });
 });
+

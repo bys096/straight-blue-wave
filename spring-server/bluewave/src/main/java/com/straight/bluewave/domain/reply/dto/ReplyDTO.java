@@ -32,7 +32,7 @@ public class ReplyDTO {
 
     private String writer;
 
-    private List<ReplyDTO> children = new ArrayList<>();
+    private List<ReplyDTO> children;
 
     public ReplyDTO(Long replyId, String replyContent, Long memId, String writer, LocalDateTime replyCreateAt, LocalDateTime replyUpdateAt) {
         this.replyId = replyId;

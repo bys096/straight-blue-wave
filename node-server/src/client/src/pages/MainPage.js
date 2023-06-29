@@ -73,7 +73,7 @@ function MainPage(props) {
     console.log(sessionStorage.getItem("prjid"));
 
     // socket.emit("join_room", roomForm.value, userId);
-    socket.emit("join_room", roomName, userId);
+    socket.emit("join_room", roomName, userId, sessionStorage.getItem("memnick"));
     console.log("방입장: ", roomName);
     // stt
     // stt code
@@ -444,7 +444,7 @@ function MainPage(props) {
       roomName: roomName,
       msg: msg,
       sid: socket.id,
-      userId: userId,
+      userId: sessionStorage.getItem("memnick"),
     };
 
     socket.emit("sendChat", chat);
@@ -468,7 +468,7 @@ function MainPage(props) {
     console.log(user.msg);
     console.log(`left socket id: ${user.sid}`);
     console.log(`left my user id: ${user.mid}`);
-    addMessage(`${user.mid} 님이 퇴실하셨습니다`);
+    addMessage(`${user.mnick} 님이 퇴실하셨습니다`);
 
     const streamArr = myStreamRef.current.querySelectorAll("div");
 
@@ -678,7 +678,7 @@ function MainPage(props) {
           </div>
           <div className="chat-box" ref={chatBoxRef}>
             <div class="chat-box-header">
-              ChatBot
+              채팅방
               <span className="chat-box-toggle">
                 <i className="material-icons">close</i>
               </span>
@@ -718,3 +718,4 @@ function MainPage(props) {
 }
 
 export default MainPage;
+
