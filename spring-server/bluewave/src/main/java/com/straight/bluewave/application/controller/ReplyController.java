@@ -36,18 +36,6 @@ public class ReplyController {
         return ResponseEntity.ok(replies);
     }
 
-    // 자기가 쓴 댓글 모아서 보기
-//    @GetMapping("/read/member/{member_id}")
-//    public List<ReplyDTO> getReplyByMember(@PathVariable Long mem_id) {
-//        return replyService.getReplyByMember(mem_id);
-//    }
-
-    // 게시글의 전체 댓글 조회
-//    @GetMapping("/read/post/{post_id}")
-//    public List<ReplyDTO> getReplyByPost(@PathVariable Long post_id) {
-//        return replyService.getReplyByPost(post_id);
-//    }
-
     // 댓글 1개 조회
     @GetMapping("/read/reply/{replyId}")
     public ReplyDTO getReply(@PathVariable Long replyId) {
