@@ -24,7 +24,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Grant execute permission for gradlew
-      run: cd spring-server && chmod +x gradlew
+      run: cd spring-server/bluewave && chmod +x gradlew
     
     - name: Build with Gradle
-      run: cd spring-server && ./gradlew clean build
+      run: cd spring-server/bluewave && ./gradlew clean build
