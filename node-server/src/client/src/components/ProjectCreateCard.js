@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import axios from "axios";
 
-import { PiPlusThin } from 'react-icons/pi';
+import { PiPlusThin } from "react-icons/pi";
 
 // const StyledCard = styled(Card)`
 // 	display: flex;
