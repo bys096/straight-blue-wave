@@ -6,7 +6,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { updateTeamImage } from "../actions/team";
 
-import { PiPlusThin } from 'react-icons/pi';
+import { PiPlusThin } from "react-icons/pi";
 
 // const StyledCard = styled(Card)`
 // 	display: flex;
